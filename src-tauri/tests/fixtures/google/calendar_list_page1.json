@@ -1,0 +1,36 @@
+{
+  "kind": "calendar#calendarList",
+  "etag": "\"p32c9n0ndqm0t60o\"",
+  "nextPageToken": "CL_PAGE_2",
+  "items": [
+    {
+      "kind": "calendar#calendarListEntry",
+      "etag": "\"1600000000000000\"",
+      "id": "someone@example.com",
+      "summary": "someone@example.com",
+      "timeZone": "America/Argentina/Buenos_Aires",
+      "colorId": "7",
+      "backgroundColor": "#039be5",
+      "foregroundColor": "#000000",
+      "selected": true,
+      "accessRole": "owner",
+      "defaultReminders": [{ "method": "popup", "minutes": 10 }],
+      "notificationSettings": { "notifications": [{ "type": "eventCreation", "method": "email" }] },
+      "primary": true,
+      "conferenceProperties": { "allowedConferenceSolutionTypes": ["hangoutsMeet"] }
+    },
+    {
+      "kind": "calendar#calendarListEntry",
+      "etag": "\"1600000000000001\"",
+      "id": "abc123@group.calendar.google.com",
+      "summary": "UGC Fixtures",
+      "timeZone": "America/Argentina/Buenos_Aires",
+      "colorId": "10",
+      "backgroundColor": "#0b8043",
+      "foregroundColor": "#000000",
+      "selected": false,
+      "accessRole": "owner",
+      "defaultReminders": []
+    }
+  ]
+}

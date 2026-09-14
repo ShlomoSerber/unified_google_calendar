@@ -1,0 +1,8 @@
+{
+  "kind": "api#channel",
+  "id": "01234567-89ab-cdef-0123-456789abcdef",
+  "resourceId": "o3hgv1538sdjfh",
+  "resourceUri": "https://www.googleapis.com/calendar/v3/calendars/someone%40example.com/events?alt=json",
+  "token": "c2VjcmV0LXRva2Vu",
+  "expiration": "1789604800000"
+}

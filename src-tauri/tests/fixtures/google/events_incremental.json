@@ -1,0 +1,33 @@
+{
+  "kind": "calendar#events",
+  "etag": "\"p33c9n0ndqm0t62o\"",
+  "summary": "someone@example.com",
+  "updated": "2026-09-14T13:00:00.000Z",
+  "timeZone": "America/Argentina/Buenos_Aires",
+  "accessRole": "owner",
+  "defaultReminders": [{ "method": "popup", "minutes": 10 }],
+  "nextSyncToken": "EV_SYNC_2",
+  "items": [
+    {
+      "kind": "calendar#event",
+      "etag": "\"3400000000000010\"",
+      "id": "simple1",
+      "status": "cancelled"
+    },
+    {
+      "kind": "calendar#event",
+      "etag": "\"3400000000000011\"",
+      "id": "weekly1_20260925T130000Z",
+      "status": "confirmed",
+      "summary": "Weekly repeat (moved)",
+      "organizer": { "email": "someone@example.com", "self": true },
+      "start": { "dateTime": "2026-09-25T15:00:00-03:00", "timeZone": "America/Argentina/Buenos_Aires" },
+      "end": { "dateTime": "2026-09-25T15:30:00-03:00", "timeZone": "America/Argentina/Buenos_Aires" },
+      "recurringEventId": "weekly1",
+      "originalStartTime": { "dateTime": "2026-09-25T10:00:00-03:00", "timeZone": "America/Argentina/Buenos_Aires" },
+      "iCalUID": "weekly1@google.com",
+      "reminders": { "useDefault": true },
+      "eventType": "default"
+    }
+  ]
+}

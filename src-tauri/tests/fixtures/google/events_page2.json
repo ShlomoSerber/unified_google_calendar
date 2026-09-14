@@ -1,0 +1,41 @@
+{
+  "kind": "calendar#events",
+  "etag": "\"p33c9n0ndqm0t61o\"",
+  "summary": "someone@example.com",
+  "updated": "2026-09-14T12:00:00.000Z",
+  "timeZone": "America/Argentina/Buenos_Aires",
+  "accessRole": "owner",
+  "defaultReminders": [{ "method": "popup", "minutes": 10 }],
+  "nextSyncToken": "EV_SYNC_1",
+  "items": [
+    {
+      "kind": "calendar#event",
+      "etag": "\"3400000000000003\"",
+      "id": "meet1",
+      "status": "confirmed",
+      "summary": "With Meet",
+      "organizer": { "email": "someone@example.com", "self": true },
+      "start": { "dateTime": "2026-09-17T09:00:00-03:00", "timeZone": "America/Argentina/Buenos_Aires" },
+      "end": { "dateTime": "2026-09-17T10:00:00-03:00", "timeZone": "America/Argentina/Buenos_Aires" },
+      "iCalUID": "meet1@google.com",
+      "hangoutLink": "https://meet.google.com/abc-defg-hij",
+      "conferenceData": {
+        "entryPoints": [{ "entryPointType": "video", "uri": "https://meet.google.com/abc-defg-hij", "label": "meet.google.com/abc-defg-hij" }],
+        "conferenceSolution": { "key": { "type": "hangoutsMeet" }, "name": "Google Meet", "iconUri": "https://x/icon.png" },
+        "conferenceId": "abc-defg-hij"
+      },
+      "attendees": [
+        { "email": "someone@example.com", "organizer": true, "self": true, "responseStatus": "accepted" },
+        { "email": "guest@example.com", "responseStatus": "needsAction" }
+      ],
+      "reminders": { "useDefault": true },
+      "eventType": "default"
+    },
+    {
+      "kind": "calendar#event",
+      "etag": "\"3400000000000004\"",
+      "id": "gone1",
+      "status": "cancelled"
+    }
+  ]
+}

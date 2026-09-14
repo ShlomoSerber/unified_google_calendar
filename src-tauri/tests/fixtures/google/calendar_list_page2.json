@@ -1,0 +1,27 @@
+{
+  "kind": "calendar#calendarList",
+  "etag": "\"p32c9n0ndqm0t61o\"",
+  "nextSyncToken": "CL_SYNC_1",
+  "items": [
+    {
+      "kind": "calendar#calendarListEntry",
+      "etag": "\"1600000000000002\"",
+      "id": "en.ar#holiday@group.v.calendar.google.com",
+      "summary": "Holidays in Argentina",
+      "description": "Holidays and Observances in Argentina",
+      "timeZone": "America/Argentina/Buenos_Aires",
+      "colorId": "8",
+      "backgroundColor": "#616161",
+      "foregroundColor": "#ffffff",
+      "selected": true,
+      "accessRole": "reader",
+      "defaultReminders": []
+    },
+    {
+      "kind": "calendar#calendarListEntry",
+      "etag": "\"1600000000000003\"",
+      "id": "old@group.calendar.google.com",
+      "deleted": true
+    }
+  ]
+}

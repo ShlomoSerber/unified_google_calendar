@@ -1,0 +1,25 @@
+{
+  "kind": "calendar#event",
+  "etag": "\"3400000000000020\"",
+  "id": "new1",
+  "status": "confirmed",
+  "htmlLink": "https://www.google.com/calendar/event?eid=new1",
+  "created": "2026-09-14T12:00:00.000Z",
+  "updated": "2026-09-14T12:00:00.000Z",
+  "summary": "Created from app",
+  "creator": { "email": "someone@example.com", "self": true },
+  "organizer": { "email": "someone@example.com", "self": true },
+  "start": { "dateTime": "2026-09-20T10:00:00-03:00", "timeZone": "America/Argentina/Buenos_Aires" },
+  "end": { "dateTime": "2026-09-20T11:00:00-03:00", "timeZone": "America/Argentina/Buenos_Aires" },
+  "iCalUID": "new1@google.com",
+  "sequence": 0,
+  "hangoutLink": "https://meet.google.com/new-meet-xyz",
+  "conferenceData": {
+    "createRequest": { "requestId": "req-1", "conferenceSolutionKey": { "type": "hangoutsMeet" }, "status": { "statusCode": "success" } },
+    "entryPoints": [{ "entryPointType": "video", "uri": "https://meet.google.com/new-meet-xyz" }],
+    "conferenceSolution": { "key": { "type": "hangoutsMeet" }, "name": "Google Meet" },
+    "conferenceId": "new-meet-xyz"
+  },
+  "reminders": { "useDefault": true },
+  "eventType": "default"
+}

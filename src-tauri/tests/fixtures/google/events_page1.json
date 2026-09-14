@@ -1,0 +1,60 @@
+{
+  "kind": "calendar#events",
+  "etag": "\"p33c9n0ndqm0t60o\"",
+  "summary": "someone@example.com",
+  "updated": "2026-09-14T12:00:00.000Z",
+  "timeZone": "America/Argentina/Buenos_Aires",
+  "accessRole": "owner",
+  "defaultReminders": [{ "method": "popup", "minutes": 10 }],
+  "nextPageToken": "EV_PAGE_2",
+  "items": [
+    {
+      "kind": "calendar#event",
+      "etag": "\"3400000000000000\"",
+      "id": "simple1",
+      "status": "confirmed",
+      "htmlLink": "https://www.google.com/calendar/event?eid=simple1",
+      "created": "2026-09-01T10:00:00.000Z",
+      "updated": "2026-09-01T10:00:00.000Z",
+      "summary": "Sixty",
+      "description": "Description line",
+      "location": "Location text",
+      "creator": { "email": "someone@example.com", "self": true },
+      "organizer": { "email": "someone@example.com", "self": true },
+      "start": { "dateTime": "2026-09-14T13:00:00-03:00", "timeZone": "America/Argentina/Buenos_Aires" },
+      "end": { "dateTime": "2026-09-14T14:00:00-03:00", "timeZone": "America/Argentina/Buenos_Aires" },
+      "iCalUID": "simple1@google.com",
+      "sequence": 0,
+      "reminders": { "useDefault": true },
+      "eventType": "default"
+    },
+    {
+      "kind": "calendar#event",
+      "etag": "\"3400000000000001\"",
+      "id": "allday1",
+      "status": "confirmed",
+      "summary": "All-day one",
+      "organizer": { "email": "someone@example.com", "self": true },
+      "start": { "date": "2026-09-14" },
+      "end": { "date": "2026-09-15" },
+      "iCalUID": "allday1@google.com",
+      "transparency": "transparent",
+      "reminders": { "useDefault": false },
+      "eventType": "default"
+    },
+    {
+      "kind": "calendar#event",
+      "etag": "\"3400000000000002\"",
+      "id": "weekly1",
+      "status": "confirmed",
+      "summary": "Weekly repeat",
+      "organizer": { "email": "someone@example.com", "self": true },
+      "start": { "dateTime": "2026-09-18T10:00:00-03:00", "timeZone": "America/Argentina/Buenos_Aires" },
+      "end": { "dateTime": "2026-09-18T10:30:00-03:00", "timeZone": "America/Argentina/Buenos_Aires" },
+      "recurrence": ["RRULE:FREQ=WEEKLY;BYDAY=FR"],
+      "iCalUID": "weekly1@google.com",
+      "reminders": { "useDefault": true },
+      "eventType": "default"
+    }
+  ]
+}
