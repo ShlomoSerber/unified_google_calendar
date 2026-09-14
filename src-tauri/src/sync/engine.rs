@@ -262,7 +262,13 @@ pub fn start(app: tauri::AppHandle) -> mpsc::Sender<SyncTick> {
             if let Err(e) = initial.sync_all("startup").await {
                 tracing::warn!(error = %e, "startup sync finished with errors");
             }
+            // Channels after the first sync, so every calendar has full_sync_done (docs/05 section 6).
+            if let Err(e) = crate::sync::push::ensure_channels(&initial.ctx).await {
+                tracing::warn!(error = %e, "startup channel setup failed");
+            }
         });
+        let renew_ctx = engine.ctx.clone();
+        tauri::async_runtime::spawn(crate::sync::push::renew_loop(renew_ctx));
     }
     engine.ticks()
 }

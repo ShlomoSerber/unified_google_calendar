@@ -282,6 +282,11 @@ pub async fn remove_account(app: tauri::AppHandle, account_id: String) -> CmdRes
     if events::is_local(&account_id) {
         return Err(AppError::invalid("The local account cannot be removed").user_message());
     }
+    if let Ok(ctx) = sync_ctx() {
+        if let Err(e) = crate::sync::push::stop_account_channels(&ctx, &account_id).await {
+            tracing::debug!(error = %e, "stopping channels before removal failed");
+        }
+    }
     let id = account_id.clone();
     db::call(move |c| {
         // Tokens first, so a crash leaves no orphan credentials behind.
@@ -347,8 +352,43 @@ pub async fn set_settings(
             });
         }
     }
+    if settings.push_enabled != before.push_enabled
+        || settings.public_base_url != before.public_base_url
+    {
+        if let Ok(ctx) = sync_ctx() {
+            let enable = settings.push_enabled;
+            tauri::async_runtime::spawn(async move {
+                let r = if enable {
+                    crate::sync::push::ensure_channels(&ctx).await.map(|_| ())
+                } else {
+                    crate::sync::push::stop_all_channels(&ctx).await
+                };
+                if let Err(e) = r {
+                    tracing::warn!(error = %e, "push channel update failed");
+                }
+            });
+        }
+    }
     emit_accounts(&app).await;
     db::call(|c| settings::load(c)).await.map_err(to_ipc)
+}
+
+#[tauri::command]
+pub async fn test_push(url: String) -> CmdResult<types::PushTestResult> {
+    if !url.starts_with("https://") {
+        return Err(AppError::invalid("The push URL must start with https://").user_message());
+    }
+    let ctx = sync_ctx().map_err(to_ipc)?;
+    let result = crate::sync::push::test_public_url(&ctx, &url).await;
+    if result.ok {
+        let c2 = ctx.clone();
+        tauri::async_runtime::spawn(async move {
+            if let Err(e) = crate::sync::push::ensure_channels(&c2).await {
+                tracing::warn!(error = %e, "channel setup after test failed");
+            }
+        });
+    }
+    Ok(result)
 }
 
 #[tauri::command]
