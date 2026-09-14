@@ -8,43 +8,46 @@
  "theme": null,
  "colorScheme": "normal",
  "rootRect": [
-  1041.96875,
-  437,
-  68.40625,
+  973.5625,
+  495,
+  116.28125,
   58
  ],
  "nodes": [
   {
    "path": "div",
    "tag": "div",
-   "cls": "GTG3wb ChfiMc rFUW1c  EiZ8Dd Hrn1mc MmaWIb afiDFd",
+   "cls": "GTG3wb ChfiMc rFUW1c  EiZ8Dd Epw9Dc MmaWIb",
    "role": "button",
    "aria": null,
    "rect": [
     0,
     0,
-    68.41,
+    116.28,
     58
    ],
    "abs": [
-    1041.97,
-    437
+    973.56,
+    495
    ],
    "style": {
     "position": "absolute",
     "color": "rgb(31, 31, 31)",
-    "backgroundColor": "rgb(124, 179, 66)",
-    "borderTop": "0px none rgb(124, 179, 66)",
-    "borderRight": "0px none rgb(124, 179, 66)",
-    "borderBottom": "0px none rgb(124, 179, 66)",
-    "borderLeft": "0px none rgb(124, 179, 66)",
+    "backgroundColor": "rgb(3, 155, 229)",
+    "borderTop": "0px none rgb(3, 155, 229)",
+    "borderRight": "0px none rgb(3, 155, 229)",
+    "borderBottom": "0px none rgb(3, 155, 229)",
+    "borderLeft": "0px none rgb(3, 155, 229)",
     "borderRadius": "6px",
     "marginTop": "1px",
     "marginLeft": "-1px",
-    "width": "68.4062px",
+    "width": "116.281px",
     "height": "58px",
-    "zIndex": "6",
-    "outline": "rgb(31, 31, 31) none 3px"
+    "zIndex": "5",
+    "outline": "rgb(31, 31, 31) none 3px",
+    "backgroundImage": "linear-gradient(45deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.2) 40%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0) 90%, rgba(0, 0, 0, 0.2) 90%, rgba(0, 0, 0, 0.2))",
+    "top": "719px",
+    "left": "0px"
    }
   },
   {
@@ -53,7 +56,7 @@
    "cls": "XuJrye",
    "role": null,
    "aria": null,
-   "text": "12:00 to 13:00, Tentative, Calendar: UGC Fixtures, No location, September 18, 20",
+   "text": "12:00 to 13:00, Tentative, Shlomo Serber, Tentative, No location, September 18, ",
    "rect": [
     0,
     0,
@@ -61,8 +64,8 @@
     1
    ],
    "abs": [
-    1041.97,
-    437
+    973.56,
+    495
    ],
    "style": {
     "position": "absolute",
@@ -75,7 +78,9 @@
     "height": "1px",
     "whiteSpace": "nowrap",
     "overflow": "hidden",
-    "outline": "rgb(31, 31, 31) none 3px"
+    "outline": "rgb(31, 31, 31) none 3px",
+    "top": "0px",
+    "left": "0px"
    }
   },
   {
@@ -87,12 +92,12 @@
    "rect": [
     0,
     0,
-    68.41,
+    116.28,
     34
    ],
    "abs": [
-    1041.97,
-    437
+    973.56,
+    495
    ],
    "style": {
     "display": "flex",
@@ -102,10 +107,11 @@
     "borderBottom": "0px none rgb(31, 31, 31)",
     "borderLeft": "0px none rgb(31, 31, 31)",
     "paddingLeft": "8px",
-    "width": "60.4062px",
+    "width": "108.281px",
     "height": "34px",
     "overflow": "hidden",
-    "outline": "rgb(31, 31, 31) none 3px"
+    "outline": "rgb(31, 31, 31) none 3px",
+    "textAlign": "left"
    }
   },
   {
@@ -117,12 +123,12 @@
    "rect": [
     8,
     0,
-    60.41,
+    108.28,
     34
    ],
    "abs": [
-    1049.97,
-    437
+    981.56,
+    495
    ],
    "style": {
     "color": "rgb(31, 31, 31)",
@@ -130,29 +136,30 @@
     "borderRight": "0px none rgb(31, 31, 31)",
     "borderBottom": "0px none rgb(31, 31, 31)",
     "borderLeft": "0px none rgb(31, 31, 31)",
-    "width": "60.4062px",
+    "width": "108.281px",
     "height": "34px",
     "minWidth": "auto",
     "minHeight": "auto",
     "overflow": "hidden",
-    "outline": "rgb(31, 31, 31) none 3px"
+    "outline": "rgb(31, 31, 31) none 3px",
+    "textAlign": "left"
    }
   },
   {
    "path": "div/div[1]/div[0]/div[0]",
    "tag": "div",
-   "cls": "lhydbb RIOtYe EiZ8Dd TuM9nf",
+   "cls": "lhydbb RIOtYe EiZ8Dd Epw9Dc",
    "role": null,
    "aria": null,
    "rect": [
     8,
     0,
-    60.41,
+    108.28,
     19
    ],
    "abs": [
-    1049.97,
-    437
+    981.56,
+    495
    ],
    "style": {
     "fontSize": "12px",
@@ -165,11 +172,12 @@
     "borderBottom": "0px none rgb(255, 255, 255)",
     "borderLeft": "0px none rgb(255, 255, 255)",
     "paddingTop": "4px",
-    "width": "60.4062px",
+    "width": "108.281px",
     "height": "15px",
     "overflow": "hidden",
     "fill": "rgb(255, 255, 255)",
-    "outline": "rgb(255, 255, 255) none 3px"
+    "outline": "rgb(255, 255, 255) none 3px",
+    "textAlign": "left"
    }
   },
   {
@@ -181,12 +189,12 @@
    "rect": [
     8,
     4,
-    60.41,
+    108.28,
     15
    ],
    "abs": [
-    1049.97,
-    441
+    981.56,
+    499
    ],
    "style": {
     "display": "flex",
@@ -199,10 +207,11 @@
     "borderRight": "0px none rgb(255, 255, 255)",
     "borderBottom": "0px none rgb(255, 255, 255)",
     "borderLeft": "0px none rgb(255, 255, 255)",
-    "width": "60.4062px",
+    "width": "108.281px",
     "height": "15px",
     "fill": "rgb(255, 255, 255)",
-    "outline": "rgb(255, 255, 255) none 3px"
+    "outline": "rgb(255, 255, 255) none 3px",
+    "textAlign": "left"
    }
   },
   {
@@ -219,8 +228,8 @@
     15
    ],
    "abs": [
-    1049.97,
-    441
+    981.56,
+    499
    ],
    "style": {
     "fontSize": "12px",
@@ -237,25 +246,26 @@
     "minWidth": "auto",
     "minHeight": "auto",
     "fill": "rgb(255, 255, 255)",
-    "outline": "rgb(255, 255, 255) none 3px"
+    "outline": "rgb(255, 255, 255) none 3px",
+    "textAlign": "left"
    }
   },
   {
    "path": "div/div[1]/div[0]/div[1]",
    "tag": "div",
-   "cls": "lhydbb gVNoLb  EiZ8Dd TuM9nf",
+   "cls": "lhydbb gVNoLb  EiZ8Dd Epw9Dc",
    "role": null,
    "aria": null,
    "text": "12:00 – 13:00",
    "rect": [
     8,
     19,
-    60.41,
+    108.28,
     15
    ],
    "abs": [
-    1049.97,
-    456
+    981.56,
+    514
    ],
    "style": {
     "display": "flex",
@@ -267,30 +277,31 @@
     "borderRight": "0px none rgb(255, 255, 255)",
     "borderBottom": "0px none rgb(255, 255, 255)",
     "borderLeft": "0px none rgb(255, 255, 255)",
-    "width": "60.4062px",
+    "width": "108.281px",
     "height": "15px",
     "alignItems": "center",
     "whiteSpace": "nowrap",
     "overflow": "hidden",
     "fill": "rgb(255, 255, 255)",
-    "outline": "rgb(255, 255, 255) none 3px"
+    "outline": "rgb(255, 255, 255) none 3px",
+    "textAlign": "left"
    }
   },
   {
    "path": "div/div[1]/div[0]/div[2]",
    "tag": "div",
-   "cls": "lhydbb K9QN7e  EiZ8Dd TuM9nf",
+   "cls": "lhydbb K9QN7e  EiZ8Dd Epw9Dc",
    "role": null,
    "aria": null,
    "rect": [
     8,
     34,
-    60.41,
+    108.28,
     0
    ],
    "abs": [
-    1049.97,
-    471
+    981.56,
+    529
    ],
    "style": {
     "fontSize": "12px",
@@ -301,42 +312,11 @@
     "borderRight": "0px none rgb(255, 255, 255)",
     "borderBottom": "0px none rgb(255, 255, 255)",
     "borderLeft": "0px none rgb(255, 255, 255)",
-    "width": "60.4062px",
+    "width": "108.281px",
     "overflow": "hidden",
     "fill": "rgb(255, 255, 255)",
-    "outline": "rgb(255, 255, 255) none 3px"
-   }
-  },
-  {
-   "path": "div/div[2]",
-   "tag": "div",
-   "cls": "leOeGd ChfiMc YVffPe",
-   "role": null,
-   "aria": null,
-   "rect": [
-    0,
-    50,
-    68.41,
-    8
-   ],
-   "abs": [
-    1041.97,
-    487
-   ],
-   "style": {
-    "display": "flex",
-    "position": "absolute",
-    "color": "rgb(31, 31, 31)",
-    "borderTop": "0px none rgb(31, 31, 31)",
-    "borderRight": "0px none rgb(31, 31, 31)",
-    "borderBottom": "0px none rgb(31, 31, 31)",
-    "borderLeft": "0px none rgb(31, 31, 31)",
-    "width": "68.4062px",
-    "height": "8px",
-    "alignItems": "center",
-    "justifyContent": "center",
-    "zIndex": "5004",
-    "outline": "rgb(31, 31, 31) none 3px"
+    "outline": "rgb(255, 255, 255) none 3px",
+    "textAlign": "left"
    }
   }
  ]

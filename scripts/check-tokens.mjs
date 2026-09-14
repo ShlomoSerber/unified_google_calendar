@@ -18,10 +18,12 @@ if (existsSync(resolve(root, 'src'))) walk(resolve(root, 'src'));
 
 const problems = [];
 const LITERAL = /(?<![\w-])(\d+(\.\d+)?px|#[0-9a-fA-F]{3,8}\b|rgba?\(|hsla?\()/;
-const ALLOWED_LITERAL_FILES = /src\/styles\/(tokens|fonts|base)\.css$/;
+const ALLOWED_LITERAL_FILES = /src\/styles\/(tokens|measured|fonts|base)\.css$/;
 for (const f of files) {
   const src = readFileSync(f, 'utf8');
-  for (const m of src.matchAll(/var\((--[a-z0-9-]+)/g)) if (!defined.has(m[1])) problems.push(`${f}: token ${m[1]} is not defined (null or missing in tokens.json)`);
+  // --data-* variables carry values that come from the calendar data at runtime (a calendar's
+  // colour), set inline by the component; they are not design tokens.
+  for (const m of src.matchAll(/var\((--[a-z0-9-]+)/g)) if (!defined.has(m[1]) && !m[1].startsWith('--data-')) problems.push(`${f}: token ${m[1]} is not defined (null or missing in tokens.json)`);
   if (f.endsWith('.css') && !ALLOWED_LITERAL_FILES.test(f)) {
     src.split('\n').forEach((line, i) => {
       const code = line.replace(/\/\*.*?\*\//g, '');
@@ -30,7 +32,7 @@ for (const f of files) {
   }
 }
 const nulls = [];
-const scan = (o, p) => { for (const [k, v] of Object.entries(o)) { if (v === null) nulls.push(`${p}.${k}`); else if (typeof v === 'object' && !Array.isArray(v)) scan(v, `${p}.${k}`); } };
+const scan = (o, p) => { for (const [k, v] of Object.entries(o)) { if (k.startsWith('_')) continue; if (v === null) nulls.push(`${p}.${k}`); else if (typeof v === 'object' && !Array.isArray(v)) scan(v, `${p}.${k}`); } };
 scan(JSON.parse(readFileSync(resolve(root, 'docs/design/tokens.json'), 'utf8')), 'tokens');
 
 console.log(`${defined.size} tokens defined, ${files.length} source files scanned, ${nulls.length} tokens still null in tokens.json`);

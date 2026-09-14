@@ -426,7 +426,10 @@ mod tests {
         let vl = vevent(&long);
         assert!(vl.contains("\r\n "), "generated text is folded");
         assert_eq!(uid_of(&vl).as_deref(), Some(long.uid.as_str()));
-        assert_eq!(diff(std::slice::from_ref(&vl), std::slice::from_ref(&long)), Diff::default());
+        assert_eq!(
+            diff(std::slice::from_ref(&vl), std::slice::from_ref(&long)),
+            Diff::default()
+        );
         // Both exist unchanged (EDS reformats DTSTAMP/SEQUENCE): nothing to do.
         let existing = vec![
             va.replace("SEQUENCE:0", "SEQUENCE:3")

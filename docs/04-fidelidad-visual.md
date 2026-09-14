@@ -160,3 +160,7 @@ Todo lo que se sospeche distinto se prueba primero con `CSS.supports()` dentro d
 ## 9. Logo y nombre
 
 No se usa el logo de Google Calendar ni ninguna variante. El ícono de la app es propio. El nombre "Unified Google Calendar" se usa en la ventana y el `.desktop`. En la barra superior el texto junto al ícono dice "Calendar" para conservar el layout medido, y esa es la única aparición del término.
+
+## Registro de cambios
+
+- 2026-09-14 — Medición automatizada por CDP, propiedades extra de `dumpRegion`, tokens por nodo, ajustes de la cuenta de referencia y paleta clara/oscura medida: ver `docs/99-decisiones.md` (F4-T1, F4-T3, F4-T4). Criterio `odiff < 0.5 %` no alcanzado por rasterizado de texto: ver la entrada "Criterio de aceptación visual" en `docs/99-decisiones.md`.

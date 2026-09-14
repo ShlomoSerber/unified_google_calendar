@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Compare two dumpRegion() JSON files: the Google Calendar reference and our app.
-// Usage: node scripts/measure/diff-layout.mjs <google.json> <app.json> [--tolerance 0.5] [--all]
+// Usage: node scripts/measure/diff-layout.mjs <google.json> <app.json> [--tolerance 0.5] [--all] [--ignore <regex>] [--ignore-hidden]
 //
 // Matching strategy: our DOM does not share Google's element paths, so nodes are
 // matched by a semantic key (tag + role + aria-label + text). Nodes without any
@@ -14,11 +14,19 @@ if (args.length < 2) { console.error('usage: diff-layout.mjs <google.json> <app.
 const tolIdx = args.indexOf('--tolerance');
 const TOL = tolIdx >= 0 ? parseFloat(args[tolIdx + 1]) : 0.5;
 const ALL = args.includes('--all');
-const [refFile, appFile] = args.filter(a => !a.startsWith('--') && a !== String(TOL));
+// --ignore <regex>: semantic keys to leave out (user identity such as the account avatar label);
+// every use must be justified in docs/design/measurements/<component>.md.
+const ignIdx = args.indexOf('--ignore');
+const IGNORE = ignIdx >= 0 ? new RegExp(args[ignIdx + 1]) : null;
+// --ignore-hidden: skip screen-reader-only nodes (1×1 boxes parked off screen); their position
+// depends on the static position of an absolute box, which is invisible by definition.
+const IGNORE_HIDDEN = args.includes('--ignore-hidden');
+const positional = args.filter((a, i) => !a.startsWith('--') && !(i > 0 && args[i - 1].startsWith('--')));
+const [refFile, appFile] = positional;
 
 const STYLE_PROPS = ['fontFamily','fontSize','fontWeight','lineHeight','letterSpacing','color','backgroundColor',
   'borderTop','borderRight','borderBottom','borderLeft','borderRadius','paddingTop','paddingRight','paddingBottom',
-  'paddingLeft','boxShadow','opacity','textTransform','whiteSpace'];
+  'paddingLeft','boxShadow','opacity','textTransform','whiteSpace','backgroundImage','textDecorationLine'];
 
 const load = f => JSON.parse(readFileSync(f, 'utf8'));
 const ref = load(refFile), app = load(appFile);
@@ -40,6 +48,8 @@ const refIdx = index(ref.nodes), appIdx = index(app.nodes);
 const diffs = [];
 let compared = 0;
 for (const [k, rn] of refIdx) {
+  if (IGNORE && IGNORE.test(k)) continue;
+  if (IGNORE_HIDDEN && rn.rect[2] <= 1 && rn.rect[3] <= 1) continue;
   const an = appIdx.get(k);
   if (!an) { diffs.push({ kind: 'missing', key: k, ref: rn.rect }); continue; }
   compared++;

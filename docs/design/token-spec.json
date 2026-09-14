@@ -1,0 +1,1146 @@
+{
+  "_note": "Read by scripts/measure/extract-tokens.mjs. Node indexes refer to scripts/measure/tree.mjs output of the named dump.",
+  "set": {
+    "font.source": "measurements/gm3-light.json (roles) — effective families on calendar.google.com",
+    "font.family_body": "\"Google Sans Text\", \"Google Sans\", Helvetica, Arial, sans-serif",
+    "font.family_display": "\"Google Sans\", Roboto, Arial, sans-serif",
+    "font.family_topbar": "\"Google Sans Text\", Roboto, Helvetica, Arial, sans-serif",
+    "font.family_button": "\"Google Sans Flex\", \"Google Sans Text\", \"Google Sans\", Roboto, Arial, sans-serif",
+    "font.effective_family_note": "gm3-light.json roles: body/sidebar/mini calendar/day names use Google Sans Text; the topbar title, month title and day numbers use Google Sans; Today/Week buttons use Google Sans Flex; icons use Google Material Icons.",
+    "color.source_light": "measurements/gm3-light.json bodyBg + component dumps",
+    "color.source_dark": "measurements/gm3-dark.json bodyBg + component dumps",
+    "layout.source": "measurements/topbar-light.json, hour_grid-light.json",
+    "font.body_size": "14px",
+    "font.body_note": "body_size copied from measurements/gm3-light.json roles.body.fontSize",
+    "color.light.body_text": "rgb(0, 0, 0)",
+    "color.dark.body_text": "rgb(0, 0, 0)",
+    "color.body_text_note": "body_text copied from measurements/gm3-light.json and gm3-dark.json roles.body.color (Google leaves body color black in both themes; every visible text sets its own color)",
+    "layout.chip_width_factor": 1.7,
+    "layout.chip_width_factor_note": "Derived from measurements/hour_grid-light.json: Overlap A 116.28px / column 136.80px × 2 columns = 1.70; Triple A 77.52px / 136.80px × 3 = 1.70. A chip in column i of n spans min(1.7/n, 1 − i/n) of the column width; left = i/n.",
+    "layout.chip_height_gap": "2px",
+    "layout.chip_height_gap_note": "measurements/hour_grid-light.json: Fifteen 13px, Thirty 28px, Forty-five 43px, Sixty 58px, Ninety 88px = minutes − 2px at 60px per hour.",
+    "layout.week_initial_scroll": "420px",
+    "layout.week_initial_scroll_note": "Probed on calendar.google.com (week view, 1440×900, Date shifted to 08:30, 10:00, 13:00, 15:30): the grid opens at scrollTop 420px (07:00) whenever the now line falls inside the visible window; at 19:29 (now line at 1169px, outside the window) it opened at the bottom (753px) and at 00:30 at 0px, which matches scrollTop = clamp(nowY − week_scroll_now_margin).",
+    "component.week.tz_label.top": "86px",
+    "component.week.tz_label_primary.top": "86px",
+    "component.week.tz_label_note": "top copied from getComputedStyle on calendar.google.com (the label cells are position: relative; top 86px = header 84px + 2px), probed 2026-09-14 alongside measurements/hour_grid-light.json.",
+    "component.week.gutter_label.top": "-6px",
+    "component.week.gutter_label_note": "top copied from getComputedStyle (position: relative; top -6px) on calendar.google.com, probed 2026-09-14 alongside measurements/hour_grid-light.json.",
+    "layout.main_gap_right": "16px",
+    "layout.main_gap_bottom": "16px",
+    "layout.main_gap_note": "measurements/hour_grid-light.json rootRect [256,64,1168,820] inside a 1440×900 viewport: 16px free on the right and at the bottom.",
+    "layout.week_scroll_now_margin": "90px",
+    "layout.week_scroll_now_margin_note": "See week_initial_scroll_note: the only out-of-window observations were clamped, so 90px is the smallest margin consistent with them (08:30: 510 − 420) and is applied only when the now line is outside the window.",
+    "component.sidebar.list_check_path_on.stroke_width": "4px",
+    "component.sidebar.list_check_path_on.stroke": "rgb(255, 255, 255)",
+    "component.sidebar.list_check_path_note": "stroke and stroke-width read with getComputedStyle on the tick path of calendar.google.com (probed 2026-09-14); the unchecked tick is hidden with a dash offset equal to its length.",
+    "component.week.line_after.margin_top": "-1px",
+    "component.week.line_after_note": "getComputedStyle(cell, \"::after\") on calendar.google.com (2026-09-14): content \"\", position absolute, left/right 0, height 0, margin-top -1px, z-index 3, border-bottom 1px solid rgb(221, 227, 234) (same as lines.borderTop); the line of hour k lies at 60k px from the top of the row.",
+    "component.week.body_inner_before.box_shadow": "rgba(0, 0, 0, 0.14) 0px 1px 1px 0px inset, rgba(0, 0, 0, 0.12) 0px 2px 1px -1px inset",
+    "component.week.body_inner_before.height": "4px",
+    "component.week.body_inner_before.left": "0px",
+    "component.week.body_inner_before.right": "16px",
+    "component.week.body_inner_before.z_index": "507",
+    "component.week.body_inner_before_note": "getComputedStyle(bodyInner, \"::before\"): the shadow under the header row, absolute at top 0 inside .week-body (position relative), width 100% minus the 16px scrollbar gutter on the right.",
+    "component.week.gutter_before.background_image": {
+      "light": "linear-gradient(to right, rgb(255, 255, 255), rgba(255, 255, 255, 0))",
+      "dark": "linear-gradient(to right, rgb(19, 19, 20), rgba(19, 19, 20, 0))"
+    },
+    "component.week.gutter_before.width": "80px",
+    "component.week.gutter_before.height": "2px",
+    "component.week.body_inner_after.background_image": {
+      "light": "linear-gradient(to left, rgb(255, 255, 255), rgba(255, 255, 255, 0))",
+      "dark": "linear-gradient(to left, rgb(19, 19, 20), rgba(19, 19, 20, 0))"
+    },
+    "component.week.body_inner_after.width": "80px",
+    "component.week.body_inner_after.height": "2px",
+    "component.week.body_inner_after.right": "16px",
+    "component.week.fades_note": "getComputedStyle(gutter, \"::before\") and (bodyInner, \"::after\") on calendar.google.com, light and with prefers-color-scheme: dark emulated (2026-09-14): 2px-high fades over the header shadow at both ends, absolute at top 0, z-index 507.",
+    "component.chip.stacked_after.border_top": {
+      "light": "1px solid rgb(255, 255, 255)",
+      "dark": "1px solid rgb(19, 19, 20)"
+    },
+    "component.chip.stacked_after.left": "-1px",
+    "component.chip.stacked_after.top": "-1px",
+    "component.chip.stacked_after.border_radius": "7px",
+    "component.chip.stacked_after_note": "getComputedStyle(chip, \"::after\") on calendar.google.com (2026-09-14): chips in column 1+ of an overlap cluster carry a 1px outline in the surface colour (absolute, −1px/−1px, chip size + 2px, radius 7px); column 0 chips have none. The chip z-index is 5 + column (Triple A 5, B 6, C 7).",
+    "layout.allday_row_min_height_note": "not measured: the reference week has all-day events in every dump (allday_row.md)"
+  },
+  "font": {
+    "topbar_title": {
+      "size": [
+        "topbar",
+        11,
+        "fontSize"
+      ],
+      "weight": [
+        "topbar",
+        11,
+        "fontWeight"
+      ],
+      "line_height": [
+        "topbar",
+        11,
+        "lineHeight"
+      ],
+      "letter_spacing": [
+        "topbar",
+        11,
+        "letterSpacing"
+      ]
+    },
+    "topbar_button": {
+      "size": [
+        "topbar",
+        24,
+        "fontSize"
+      ],
+      "weight": [
+        "topbar",
+        24,
+        "fontWeight"
+      ],
+      "line_height": [
+        "topbar",
+        24,
+        "lineHeight"
+      ],
+      "letter_spacing": [
+        "topbar",
+        24,
+        "letterSpacing"
+      ]
+    },
+    "sidebar_item": {
+      "size": [
+        "sidebar",
+        309,
+        "fontSize"
+      ],
+      "weight": [
+        "sidebar",
+        309,
+        "fontWeight"
+      ],
+      "line_height": [
+        "sidebar",
+        309,
+        "lineHeight"
+      ],
+      "letter_spacing": [
+        "sidebar",
+        309,
+        "letterSpacing"
+      ]
+    },
+    "mini_cal_day": {
+      "size": [
+        "sidebar",
+        78,
+        "fontSize"
+      ],
+      "weight": [
+        "sidebar",
+        78,
+        "fontWeight"
+      ],
+      "line_height": [
+        "sidebar",
+        78,
+        "lineHeight"
+      ],
+      "letter_spacing": [
+        "sidebar",
+        78,
+        "letterSpacing"
+      ]
+    },
+    "day_header_name": {
+      "size": [
+        "week_header",
+        6,
+        "fontSize"
+      ],
+      "weight": [
+        "week_header",
+        6,
+        "fontWeight"
+      ],
+      "line_height": [
+        "week_header",
+        6,
+        "lineHeight"
+      ],
+      "letter_spacing": [
+        "week_header",
+        6,
+        "letterSpacing"
+      ]
+    },
+    "day_header_number": {
+      "size": [
+        "week_header",
+        9,
+        "fontSize"
+      ],
+      "weight": [
+        "week_header",
+        9,
+        "fontWeight"
+      ],
+      "line_height": [
+        "week_header",
+        9,
+        "lineHeight"
+      ],
+      "letter_spacing": [
+        "week_header",
+        9,
+        "letterSpacing"
+      ]
+    },
+    "hour_label": {
+      "size": [
+        "hour_grid",
+        123,
+        "fontSize"
+      ],
+      "weight": [
+        "hour_grid",
+        123,
+        "fontWeight"
+      ],
+      "line_height": [
+        "hour_grid",
+        123,
+        "lineHeight"
+      ],
+      "letter_spacing": [
+        "hour_grid",
+        123,
+        "letterSpacing"
+      ]
+    },
+    "chip_title": {
+      "size": [
+        "event_chip",
+        6,
+        "fontSize"
+      ],
+      "weight": [
+        "event_chip",
+        6,
+        "fontWeight"
+      ],
+      "line_height": [
+        "event_chip",
+        6,
+        "lineHeight"
+      ],
+      "letter_spacing": [
+        "event_chip",
+        6,
+        "letterSpacing"
+      ]
+    },
+    "chip_time": {
+      "size": [
+        "event_chip",
+        7,
+        "fontSize"
+      ],
+      "weight": [
+        "event_chip",
+        7,
+        "fontWeight"
+      ],
+      "line_height": [
+        "event_chip",
+        7,
+        "lineHeight"
+      ],
+      "letter_spacing": [
+        "event_chip",
+        7,
+        "letterSpacing"
+      ]
+    }
+  },
+  "color": {
+    "on_surface": [
+      "topbar",
+      0,
+      "color"
+    ],
+    "on_surface_variant": [
+      "topbar",
+      27,
+      "color"
+    ],
+    "outline": [
+      "topbar",
+      21,
+      "borderTop"
+    ],
+    "primary_container": [
+      "topbar",
+      102,
+      "backgroundColor"
+    ],
+    "surface": [
+      "gm3",
+      0,
+      "bodyBg"
+    ],
+    "today_badge_bg": [
+      "week_header",
+      7,
+      "backgroundColor"
+    ],
+    "today_badge_fg": [
+      "week_header",
+      9,
+      "color"
+    ],
+    "now_line": [
+      "now_line-dot",
+      0,
+      "backgroundColor"
+    ],
+    "grid_line": [
+      "hour_grid",
+      218,
+      "borderTop"
+    ],
+    "hover_overlay": [
+      "calendar_list-hover",
+      12,
+      "backgroundColor"
+    ],
+    "primary": [
+      "sidebar",
+      130,
+      "backgroundColor"
+    ],
+    "on_primary": [
+      "sidebar",
+      132,
+      "color"
+    ]
+  },
+  "layout": {
+    "topbar_height": [
+      "topbar",
+      0,
+      "rect.h"
+    ],
+    "sidebar_width": [
+      "sidebar",
+      0,
+      "rect.w"
+    ],
+    "create_button_left": [
+      "create_button",
+      0,
+      "root.x"
+    ],
+    "create_button_top": [
+      "create_button",
+      0,
+      "root.y"
+    ],
+    "create_menu_left": [
+      "create_button-open",
+      0,
+      "root.x"
+    ],
+    "create_menu_top": [
+      "create_button-open",
+      0,
+      "root.y"
+    ],
+    "main_left": [
+      "hour_grid",
+      0,
+      "root.x"
+    ],
+    "main_width": [
+      "hour_grid",
+      0,
+      "rect.w"
+    ],
+    "main_top": [
+      "hour_grid",
+      0,
+      "root.y"
+    ],
+    "hour_row_height": [
+      "hour_grid",
+      219,
+      "rect.h"
+    ],
+    "gutter_width": [
+      "hour_grid",
+      119,
+      "rect.w"
+    ],
+    "week_header_height": [
+      "week_header",
+      0,
+      "rect.h"
+    ],
+    "allday_chip_row_height": [
+      "allday_row",
+      15,
+      "rect.h"
+    ],
+    "day_column_pad": [
+      "hour_grid",
+      243,
+      "rect.w"
+    ],
+    "gutter_width_two_zones": [
+      "hour_grid",
+      119,
+      "rect.w"
+    ],
+    "day_header_height": [
+      "week_header",
+      0,
+      "rect.h"
+    ],
+    "mini_cal_cell": [
+      "sidebar",
+      71,
+      "rect.w"
+    ],
+    "sidebar_padding": [
+      "sidebar",
+      7,
+      "paddingLeft"
+    ],
+    "chip_radius": [
+      "event_chip",
+      0,
+      "borderRadius"
+    ],
+    "chip_padding_left": [
+      "event_chip",
+      2,
+      "paddingLeft"
+    ],
+    "chip_min_height": [
+      "event_chip-fifteen",
+      0,
+      "minHeight"
+    ]
+  },
+  "component": {
+    "topbar": {
+      "source": "topbar",
+      "names": {
+        "0": "root",
+        "2": "bar",
+        "3": "left",
+        "4": "drawer",
+        "5": "drawer_icon",
+        "7": "brand",
+        "9": "brand_link",
+        "10": "logo",
+        "11": "title",
+        "12": "center",
+        "21": "today",
+        "24": "today_label",
+        "25": "today_tooltip",
+        "27": "prev",
+        "31": "prev_icon",
+        "34": "prev_tooltip",
+        "36": "next",
+        "40": "next_icon",
+        "43": "next_tooltip",
+        "47": "title_sr",
+        "50": "month_title",
+        "51": "right",
+        "57": "search",
+        "60": "search_icon",
+        "62": "search_tooltip",
+        "65": "support",
+        "69": "support_icon",
+        "72": "support_tooltip",
+        "77": "settings",
+        "79": "settings_icon",
+        "84": "settings_tooltip",
+        "91": "view_button",
+        "94": "view_label",
+        "96": "view_arrow",
+        "102": "switch_cal",
+        "104": "switch_cal_icon",
+        "107": "switch_cal_tooltip",
+        "110": "switch_tasks",
+        "112": "switch_tasks_icon",
+        "115": "switch_tasks_tooltip",
+        "116": "account",
+        "121": "apps",
+        "122": "apps_icon",
+        "125": "account_button",
+        "128": "org_logo",
+        "131": "avatar",
+        "133": "avatar_img",
+        "134": "bottom_strip",
+        "1": "top_strip"
+      },
+      "size": [
+        "*"
+      ],
+      "fluid": [
+        "root",
+        "bar",
+        "center",
+        "right",
+        "n52",
+        "n53",
+        "n54"
+      ]
+    },
+    "sidebar": {
+      "source": "sidebar",
+      "only_named": true,
+      "names": {
+        "0": "root",
+        "1": "inner",
+        "2": "head",
+        "3": "scroll",
+        "4": "sr_title",
+        "5": "minical",
+        "6": "minical_sr",
+        "7": "minical_box",
+        "8": "minical_head",
+        "9": "minical_month",
+        "10": "minical_nav",
+        "11": "minical_prev_cell",
+        "12": "minical_prev_span",
+        "13": "minical_prev",
+        "14": "minical_prev_ripple",
+        "15": "minical_prev_icon_box",
+        "16": "minical_prev_icon_span",
+        "17": "minical_prev_icon",
+        "18": "minical_prev_path",
+        "19": "minical_prev_overlay",
+        "20": "minical_prev_tooltip",
+        "21": "minical_next_cell",
+        "22": "minical_next_span",
+        "23": "minical_next",
+        "24": "minical_next_ripple",
+        "25": "minical_next_icon_box",
+        "26": "minical_next_icon_span",
+        "27": "minical_next_icon",
+        "28": "minical_next_path",
+        "29": "minical_next_overlay",
+        "30": "minical_next_tooltip",
+        "31": "minical_grid",
+        "32": "minical_thead",
+        "33": "minical_head_row",
+        "34": "minical_dow",
+        "35": "minical_dow_span",
+        "36": "minical_dow_label",
+        "37": "minical_dow_tooltip",
+        "38": "minical_dow_sr",
+        "69": "minical_tbody",
+        "70": "minical_row",
+        "71": "minical_cell_other",
+        "72": "minical_day_other",
+        "73": "minical_day_other_ripple",
+        "74": "minical_day_other_label",
+        "75": "minical_cell",
+        "76": "minical_day",
+        "77": "minical_day_ripple",
+        "78": "minical_day_label",
+        "129": "minical_cell_today",
+        "130": "minical_day_today",
+        "131": "minical_day_today_ripple",
+        "132": "minical_day_today_label",
+        "244": "spacer_a",
+        "245": "people",
+        "246": "people_title",
+        "247": "people_row",
+        "248": "people_box",
+        "249": "people_n249",
+        "250": "people_field",
+        "251": "people_field_inner",
+        "252": "people_field_row",
+        "253": "people_input_span",
+        "254": "people_input",
+        "255": "people_underline",
+        "256": "people_n256",
+        "257": "people_overlay",
+        "258": "people_icon",
+        "259": "people_icon_path",
+        "260": "people_placeholder",
+        "261": "booking",
+        "262": "booking_sr",
+        "263": "booking_box",
+        "264": "booking_panel",
+        "265": "booking_inner",
+        "266": "booking_button",
+        "267": "booking_ripple",
+        "268": "booking_n268",
+        "269": "booking_row",
+        "270": "booking_label",
+        "271": "booking_add_span",
+        "272": "booking_add",
+        "273": "booking_add_ripple",
+        "274": "booking_add_icon_box",
+        "275": "booking_add_icon",
+        "276": "booking_add_overlay",
+        "277": "booking_add_tooltip",
+        "278": "booking_foot",
+        "279": "booking_foot_inner",
+        "280": "spacer_b",
+        "281": "spacer_b_inner",
+        "282": "lists",
+        "283": "lists_sr",
+        "284": "lists_box",
+        "285": "lists_inner",
+        "286": "list_panel",
+        "287": "list_wrap",
+        "288": "list_header",
+        "289": "list_header_ripple",
+        "290": "list_header_box",
+        "291": "list_header_row",
+        "292": "list_header_label",
+        "293": "list_header_arrow",
+        "294": "list_body",
+        "295": "list",
+        "296": "list_row_wrap",
+        "297": "list_row",
+        "298": "list_row_inner",
+        "299": "list_check_area",
+        "300": "list_check_box",
+        "301": "list_check",
+        "302": "list_check_input",
+        "303": "list_check_mark",
+        "304": "list_check_svg",
+        "305": "list_check_path",
+        "306": "list_check_mixed",
+        "307": "list_check_ripple",
+        "308": "list_label_box",
+        "309": "list_label",
+        "359": "list_check_mark_on",
+        "360": "list_check_svg_on",
+        "361": "list_check_path_on",
+        "366": "list_gap",
+        "367": "list_header2_wrap",
+        "368": "list_header2",
+        "369": "list_header2_ripple",
+        "370": "list_header2_box",
+        "371": "list_header2_row",
+        "372": "list_header2_label",
+        "373": "list_header2_arrow",
+        "374": "list_add_wrap",
+        "375": "list_add_box",
+        "376": "list_add_inner",
+        "377": "list_add_span",
+        "378": "list_add",
+        "379": "list_add_ripple",
+        "380": "list_add_icon_box",
+        "381": "list_add_icon",
+        "382": "list_add_path",
+        "383": "list_add_overlay",
+        "384": "list_add_tooltip",
+        "385": "list_add_foot",
+        "402": "foot"
+      },
+      "size": [
+        "*"
+      ],
+      "fluid": [
+        "root",
+        "inner",
+        "scroll",
+        "list_row",
+        "list_row_wrap",
+        "list_label_box",
+        "list_label",
+        "list_header_label",
+        "list_header2_label",
+        "list_row_hover",
+        "minical_month",
+        "lists",
+        "lists_box",
+        "lists_inner",
+        "list_panel",
+        "list_wrap",
+        "list_body",
+        "list"
+      ],
+      "extra": {
+        "minical_day_selected": [
+          "mini_calendar-next_week",
+          162
+        ],
+        "minical_day_selected_ripple": [
+          "mini_calendar-next_week",
+          163
+        ],
+        "minical_day_selected_label": [
+          "mini_calendar-next_week",
+          164
+        ],
+        "list_row_hover": [
+          "calendar_list-hover",
+          12
+        ]
+      }
+    },
+    "create_button": {
+      "source": "create_button",
+      "names": {
+        "0": "root",
+        "1": "ripple",
+        "2": "box",
+        "3": "label",
+        "4": "icon",
+        "5": "arrow"
+      },
+      "size": [
+        "*"
+      ]
+    },
+    "create_menu": {
+      "source": "create_button-open",
+      "names": {
+        "0": "root",
+        "1": "n1",
+        "2": "n2",
+        "3": "scrim",
+        "4": "scrim_inner",
+        "5": "body",
+        "6": "list",
+        "7": "item",
+        "8": "item_ripple",
+        "9": "item_box",
+        "10": "item_label",
+        "19": "item_last",
+        "20": "item_last_box",
+        "21": "item_last_label",
+        "22": "item_last_ripple",
+        "23": "n23",
+        "24": "n24"
+      },
+      "only_named": true,
+      "size": [
+        "*"
+      ]
+    },
+    "week": {
+      "source": "hour_grid",
+      "only_named": true,
+      "size": [
+        "*"
+      ],
+      "names": {
+        "0": "root",
+        "1": "top",
+        "2": "gutter_head",
+        "3": "gutter_head_inner",
+        "4": "tz_table",
+        "5": "tz_cell",
+        "6": "tz_label",
+        "7": "tz_cell_primary",
+        "8": "tz_label_primary",
+        "9": "top_right",
+        "10": "allday_overlay",
+        "11": "allday_overlay_inner",
+        "12": "allday_overlay_pad",
+        "13": "allday_overlay_cols",
+        "14": "allday_overlay_col",
+        "21": "header_row",
+        "73": "header_bottom",
+        "74": "allday_row",
+        "117": "body",
+        "118": "body_inner",
+        "119": "gutter",
+        "120": "gutter_col",
+        "121": "gutter_cell_first",
+        "122": "gutter_cell",
+        "123": "gutter_label",
+        "168": "gutter_col_primary",
+        "216": "scroller",
+        "217": "row",
+        "218": "lines",
+        "219": "line",
+        "243": "row_pad",
+        "244": "daycol",
+        "245": "daycol_sr",
+        "246": "now_line",
+        "247": "now_dot",
+        "248": "daycol_bg",
+        "249": "chips"
+      },
+      "fluid": [
+        "root",
+        "top",
+        "top_right",
+        "header_row",
+        "header_bottom",
+        "allday_row",
+        "body",
+        "body_inner",
+        "scroller",
+        "allday_overlay",
+        "allday_overlay_inner",
+        "allday_overlay_cols",
+        "allday_overlay_col"
+      ],
+      "fluid_w": [
+        "row",
+        "daycol",
+        "daycol_bg",
+        "chips",
+        "now_line",
+        "lines"
+      ]
+    },
+    "week_header": {
+      "source": "week_header",
+      "only_named": true,
+      "size": [
+        "*"
+      ],
+      "names": {
+        "0": "root",
+        "1": "pres",
+        "2": "pad",
+        "3": "col_today",
+        "4": "col_line_today",
+        "5": "h2_today",
+        "6": "dow_today",
+        "7": "daybtn_today",
+        "8": "daybtn_today_ripple",
+        "9": "daynum_today",
+        "10": "col",
+        "11": "col_line",
+        "12": "h2",
+        "13": "dow",
+        "14": "daybtn",
+        "15": "daybtn_ripple",
+        "16": "daynum"
+      },
+      "fluid_w": [
+        "root",
+        "pres",
+        "col_today",
+        "h2_today",
+        "dow_today",
+        "col",
+        "h2",
+        "dow",
+        "daynum",
+        "daynum_today"
+      ]
+    },
+    "allday": {
+      "source": "allday_row",
+      "only_named": true,
+      "size": [
+        "*"
+      ],
+      "names": {
+        "0": "root",
+        "1": "pad",
+        "2": "pres",
+        "3": "ul",
+        "4": "li",
+        "11": "cells",
+        "12": "cell",
+        "13": "cell_sr",
+        "14": "cell_chips",
+        "15": "chip_wrap",
+        "16": "chip",
+        "17": "chip_text_box",
+        "18": "chip_text",
+        "19": "chip_sr",
+        "33": "cell_empty",
+        "34": "cell_empty_sr"
+      },
+      "fluid_w": [
+        "root",
+        "pres",
+        "ul",
+        "li",
+        "cells",
+        "cell",
+        "cell_chips",
+        "chip_wrap",
+        "chip",
+        "cell_empty",
+        "chip_text_box",
+        "chip_text"
+      ],
+      "fluid_h": [
+        "root",
+        "pres",
+        "ul",
+        "li",
+        "cells",
+        "cell",
+        "cell_empty"
+      ]
+    },
+    "chip": {
+      "source": "event_chip",
+      "size": [
+        "*"
+      ],
+      "names": {
+        "0": "root",
+        "1": "sr",
+        "2": "body",
+        "3": "inner",
+        "4": "title_box",
+        "5": "title_span",
+        "6": "title",
+        "7": "time",
+        "8": "extra",
+        "9": "resize"
+      },
+      "fluid_w": [
+        "root",
+        "time",
+        "extra",
+        "resize",
+        "loc_extra",
+        "short_root",
+        "short_body",
+        "short_inner",
+        "short_line",
+        "short_span",
+        "short_title",
+        "short_comma",
+        "short_time",
+        "short_resize",
+        "tiny_root",
+        "tiny_body",
+        "tiny_inner",
+        "tiny_line",
+        "tiny_span",
+        "tiny_title",
+        "tiny_comma",
+        "tiny_time",
+        "tiny_resize",
+        "mid_root",
+        "mid_body",
+        "mid_inner",
+        "mid_time",
+        "mid_resize",
+        "hover_root",
+        "tentative_root",
+        "tentative_title_box",
+        "tentative_title",
+        "tentative_time",
+        "declined_root",
+        "declined_body",
+        "declined_title_box",
+        "declined_title",
+        "declined_time",
+        "past_root"
+      ],
+      "fluid_h": [
+        "root"
+      ],
+      "extra": {
+        "short_root": [
+          "event_chip-thirty",
+          0
+        ],
+        "short_sr": [
+          "event_chip-thirty",
+          1
+        ],
+        "short_body": [
+          "event_chip-thirty",
+          2
+        ],
+        "short_inner": [
+          "event_chip-thirty",
+          3
+        ],
+        "short_line": [
+          "event_chip-thirty",
+          4
+        ],
+        "short_span": [
+          "event_chip-thirty",
+          5
+        ],
+        "short_title": [
+          "event_chip-thirty",
+          6
+        ],
+        "short_comma": [
+          "event_chip-thirty",
+          7
+        ],
+        "short_time": [
+          "event_chip-thirty",
+          8
+        ],
+        "short_resize": [
+          "event_chip-thirty",
+          9
+        ],
+        "tiny_root": [
+          "event_chip-fifteen",
+          0
+        ],
+        "tiny_body": [
+          "event_chip-fifteen",
+          2
+        ],
+        "tiny_inner": [
+          "event_chip-fifteen",
+          3
+        ],
+        "tiny_line": [
+          "event_chip-fifteen",
+          4
+        ],
+        "tiny_span": [
+          "event_chip-fifteen",
+          5
+        ],
+        "tiny_title": [
+          "event_chip-fifteen",
+          6
+        ],
+        "tiny_comma": [
+          "event_chip-fifteen",
+          7
+        ],
+        "tiny_time": [
+          "event_chip-fifteen",
+          8
+        ],
+        "tiny_resize": [
+          "event_chip-fifteen",
+          9
+        ],
+        "mid_root": [
+          "event_chip-forty_five",
+          0
+        ],
+        "mid_body": [
+          "event_chip-forty_five",
+          2
+        ],
+        "mid_inner": [
+          "event_chip-forty_five",
+          3
+        ],
+        "mid_title_box": [
+          "event_chip-forty_five",
+          4
+        ],
+        "mid_title_span": [
+          "event_chip-forty_five",
+          5
+        ],
+        "mid_title": [
+          "event_chip-forty_five",
+          6
+        ],
+        "mid_time": [
+          "event_chip-forty_five",
+          7
+        ],
+        "mid_resize": [
+          "event_chip-forty_five",
+          8
+        ],
+        "hover_root": [
+          "event_chip-hover",
+          0
+        ],
+        "tentative_root": [
+          "event_chip-tentative",
+          0
+        ],
+        "tentative_title_box": [
+          "event_chip-tentative",
+          4
+        ],
+        "tentative_title": [
+          "event_chip-tentative",
+          6
+        ],
+        "tentative_time": [
+          "event_chip-tentative",
+          7
+        ],
+        "declined_root": [
+          "event_chip-declined",
+          0
+        ],
+        "declined_body": [
+          "event_chip-declined",
+          2
+        ],
+        "declined_title_box": [
+          "event_chip-declined",
+          4
+        ],
+        "declined_title": [
+          "event_chip-declined",
+          6
+        ],
+        "declined_time": [
+          "event_chip-declined",
+          7
+        ],
+        "past_root": [
+          "event_chip-past",
+          0
+        ],
+        "loc_body": [
+          "event_chip-with_location",
+          2
+        ],
+        "loc_inner": [
+          "event_chip-with_location",
+          3
+        ],
+        "loc_title_box": [
+          "event_chip-with_location",
+          4
+        ],
+        "loc_title_span": [
+          "event_chip-with_location",
+          5
+        ],
+        "loc_title": [
+          "event_chip-with_location",
+          6
+        ],
+        "loc_extra": [
+          "event_chip-with_location",
+          8
+        ]
+      },
+      "fluid": [
+        "body",
+        "inner",
+        "title_box",
+        "title_span",
+        "title",
+        "loc_body",
+        "loc_inner",
+        "loc_title_box",
+        "loc_title_span",
+        "loc_title",
+        "mid_title_box",
+        "mid_title_span",
+        "mid_title"
+      ]
+    }
+  }
+}

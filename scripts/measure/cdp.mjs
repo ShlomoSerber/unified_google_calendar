@@ -30,7 +30,9 @@ export async function launchChrome({ width = 1440, height = 900, headless = true
     try {
       const r = await fetch(`http://127.0.0.1:${PORT}/json/version`);
       if (r.ok) return child;
-    } catch {}
+    } catch {
+      // not up yet
+    }
     await new Promise((res) => setTimeout(res, 200));
   }
   child.kill();

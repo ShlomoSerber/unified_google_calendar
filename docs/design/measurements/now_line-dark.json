@@ -9,7 +9,7 @@
  "colorScheme": "normal",
  "rootRect": [
   375.34375,
-  866,
+  984,
   148.796875,
   2
  ],
@@ -28,7 +28,7 @@
    ],
    "abs": [
     375.34,
-    866
+    984
    ],
    "style": {
     "position": "absolute",
@@ -39,7 +39,9 @@
     "borderLeft": "0px none rgb(227, 227, 227)",
     "width": "148.797px",
     "zIndex": "507",
-    "outline": "rgb(227, 227, 227) none 3px"
+    "outline": "rgb(227, 227, 227) none 3px",
+    "top": "1208px",
+    "left": "0px"
    }
   }
  ]

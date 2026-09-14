@@ -4,7 +4,7 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 
 export default tseslint.config(
-  { ignores: ['dist', 'node_modules', 'src-tauri', 'scripts/measure/dumpRegion.js'] },
+  { ignores: ["dist", "node_modules", "src-tauri", "scripts/measure/dumpRegion.js"] },
   {
     files: ['**/*.{ts,tsx}'],
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
@@ -19,6 +19,6 @@ export default tseslint.config(
   {
     files: ['scripts/**/*.mjs', 'eslint.config.js'],
     extends: [js.configs.recommended],
-    languageOptions: { globals: { process: 'readonly', console: 'readonly' } },
+    languageOptions: { globals: { process: 'readonly', console: 'readonly', URL: 'readonly', fetch: 'readonly', Buffer: 'readonly', setTimeout: 'readonly', document: 'readonly', window: 'readonly', getComputedStyle: 'readonly', location: 'readonly', devicePixelRatio: 'readonly', innerWidth: 'readonly', innerHeight: 'readonly' } },
   },
 );
