@@ -99,7 +99,9 @@ mod tests {
         let conn = open(&path).unwrap();
         assert_eq!(migrations::user_version(&conn).unwrap(), 1);
         let kind: String = conn
-            .query_row("SELECT kind FROM accounts WHERE id = 'local'", [], |r| r.get(0))
+            .query_row("SELECT kind FROM accounts WHERE id = 'local'", [], |r| {
+                r.get(0)
+            })
             .unwrap();
         assert_eq!(kind, "local");
         let (color, reminders): (String, String) = conn
@@ -111,9 +113,13 @@ mod tests {
             .unwrap();
         assert_eq!(color, "#f4511e");
         assert_eq!(reminders, r#"[{"method":"popup","minutes":10}]"#);
-        let fk: i64 = conn.query_row("PRAGMA foreign_keys", [], |r| r.get(0)).unwrap();
+        let fk: i64 = conn
+            .query_row("PRAGMA foreign_keys", [], |r| r.get(0))
+            .unwrap();
         assert_eq!(fk, 1);
-        let mode: String = conn.query_row("PRAGMA journal_mode", [], |r| r.get(0)).unwrap();
+        let mode: String = conn
+            .query_row("PRAGMA journal_mode", [], |r| r.get(0))
+            .unwrap();
         assert_eq!(mode, "wal");
     }
 
@@ -127,7 +133,9 @@ mod tests {
         let mut conn = open(&path).unwrap();
         migrate(&mut conn).unwrap();
         assert_eq!(migrations::user_version(&conn).unwrap(), 1);
-        let n: i64 = conn.query_row("SELECT count(*) FROM accounts", [], |r| r.get(0)).unwrap();
+        let n: i64 = conn
+            .query_row("SELECT count(*) FROM accounts", [], |r| r.get(0))
+            .unwrap();
         assert_eq!(n, 1);
     }
 
@@ -142,11 +150,16 @@ mod tests {
         .await
         .unwrap();
         let v: String = h
-            .call(|c| Ok(c.query_row("SELECT value FROM settings WHERE key='a'", [], |r| r.get(0))?))
+            .call(
+                |c| Ok(c.query_row("SELECT value FROM settings WHERE key='a'", [], |r| r.get(0))?),
+            )
             .await
             .unwrap();
         assert_eq!(v, "1");
-        let err = h.call(|_| Err::<(), _>(AppError::Db("boom".into()))).await.unwrap_err();
+        let err = h
+            .call(|_| Err::<(), _>(AppError::Db("boom".into())))
+            .await
+            .unwrap_err();
         assert!(matches!(err, AppError::Db(_)));
     }
 }

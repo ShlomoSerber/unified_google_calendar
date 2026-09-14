@@ -104,8 +104,14 @@ mod tests {
         let errors = [
             AppError::Auth("invalid_grant".into()),
             AppError::Network("timeout".into()),
-            AppError::Google { status: 404, reason: "notFound".into() },
-            AppError::Google { status: 503, reason: "backendError".into() },
+            AppError::Google {
+                status: 404,
+                reason: "notFound".into(),
+            },
+            AppError::Google {
+                status: 503,
+                reason: "backendError".into(),
+            },
             AppError::Db("locked".into()),
             AppError::Recurrence("bad rule".into()),
             AppError::NotFound("The event".into()),

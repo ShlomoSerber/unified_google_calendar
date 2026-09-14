@@ -33,7 +33,10 @@ fn init_logging() -> Option<tracing_appender::non_blocking::WorkerGuard> {
         .ok()?;
     let (writer, guard) = tracing_appender::non_blocking(appender);
     let filter = EnvFilter::try_from_env("UGC_LOG").unwrap_or_else(|_| EnvFilter::new("info"));
-    let file_layer = fmt::layer().with_ansi(false).with_target(true).with_writer(writer);
+    let file_layer = fmt::layer()
+        .with_ansi(false)
+        .with_target(true)
+        .with_writer(writer);
     let stderr_layer = if cfg!(debug_assertions) {
         Some(fmt::layer().with_writer(std::io::stderr))
     } else {

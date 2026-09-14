@@ -17,7 +17,9 @@ pub const DEFAULT_SECONDARY_TZ: &str = "America/Mexico_City";
 pub const MAX_INSTANCES_PER_MASTER: usize = 5000;
 
 fn home() -> PathBuf {
-    std::env::var_os("HOME").map(PathBuf::from).unwrap_or_else(|| PathBuf::from("/"))
+    std::env::var_os("HOME")
+        .map(PathBuf::from)
+        .unwrap_or_else(|| PathBuf::from("/"))
 }
 
 /// `$XDG_CONFIG_HOME/unified-google-calendar`, default `~/.config/unified-google-calendar`.
