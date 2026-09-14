@@ -287,6 +287,9 @@ pub async fn remove_account(app: tauri::AppHandle, account_id: String) -> CmdRes
             tracing::debug!(error = %e, "stopping channels before removal failed");
         }
     }
+    if let Err(e) = crate::eds::remove_account_sources(&app, &account_id).await {
+        tracing::debug!(error = %e, "removing EDS sources failed");
+    }
     let id = account_id.clone();
     db::call(move |c| {
         // Tokens first, so a crash leaves no orphan credentials behind.
@@ -389,6 +392,47 @@ pub async fn test_push(url: String) -> CmdResult<types::PushTestResult> {
         });
     }
     Ok(result)
+}
+
+#[tauri::command]
+pub async fn goa_status() -> CmdResult<types::GoaStatus> {
+    let prompt_done: bool =
+        db::call(|c| db::queries::settings::get_or(c, "goa_prompt_done", false))
+            .await
+            .map_err(to_ipc)?;
+    let accounts = match crate::eds::goa::google_accounts().await {
+        Ok(list) => list
+            .into_iter()
+            .map(|a| types::GoaAccount {
+                id: a.id,
+                identity: a.identity,
+                calendar_disabled: a.calendar_disabled,
+            })
+            .collect(),
+        Err(e) => {
+            tracing::debug!(error = %e, "GOA unavailable");
+            vec![]
+        }
+    };
+    Ok(types::GoaStatus {
+        accounts,
+        prompt_done,
+    })
+}
+
+/// Answer of the first-run dialog. `disable = true` sets `CalendarDisabled` on every Google
+/// account in Online Accounts; either way the prompt is not shown again.
+#[tauri::command]
+pub async fn goa_disable_calendars(disable: bool) -> CmdResult<types::GoaStatus> {
+    if disable {
+        crate::eds::goa::disable_google_calendars()
+            .await
+            .map_err(to_ipc)?;
+    }
+    db::call(|c| db::queries::settings::set(c, "goa_prompt_done", &true))
+        .await
+        .map_err(to_ipc)?;
+    goa_status().await
 }
 
 #[tauri::command]
