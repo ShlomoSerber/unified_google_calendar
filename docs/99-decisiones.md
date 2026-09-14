@@ -87,6 +87,13 @@ Formato:
 - Motivo: los documentos no fijan el mecanismo concreto de estos puntos.
 - Afecta: `docs/05-sincronizacion.md` secciones 3.1, 3.3 y 4.
 
+## 2026-09-14 — Fase 6: detalles de notificaciones, bandeja y espejo EDS
+- Quién: implementación
+- Fase/tarea: F6-T1 a F6-T4
+- Decisión: (1) `sha1` 0.10 se agregó como dependencia para el UID `ugc-<sha1>` de las fuentes EDS (misma familia RustCrypto que `sha2`). (2) El UID de cada VEVENT es `ugc-<occurrence_id con | reemplazado por ->` porque se espejan ocurrencias y el `event_id` de un master se repite; `docs/06` 4.4 nombraba `ugc-<account_id>-<event_id>`. (3) El diff del espejo compara UID, DTSTART, DTEND, SUMMARY, LOCATION y LAST-MODIFIED del texto generado, ignorando DTSTAMP y SEQUENCE que EDS reescribe. (4) Tras `CreateSources` la app espera hasta 5 s a que el registro anuncie la fuente y reintenta `OpenCalendar` hasta 6 s, porque la fábrica de calendarios la ve de forma asíncrona (comprobado en vivo). (5) Recordatorios: un recordatorio perdido por hasta 10 minutos (suspensión) igual se muestra; los de día completo cuentan desde la medianoche local de la zona principal. (6) La extensión `ubuntu-appindicators@ubuntu.com` está instalada pero NO habilitada en la máquina al 2026-09-14 (`gsettings get org.gnome.shell enabled-extensions` no la incluye); sin ella no aparece el ícono de bandeja. El usuario debe habilitarla: `gnome-extensions enable ubuntu-appindicators@ubuntu.com`. (7) Verificado en vivo: webhook en 127.0.0.1:8080 (`/healthz` 200, POST inválido 404), listener de `login1`, fuente `ugc-local` con un VEVENT sin VALARM (`scripts/check-eds.sh` OK), y una notificación de recordatorio a 1 minuto registrada en `fired_reminders`. El diálogo de Online Accounts se muestra desde la UI (F7-T6) con los comandos `goa_status` y `goa_disable_calendars`.
+- Motivo: comportamiento observado de EDS y GNOME en la máquina del usuario.
+- Afecta: `docs/06-integracion-gnome.md` secciones 1, 2 y 4.4; `docs/01-requisitos.md` sección 10 (estado de la extensión).
+
 ## Mediciones de RAM por fase
 
 | Fase | Fecha | Proceso Rust PSS | WebKitWebProcess PSS | Total | Nota |
