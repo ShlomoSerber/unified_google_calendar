@@ -132,6 +132,15 @@ impl Engine {
     }
 
     async fn sync_account_inner(&self, account_id: &str) -> Result<(), AppError> {
+        let acc = account_id.to_string();
+        let kind = self
+            .ctx
+            .db
+            .call(move |c| Ok(accounts::get_account(c, &acc)?.map(|a| a.kind)))
+            .await?;
+        if kind.as_deref() == Some("ical") {
+            return crate::sync::ical::sync_ical_account(&self.ctx, account_id).await;
+        }
         let outcome = sync_calendar_list(&self.ctx, account_id).await?;
         let acc = account_id.to_string();
         let cals = self

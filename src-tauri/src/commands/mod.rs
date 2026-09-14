@@ -267,6 +267,34 @@ pub async fn add_account(app: tauri::AppHandle) -> CmdResult<types::AccountInfo>
     Ok(info)
 }
 
+/// Subscribe a read-only calendar by its secret iCal address (docs/99 "Calendarios iCal por URL").
+#[tauri::command]
+pub async fn add_ical_calendar(
+    app: tauri::AppHandle,
+    name: String,
+    url: String,
+    email: Option<String>,
+) -> CmdResult<types::AccountInfo> {
+    let ctx = sync_ctx().map_err(to_ipc)?;
+    let id = crate::sync::ical::add_ical_account(
+        &ctx,
+        &name,
+        &url,
+        email.as_deref().filter(|e| !e.trim().is_empty()),
+    )
+    .await
+    .map_err(to_ipc)?;
+    emit_accounts(&app).await;
+    let id2 = id.clone();
+    db::call(move |c| {
+        db::queries::accounts::get_account(c, &id2)?
+            .map(account_info)
+            .ok_or_else(|| AppError::NotFound("The account".into()))
+    })
+    .await
+    .map_err(to_ipc)
+}
+
 #[tauri::command]
 pub async fn sync_now(app: tauri::AppHandle) -> CmdResult<()> {
     let engine = crate::sync::engine::engine().map_err(to_ipc)?;
@@ -471,7 +499,8 @@ pub fn handler() -> impl Fn(tauri::ipc::Invoke) -> bool + Send + Sync + 'static 
         set_settings,
         test_push,
         goa_status,
-        goa_disable_calendars
+        goa_disable_calendars,
+        add_ical_calendar
     ]
 }
 
@@ -497,6 +526,7 @@ pub const COMMAND_NAMES: &[&str] = &[
     "test_push",
     "goa_status",
     "goa_disable_calendars",
+    "add_ical_calendar",
 ];
 
 #[cfg(test)]

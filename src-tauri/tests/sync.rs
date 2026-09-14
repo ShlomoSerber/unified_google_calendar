@@ -461,3 +461,91 @@ async fn poll_interval_follows_push_setting_and_window_refresh_prunes() {
         1
     );
 }
+
+#[tokio::test]
+async fn ical_subscription_is_added_synced_and_skipped_when_unchanged() {
+    use unified_google_calendar_lib::sync::ical;
+    use wiremock::matchers::header;
+    let s = server().await;
+    let feed = "BEGIN:VCALENDAR\r\nX-WR-CALNAME:RappiCard\r\nX-WR-TIMEZONE:America/Mexico_City\r\nBEGIN:VEVENT\r\nUID:one@google.com\r\nDTSTART;TZID=America/Mexico_City:20260914T090000\r\nDTEND;TZID=America/Mexico_City:20260914T093000\r\nSUMMARY:Standup\r\nATTENDEE;PARTSTAT=ACCEPTED:mailto:me@rappicard.mx\r\nEND:VEVENT\r\nEND:VCALENDAR\r\n";
+    Mock::given(method("GET"))
+        .and(path("/private/basic.ics"))
+        .and(header("if-none-match", "\"v1\""))
+        .respond_with(ResponseTemplate::new(304))
+        .expect(1)
+        .mount(&s)
+        .await;
+    Mock::given(method("GET"))
+        .and(path("/private/basic.ics"))
+        .respond_with(
+            ResponseTemplate::new(200)
+                .insert_header("etag", "\"v1\"")
+                .set_body_string(feed),
+        )
+        .expect(1)
+        .mount(&s)
+        .await;
+    let db = test_db();
+    let rec = Arc::new(Recorder::default());
+    let ctx = ctx(&s, db.clone(), rec.clone());
+    // The URL goes to the encrypted token store; keep it in a temp dir.
+    let tmp = tempfile::tempdir().unwrap();
+    std::env::set_var("XDG_DATA_HOME", tmp.path());
+    let url = format!("{}/private/basic.ics", s.uri());
+    assert!(ical::add_ical_account(&ctx, "  ", &url, None)
+        .await
+        .is_err());
+    assert!(
+        ical::add_ical_account(&ctx, "RappiCard", "http://example.com/x.ics", None)
+            .await
+            .is_err(),
+        "https required off loopback"
+    );
+    let id = ical::add_ical_account(&ctx, "RappiCard", &url, Some("me@rappicard.mx"))
+        .await
+        .unwrap();
+    assert_eq!(
+        count(&db, "SELECT count(*) FROM accounts WHERE kind='ical'").await,
+        1
+    );
+    let (summary, role): (String, String) = db
+        .call(|c| {
+            Ok(c.query_row(
+                "SELECT summary, access_role FROM calendars WHERE id='ical'",
+                [],
+                |r| Ok((r.get(0)?, r.get(1)?)),
+            )?)
+        })
+        .await
+        .unwrap();
+    assert_eq!((summary.as_str(), role.as_str()), ("RappiCard", "reader"));
+    assert_eq!(
+        count(
+            &db,
+            "SELECT count(*) FROM occurrences WHERE calendar_id='ical'"
+        )
+        .await,
+        1
+    );
+    let att: String = db
+        .call(|c| {
+            Ok(c.query_row(
+                "SELECT attendees FROM events WHERE id='one@google.com'",
+                [],
+                |r| r.get(0),
+            )?)
+        })
+        .await
+        .unwrap();
+    assert!(att.contains("\"self\":true"));
+    assert!(
+        !std::fs::read(tmp.path().join("unified-google-calendar/tokens.bin"))
+            .unwrap()
+            .windows(7)
+            .any(|w| w == b"private"),
+        "url encrypted"
+    );
+    // Second sync: the server answers 304 and nothing changes.
+    ical::sync_ical_account(&ctx, &id).await.unwrap();
+    assert_eq!(rec.updates.lock().unwrap().len(), 1);
+}

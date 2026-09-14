@@ -2,7 +2,7 @@
 // Every change here updates the Rust side and regenerates src/types/fixtures with `cargo test`.
 // src/types/ipc.test.ts imports the fixtures with these types so a drift fails typecheck.
 
-export type AccountKind = 'local' | 'google';
+export type AccountKind = 'local' | 'google' | 'ical';
 export type SyncState = 'idle' | 'syncing' | 'error' | 'auth_required';
 export type AccessRole = 'owner' | 'writer' | 'reader' | 'freeBusyReader';
 export type ResponseStatus = 'needsAction' | 'declined' | 'tentative' | 'accepted';

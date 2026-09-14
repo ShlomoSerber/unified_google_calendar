@@ -6,6 +6,8 @@ pub mod ctx;
 pub mod engine;
 pub mod full;
 pub mod holidays;
+pub mod ical;
+pub mod ics;
 pub mod incremental;
 pub mod map;
 pub mod poll;

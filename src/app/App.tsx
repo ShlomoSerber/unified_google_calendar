@@ -9,6 +9,9 @@ export function App() {
   const [accounts, setAccounts] = useState<AccountInfo[]>([]);
   const [message, setMessage] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [icalName, setIcalName] = useState('');
+  const [icalUrl, setIcalUrl] = useState('');
+  const [icalEmail, setIcalEmail] = useState('');
 
   useEffect(() => {
     ipc.listAccounts().then(setAccounts).catch((e: unknown) => setMessage(String(e)));
@@ -24,6 +27,21 @@ export function App() {
     try {
       const a = await ipc.addAccount();
       setMessage(`Added ${a.email ?? a.id}; syncing.`);
+    } catch (e) {
+      setMessage(String(e));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const addIcal = async () => {
+    setBusy(true);
+    setMessage('Downloading the calendar…');
+    try {
+      const a = await ipc.addIcalCalendar(icalName, icalUrl, icalEmail || null);
+      setMessage(`Added ${a.display_name} (read-only iCal).`);
+      setIcalName('');
+      setIcalUrl('');
     } catch (e) {
       setMessage(String(e));
     } finally {
@@ -48,6 +66,14 @@ export function App() {
       <button type="button" onClick={() => ipc.syncNow().catch((e: unknown) => setMessage(String(e)))}>
         Sync now
       </button>
+      <p>
+        <input placeholder="Name (e.g. RappiCard)" value={icalName} onChange={(e) => setIcalName(e.target.value)} />{' '}
+        <input placeholder="Secret iCal address (https://…/basic.ics)" value={icalUrl} onChange={(e) => setIcalUrl(e.target.value)} />{' '}
+        <input placeholder="Your e-mail in that calendar (optional)" value={icalEmail} onChange={(e) => setIcalEmail(e.target.value)} />{' '}
+        <button type="button" onClick={addIcal} disabled={busy || !icalName || !icalUrl}>
+          Add iCal calendar
+        </button>
+      </p>
       {message ? <p>{message}</p> : null}
     </div>
   );

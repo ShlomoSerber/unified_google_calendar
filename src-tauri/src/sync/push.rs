@@ -146,7 +146,7 @@ pub async fn ensure_channels(ctx: &SyncCtx) -> Result<usize, AppError> {
     let mut made = 0usize;
     for a in accounts
         .into_iter()
-        .filter(|a| !a.is_local() && a.sync_state != "auth_required")
+        .filter(|a| a.is_google() && a.sync_state != "auth_required")
     {
         match ensure_one(ctx, &base_url, &a.id, None).await {
             Ok(true) => made += 1,
@@ -206,7 +206,7 @@ pub async fn stop_account_channels(ctx: &SyncCtx, account_id: &str) -> Result<()
 /// Stop every channel (used when the user turns push off).
 pub async fn stop_all_channels(ctx: &SyncCtx) -> Result<(), AppError> {
     let accounts = ctx.db.call(|c| accounts::list_accounts(c)).await?;
-    for a in accounts.into_iter().filter(|a| !a.is_local()) {
+    for a in accounts.into_iter().filter(|a| a.is_google()) {
         stop_account_channels(ctx, &a.id).await?;
     }
     Ok(())

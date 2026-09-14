@@ -40,6 +40,14 @@ impl AccountRow {
     pub fn is_local(&self) -> bool {
         self.kind == "local"
     }
+
+    pub fn is_google(&self) -> bool {
+        self.kind == "google"
+    }
+
+    pub fn is_ical(&self) -> bool {
+        self.kind == "ical"
+    }
 }
 
 pub fn list_accounts(conn: &Connection) -> Result<Vec<AccountRow>, AppError> {
@@ -86,9 +94,28 @@ pub fn upsert_google_account(
 
 pub fn delete_account(conn: &Connection, id: &str) -> Result<usize, AppError> {
     Ok(conn.execute(
-        "DELETE FROM accounts WHERE id=?1 AND kind='google'",
+        "DELETE FROM accounts WHERE id=?1 AND kind IN ('google', 'ical')",
         params![id],
     )?)
+}
+
+/// Insert an iCal subscription account (docs/99 "Calendarios iCal por URL").
+pub fn insert_ical_account(
+    conn: &Connection,
+    id: &str,
+    display_name: &str,
+    email: Option<&str>,
+) -> Result<(), AppError> {
+    let next_order: i64 = conn.query_row(
+        "SELECT coalesce(max(sort_order), 0) + 1 FROM accounts",
+        [],
+        |r| r.get(0),
+    )?;
+    conn.execute(
+        "INSERT INTO accounts (id, kind, email, display_name, sort_order, sync_state, created_at) VALUES (?1, 'ical', ?2, ?3, ?4, 'idle', ?5)",
+        params![id, email, display_name, next_order, crate::db::now_ts()],
+    )?;
+    Ok(())
 }
 
 pub fn set_sync_state(

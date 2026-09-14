@@ -22,6 +22,7 @@ const COMMANDS: &[&str] = &[
     "test_push",
     "goa_status",
     "goa_disable_calendars",
+    "add_ical_calendar",
 ];
 
 fn main() {

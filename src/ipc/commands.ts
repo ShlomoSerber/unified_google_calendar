@@ -20,6 +20,8 @@ export const ipc = {
   listAccounts: () => invoke<AccountInfo[]>('list_accounts'),
   addAccount: () => invoke<AccountInfo>('add_account'),
   removeAccount: (accountId: string) => invoke<void>('remove_account', { accountId }),
+  addIcalCalendar: (name: string, url: string, email: string | null) =>
+    invoke<AccountInfo>('add_ical_calendar', { name, url, email }),
   listCalendars: () => invoke<CalendarInfo[]>('list_calendars'),
   setCalendarVisible: (accountId: string, calendarId: string, visible: boolean) =>
     invoke<void>('set_calendar_visible', { accountId, calendarId, visible }),

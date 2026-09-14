@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-add-ical-calendar"
+description = "Enables the add_ical_calendar command without any pre-configured scope."
+commands.allow = ["add_ical_calendar"]
+
+[[permission]]
+identifier = "deny-add-ical-calendar"
+description = "Denies the add_ical_calendar command without any pre-configured scope."
+commands.deny = ["add_ical_calendar"]

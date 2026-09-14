@@ -643,6 +643,20 @@ pub async fn move_event(
     };
     ensure_writable(ctx, target_account_id, target_calendar_id).await?;
 
+    let (a1, a2) = (src_account.clone(), target_account_id.to_string());
+    let kinds = ctx
+        .db
+        .call(move |c| {
+            let s = crate::db::queries::accounts::get_account(c, &a1)?.map(|a| a.kind);
+            let d = crate::db::queries::accounts::get_account(c, &a2)?.map(|a| a.kind);
+            Ok((s, d))
+        })
+        .await?;
+    if kinds.0.as_deref() == Some("ical") || kinds.1.as_deref() == Some("ical") {
+        return Err(AppError::invalid(
+            "Events of an iCal subscription cannot be moved; it is read-only",
+        ));
+    }
     let src_local = is_local(&src_account);
     let dst_local = is_local(target_account_id);
     if src_local && dst_local {

@@ -29,6 +29,9 @@ pub struct AccountTokens {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
 pub struct TokenFile {
     pub accounts: BTreeMap<String, AccountTokens>,
+    /// Secret iCal addresses by account id (docs/99 "Calendarios iCal por URL").
+    #[serde(default)]
+    pub ical_urls: BTreeMap<String, String>,
 }
 
 /// Where the file lives and what the key is derived from.
@@ -160,10 +163,23 @@ impl TokenStore {
 
     pub fn remove(&self, account_id: &str) -> Result<(), AppError> {
         let mut file = self.load()?;
-        if file.accounts.remove(account_id).is_some() {
+        let removed = file.accounts.remove(account_id).is_some()
+            | file.ical_urls.remove(account_id).is_some();
+        if removed {
             self.save(&file)?;
         }
         Ok(())
+    }
+
+    pub fn get_ical_url(&self, account_id: &str) -> Result<Option<String>, AppError> {
+        Ok(self.load()?.ical_urls.get(account_id).cloned())
+    }
+
+    pub fn put_ical_url(&self, account_id: &str, url: &str) -> Result<(), AppError> {
+        let mut file = self.load()?;
+        file.ical_urls
+            .insert(account_id.to_string(), url.to_string());
+        self.save(&file)
     }
 }
 
@@ -214,6 +230,23 @@ mod tests {
         s.remove("acc1").unwrap();
         assert!(s.get("acc1").unwrap().is_none());
         assert!(s.get("acc2").unwrap().is_some());
+        s.put_ical_url(
+            "ical1",
+            "https://calendar.google.com/calendar/ical/x/private-abc/basic.ics",
+        )
+        .unwrap();
+        assert!(s
+            .get_ical_url("ical1")
+            .unwrap()
+            .unwrap()
+            .contains("private-abc"));
+        let bytes = std::fs::read(s.path()).unwrap();
+        assert!(
+            !bytes.windows(11).any(|w| w == b"private-abc"),
+            "url is encrypted"
+        );
+        s.remove("ical1").unwrap();
+        assert!(s.get_ical_url("ical1").unwrap().is_none());
     }
 
     #[test]

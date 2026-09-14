@@ -84,7 +84,7 @@ describe('IPC fixtures', () => {
 
   it('use only the literal values of the unions', () => {
     for (const a of accounts) {
-      expect(['local', 'google']).toContain(a.kind);
+      expect(['local', 'google', 'ical']).toContain(a.kind);
       expect(SYNC_STATES).toContain(a.sync_state);
     }
     for (const c of calendars) expect(ACCESS_ROLES).toContain(c.access_role);

@@ -31,7 +31,7 @@ Then read the documents the task lists. Do not start coding a task without havin
 npm run tauri dev                         # run the app in dev mode (Vite + Rust)
 TAURI_LINUX_AYATANA_APPINDICATOR=1 npm run tauri build -- --bundles deb   # build the .deb
 cargo clippy --manifest-path src-tauri/Cargo.toml -- -D warnings
-cargo test --manifest-path src-tauri/Cargo.toml
+cargo test --manifest-path src-tauri/Cargo.toml   # use CARGO_BUILD_JOBS=2 and close the dev app first: parallel rustc of tauri crates exhausts RAM
 npm run lint && npm run typecheck && npm test
 node scripts/gen-tokens.mjs               # docs/design/tokens.json -> src/styles/tokens.css
 node scripts/check-tokens.mjs             # fails if CSS uses a null or missing token
