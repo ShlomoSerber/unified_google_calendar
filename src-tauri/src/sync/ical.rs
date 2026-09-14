@@ -73,10 +73,11 @@ pub fn apply(
     let existing = calendars::get_calendar(conn, account_id, CALENDAR_ID)?;
     let account = accounts::get_account(conn, account_id)?
         .ok_or_else(|| AppError::NotFound("The account".into()))?;
+    // Feeds often name the calendar after the e-mail address; the user's label reads better.
     let summary = cal
         .name
         .clone()
-        .filter(|n| !n.is_empty())
+        .filter(|n| !n.is_empty() && !n.contains('@'))
         .unwrap_or_else(|| account.display_name.clone());
     let row = calendars::CalendarRow {
         id: CALENDAR_ID.into(),

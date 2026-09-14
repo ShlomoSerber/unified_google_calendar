@@ -110,21 +110,40 @@ pub fn vevent(item: &MirrorItem) -> String {
     lines.push(format!("LAST-MODIFIED:{}", fmt_utc(item.updated_ts)));
     lines.push("SEQUENCE:0".into());
     lines.push("END:VEVENT".into());
-    lines.join("\r\n") + "\r\n"
+    lines
+        .iter()
+        .map(|l| fold(l))
+        .collect::<Vec<_>>()
+        .join("\r\n")
+        + "\r\n"
 }
 
-/// `UID` property of a VEVENT text.
+/// Fold a content line at 72 octet-safe characters (RFC 5545 section 3.1).
+fn fold(line: &str) -> String {
+    let mut out = String::new();
+    let mut count = 0usize;
+    for c in line.chars() {
+        if count + c.len_utf8() > 72 {
+            out.push_str("\r\n ");
+            count = 1;
+        }
+        out.push(c);
+        count += c.len_utf8();
+    }
+    out
+}
+
+/// `UID` property of a VEVENT text (lines are unfolded first: EDS folds at 75 octets).
 pub fn uid_of(vevent: &str) -> Option<String> {
-    vevent
-        .lines()
-        .find_map(|l| l.trim_end().strip_prefix("UID:").map(str::to_string))
+    crate::sync::ics::unfold(vevent)
+        .into_iter()
+        .find_map(|l| l.strip_prefix("UID:").map(str::to_string))
 }
 
-/// Comparable form of a VEVENT: the lines that matter, normalized.
+/// Comparable form of a VEVENT: the lines that matter, unfolded and normalized.
 fn normalized(vevent: &str) -> String {
-    vevent
-        .lines()
-        .map(str::trim_end)
+    crate::sync::ics::unfold(vevent)
+        .into_iter()
         .filter(|l| {
             let key = l.split([':', ';']).next().unwrap_or("");
             matches!(
@@ -402,6 +421,12 @@ mod tests {
         // Nothing exists: create both.
         let d = diff(&[], &[a.clone(), b.clone()]);
         assert_eq!((d.create.len(), d.modify.len(), d.remove.len()), (2, 0, 0));
+        // A long UID gets folded by EDS; it must still match.
+        let long = MirrorItem { uid: "ugc-117623048912784336179-shlomo.serber_greelow.com-abcdefghijklmnopqrstuvwxyz0123456789-1789401600".into(), ..a.clone() };
+        let vl = vevent(&long);
+        assert!(vl.contains("\r\n "), "generated text is folded");
+        assert_eq!(uid_of(&vl).as_deref(), Some(long.uid.as_str()));
+        assert_eq!(diff(std::slice::from_ref(&vl), std::slice::from_ref(&long)), Diff::default());
         // Both exist unchanged (EDS reformats DTSTAMP/SEQUENCE): nothing to do.
         let existing = vec![
             va.replace("SEQUENCE:0", "SEQUENCE:3")
