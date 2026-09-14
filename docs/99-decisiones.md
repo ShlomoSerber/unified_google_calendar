@@ -52,6 +52,20 @@ Formato:
 - Motivo: `events.id` solo es único dentro de `(account_id, calendar_id)`; el `occurrence_id` ya lleva las tres claves y evita ambigüedad. Los calendarios de destino se identifican por par cuenta+calendario por la misma razón.
 - Afecta: `docs/02-arquitectura.md` sección 5 (tabla de comandos).
 
+## 2026-09-14 — Fase 2 cerrada con verificaciones manuales pendientes
+- Quién: implementación
+- Fase/tarea: F2-T2, F2-T4
+- Decisión: la fase se cierra con todos los criterios automáticos cumplidos (58 tests unitarios, 8 de cliente Google y 5 de sync con wiremock). Las pruebas manuales que requieren cuentas reales (alta de la cuenta Greelow y del Gmail personal, resultado del admin de Workspace, comparación de la semana actual contra calendar.google.com) quedan agrupadas en la lista de verificación manual que se entrega al usuario al final de la implementación, porque el usuario pidió avanzar sin interrupciones. La medición de RAM se hace con el build de release en F8-T2.
+- Motivo: instrucción del usuario de completar todo el proyecto de corrido.
+- Afecta: `docs/08-plan-de-implementacion.md` sección 11 (orden del cierre de fase).
+
+## 2026-09-14 — Inyección de dependencias en el motor de sync
+- Quién: implementación
+- Fase/tarea: F2-T4
+- Decisión: `sync::SyncCtx` agrupa `DbHandle`, `google::Client`, una fuente de tokens (`TokenSource`) y un emisor de eventos (`SyncEvents`). Las funciones `full_sync_calendar` e `incremental_calendar` reciben `&SyncCtx`; las firmas con `&AppHandle` de `docs/08` sección 12 existen como wrappers (`full_sync_calendar_app`, `incremental_calendar_app`, `sync_all`). En producción el contexto usa OAuth y `app.emit`; en tests usa un token fijo y un registrador en memoria.
+- Motivo: probar el motor con wiremock sin construir una app Tauri.
+- Afecta: `docs/08-plan-de-implementacion.md` sección 12.
+
 ## Mediciones de RAM por fase
 
 | Fase | Fecha | Proceso Rust PSS | WebKitWebProcess PSS | Total | Nota |
