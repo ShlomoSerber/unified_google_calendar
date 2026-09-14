@@ -286,6 +286,24 @@ pub fn expand_dates(
             (tz, start_local, (et - st).max(0))
         };
 
+    // Google accepts a series whose UNTIL precedes DTSTART (it has no instances); the crate
+    // rejects it, so short-circuit here.
+    let series_start = if spec.all_day {
+        start_local.and_utc().timestamp()
+    } else {
+        spec.start_ts.unwrap_or(0)
+    };
+    for line in &spec.recurrence {
+        if let Some(rule) = line.strip_prefix("RRULE:") {
+            if let Some(until) = rrule_part(rule, "UNTIL") {
+                let until_ts = parse_ical_datetime(until, Some(tz), true)?.timestamp();
+                if until_ts < series_start {
+                    tracing::debug!("recurrence with UNTIL before DTSTART has no instances");
+                    return Ok(Vec::new());
+                }
+            }
+        }
+    }
     let text = build_rruleset_text(spec, tz, start_local)?;
     let set = rrule::RRuleSet::from_str(&text)
         .map_err(|e| AppError::Recurrence(format!("{e} in {text:?}")))?;
@@ -760,6 +778,21 @@ mod tests {
             starts(&s),
             vec!["2026-10-26T14:00:00+00:00", "2026-11-02T15:00:00+00:00"]
         );
+    }
+
+    #[test]
+    fn until_before_start_yields_no_instances() {
+        let s = spec_timed(
+            "2024-01-18T16:30:00-03:00",
+            "2024-01-18T17:00:00-03:00",
+            "America/Argentina/Buenos_Aires",
+            &["RRULE:FREQ=WEEKLY;WKST=SU;UNTIL=20231224T025959Z;BYDAY=TH"],
+        );
+        let wide = Window {
+            from_ts: 0,
+            to_ts: 2_000_000_000,
+        };
+        assert!(expand_dates(&s, wide, 5000).unwrap().is_empty());
     }
 
     #[test]
