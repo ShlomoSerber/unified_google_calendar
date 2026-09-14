@@ -256,6 +256,11 @@ impl Default for Settings {
 
 // ---- events emitted from Rust (docs/02 section 5) --------------------------------------------
 
+pub const EVENT_CALENDAR_UPDATED: &str = "calendar:updated";
+pub const EVENT_SYNC_STATUS: &str = "sync:status";
+pub const EVENT_ACCOUNT_CHANGED: &str = "account:changed";
+pub const EVENT_WINDOW_SHOW_EVENT: &str = "window:show-event";
+
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct CalendarUpdated {
     pub from: i64,

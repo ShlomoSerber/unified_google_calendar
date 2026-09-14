@@ -21,6 +21,29 @@ pub struct Window {
     pub to_ts: i64,
 }
 
+impl Window {
+    /// Data window of docs/03 section 3: today minus `data_window_past_days` to today plus
+    /// `data_window_future_days`, aligned to UTC midnight.
+    pub fn current(conn: &Connection) -> Result<Window, AppError> {
+        use crate::db::queries::settings;
+        let past: i64 = settings::get_or(
+            conn,
+            "data_window_past_days",
+            crate::config::DEFAULT_DATA_WINDOW_PAST_DAYS,
+        )?;
+        let future: i64 = settings::get_or(
+            conn,
+            "data_window_future_days",
+            crate::config::DEFAULT_DATA_WINDOW_FUTURE_DAYS,
+        )?;
+        let today = Utc::now().date_naive();
+        Ok(Window {
+            from_ts: date_to_ts(today - Duration::days(past)),
+            to_ts: date_to_ts(today + Duration::days(future)),
+        })
+    }
+}
+
 /// What the expander needs from a master row.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct MasterSpec {

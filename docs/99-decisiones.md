@@ -45,6 +45,13 @@ Formato:
 - Motivo: `02` sección 1 da versiones mínimas; estas son las últimas estables de cada línea al 2026-09-14. `subtle` y `http-body-util` son utilidades de test/seguridad sin superficie propia; se listan acá para cumplir la regla de dependencias.
 - Afecta: `docs/02-arquitectura.md` sección 1.
 
+## 2026-09-14 — Identificación de eventos en comandos de escritura y movimiento
+- Quién: implementación
+- Fase/tarea: F1-T5
+- Decisión: `update_event`, `delete_event` y `move_event_account` reciben `occurrence_id` (que codifica cuenta, calendario y evento) en lugar de un `event_id` suelto; `move_event_account` recibe además `target_account_id` y `target_calendar_id`. `get_view` acepta el parámetro `tz` del contrato pero no lo usa: la posición de los eventos de día completo la resuelve la UI con la zona principal.
+- Motivo: `events.id` solo es único dentro de `(account_id, calendar_id)`; el `occurrence_id` ya lleva las tres claves y evita ambigüedad. Los calendarios de destino se identifican por par cuenta+calendario por la misma razón.
+- Afecta: `docs/02-arquitectura.md` sección 5 (tabla de comandos).
+
 ## Mediciones de RAM por fase
 
 | Fase | Fecha | Proceso Rust PSS | WebKitWebProcess PSS | Total | Nota |

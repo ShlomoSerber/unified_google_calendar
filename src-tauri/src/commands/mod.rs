@@ -2,11 +2,15 @@
 //!
 //! Every `#[tauri::command]` converts `AppError` into its `user_message()` at this boundary.
 
+pub mod events;
 pub mod types;
 pub mod view;
 
+use tauri::Emitter;
+
 use crate::db;
 use crate::error::AppError;
+use crate::recurrence::Window;
 
 pub type CmdResult<T> = Result<T, String>;
 
@@ -92,6 +96,104 @@ pub async fn set_calendar_visible(
     })
     .await
     .map_err(to_ipc)
+}
+
+/// Emit `calendar:updated` for a touched range (docs/02 section 5).
+pub fn emit_updated(app: &tauri::AppHandle, t: &events::Touched) {
+    let payload = types::CalendarUpdated {
+        from: t.from,
+        to: t.to,
+        calendar_ids: t.calendars.clone(),
+    };
+    if let Err(e) = app.emit(types::EVENT_CALENDAR_UPDATED, &payload) {
+        tracing::warn!(error = %e, "failed to emit calendar:updated");
+    }
+}
+
+fn not_google_yet(account_id: &str) -> Result<(), AppError> {
+    if events::is_local(account_id) {
+        Ok(())
+    } else {
+        Err(AppError::invalid(
+            "Writing to Google accounts is not available in this build yet",
+        ))
+    }
+}
+
+#[tauri::command]
+pub async fn create_event(
+    app: tauri::AppHandle,
+    draft: types::EventDraft,
+) -> CmdResult<types::EventDetail> {
+    not_google_yet(&draft.account_id).map_err(to_ipc)?;
+    let (detail, touched) = db::call(move |c| {
+        let w = Window::current(c)?;
+        events::create_local(c, &draft, w)
+    })
+    .await
+    .map_err(to_ipc)?;
+    emit_updated(&app, &touched);
+    Ok(detail)
+}
+
+#[tauri::command]
+pub async fn update_event(
+    app: tauri::AppHandle,
+    occurrence_id: String,
+    draft: types::EventDraft,
+    scope: types::EditScope,
+) -> CmdResult<types::EventDetail> {
+    not_google_yet(&draft.account_id).map_err(to_ipc)?;
+    let (detail, touched) = db::call(move |c| {
+        let w = Window::current(c)?;
+        events::update_local(c, &occurrence_id, &draft, scope, w)
+    })
+    .await
+    .map_err(to_ipc)?;
+    emit_updated(&app, &touched);
+    Ok(detail)
+}
+
+#[tauri::command]
+pub async fn delete_event(
+    app: tauri::AppHandle,
+    occurrence_id: String,
+    scope: types::EditScope,
+) -> CmdResult<()> {
+    let touched = db::call(move |c| {
+        let (account_id, _, _) = db::queries::events::parse_occurrence_id(&occurrence_id)
+            .ok_or_else(|| AppError::NotFound("The event".into()))?;
+        not_google_yet(&account_id)?;
+        let w = Window::current(c)?;
+        events::delete_local(c, &occurrence_id, scope, w)
+    })
+    .await
+    .map_err(to_ipc)?;
+    emit_updated(&app, &touched);
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn move_event_account(
+    app: tauri::AppHandle,
+    occurrence_id: String,
+    target_account_id: String,
+    target_calendar_id: String,
+) -> CmdResult<types::EventDetail> {
+    let (detail, touched) = db::call(move |c| {
+        let w = Window::current(c)?;
+        events::move_local_to_local(
+            c,
+            &occurrence_id,
+            &target_account_id,
+            &target_calendar_id,
+            w,
+        )
+    })
+    .await
+    .map_err(to_ipc)?;
+    emit_updated(&app, &touched);
+    Ok(detail)
 }
 
 /// Commands registered with the Tauri builder.
