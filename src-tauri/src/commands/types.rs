@@ -82,6 +82,8 @@ pub struct ViewOccurrence {
     pub is_local: bool,
     /// `opaque` | `transparent`
     pub transparency: Option<String>,
+    /// Shown as the chip's third line, like Google (docs/99 F4-T4).
+    pub location: Option<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -260,6 +262,8 @@ pub const EVENT_CALENDAR_UPDATED: &str = "calendar:updated";
 pub const EVENT_SYNC_STATUS: &str = "sync:status";
 pub const EVENT_ACCOUNT_CHANGED: &str = "account:changed";
 pub const EVENT_WINDOW_SHOW_EVENT: &str = "window:show-event";
+/// Emitted at every minute boundary so the now line moves without a JS timer (docs/99 F4-T4).
+pub const EVENT_CLOCK_MINUTE: &str = "clock:minute";
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct CalendarUpdated {
@@ -405,6 +409,7 @@ mod tests {
                     also_in: vec![],
                     is_local: false,
                     transparency: Some("opaque".into()),
+                    location: Some("Room 4".into()),
                 }],
                 calendars: vec![CalendarVisibility {
                     account_id: "104857600000000000001".into(),

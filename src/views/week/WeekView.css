@@ -1,0 +1,220 @@
+/* Measured rules live in src/styles/measured.css (.week-*, .week-header-*, .allday-*, .chip-*).
+   This file adds what a computed-style dump cannot express: the hour lines Google draws with
+   ::after, auto margins that the dump resolved to used values, the dynamic calendar colour of
+   each chip, and flex sizing of the fluid nodes. */
+
+.week-root {
+  flex: 1;
+  min-height: 0;
+}
+
+.week-top-right,
+.week-body,
+.week-scroller,
+.allday-pres {
+  flex: 1;
+  min-width: 0;
+}
+
+.week-body {
+  min-height: 0;
+}
+
+.week-body-inner {
+  flex: 1;
+  min-height: 0;
+}
+
+/* Google's grid scrolls without a visible bar (component 21, measured in phase 7). */
+.week-scroller,
+.week-gutter,
+.allday-root {
+  scrollbar-width: none;
+}
+
+.week-scroller::-webkit-scrollbar,
+.week-gutter::-webkit-scrollbar,
+.allday-root::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hour lines: each hour cell draws one line across the row with ::after
+   (probed on calendar.google.com: content "", absolute, left 0, right 0, z-index 3,
+   border-bottom equal to the row's top border). */
+.week-line::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin-top: var(--week-line-after-margin-top);
+  border-bottom: var(--week-lines-border-top);
+  z-index: 3;
+}
+
+/* Shadow under the header block and the fades at both ends (probed pseudo-elements, see
+   docs/design/tokens.json component.week.body_inner_before_note). */
+.week-body-inner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: var(--week-body-inner-before-left);
+  right: var(--week-body-inner-before-right);
+  height: var(--week-body-inner-before-height);
+  box-shadow: var(--week-body-inner-before-box-shadow);
+  z-index: var(--week-body-inner-before-z-index);
+  pointer-events: none;
+}
+
+.week-gutter::before,
+.week-body-inner::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  height: var(--week-gutter-before-height);
+  width: var(--week-gutter-before-width);
+  z-index: var(--week-body-inner-before-z-index);
+  pointer-events: none;
+}
+
+.week-gutter::before {
+  left: 0;
+  background-image: var(--week-gutter-before-background-image);
+}
+
+.week-body-inner::after {
+  right: var(--week-body-inner-after-right);
+  background-image: var(--week-body-inner-after-background-image);
+}
+
+.week-header-col,
+.week-header-col-today,
+.week-daycol,
+.week-allday-overlay-col,
+.allday-cell,
+.allday-cell-empty,
+.allday-li {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.week-header-h2,
+.week-header-h2-today,
+.allday-cells {
+  flex: 1;
+  min-width: 0;
+}
+
+.week-header-h2,
+.week-header-h2-today,
+.week-daycol-sr,
+.allday-cell-sr,
+.allday-cell-empty-sr {
+  margin: 0;
+}
+
+/* The day number disc is centred with auto margins; the dump recorded their used values. */
+.week-header-daybtn,
+.week-header-daybtn-today {
+  margin-left: auto;
+  margin-right: auto;
+  cursor: pointer;
+}
+
+.week-header-dow,
+.week-header-dow-today {
+  text-align: center;
+}
+
+.week-gutter-label {
+  display: block;
+}
+
+.week-allday-overlay-cols,
+.allday-ul,
+.allday-cells {
+  width: 100%;
+}
+
+.allday-ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.allday-chip,
+.chip-root,
+.chip-short-root,
+.chip-tiny-root {
+  cursor: pointer;
+}
+
+/* Stacked chips (column 1+ of a cluster) sit above the previous column and carry an outline
+   in the surface colour (probed ::after, docs/design/tokens.json component.chip.stacked_after_note). */
+.chip-root {
+  z-index: calc(var(--chip-root-z-index) + var(--data-column, 0));
+}
+
+.chip-stacked::after {
+  content: '';
+  position: absolute;
+  left: var(--chip-stacked-after-left);
+  top: var(--chip-stacked-after-top);
+  right: var(--chip-stacked-after-left);
+  bottom: var(--chip-stacked-after-top);
+  border: var(--chip-stacked-after-border-top);
+  border-radius: var(--chip-stacked-after-border-radius);
+  pointer-events: none;
+}
+
+/* Every chip takes its calendar's colour (ViewOccurrence.color_bg via --data-chip-bg); the
+   measured chip carried the fixtures calendar's green. Declined chips invert it. */
+.allday-chip,
+.chip-root:not(.chip-declined-root),
+.chip-short-root,
+.chip-tiny-root {
+  background-color: var(--data-chip-bg);
+}
+
+.chip-declined-body,
+.chip-declined-title-box,
+.chip-declined-title,
+.chip-declined-time {
+  color: var(--data-chip-bg);
+}
+
+.chip-body,
+.chip-short-body,
+.chip-tiny-body,
+.chip-mid-body,
+.chip-short-inner,
+.chip-tiny-inner {
+  width: auto;
+}
+
+.chip-inner,
+.chip-mid-inner,
+.chip-loc-inner {
+  flex: 1;
+  min-width: 0;
+  width: auto;
+}
+
+.chip-mid-title-box {
+  width: auto;
+}
+
+.chip-short-line,
+.chip-tiny-line {
+  width: auto;
+  min-width: 0;
+}
+
+.week-error {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: var(--chip-body-padding-left);
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+}

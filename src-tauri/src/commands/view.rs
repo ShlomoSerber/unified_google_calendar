@@ -40,11 +40,12 @@ struct JoinedOccurrence {
     conference: Option<String>,
     is_recurring: bool,
     transparency: Option<String>,
+    location: Option<String>,
 }
 
 const JOIN_SQL: &str = "SELECT o.id, o.event_id, o.calendar_id, o.account_id, a.sort_order, a.kind, e.summary, o.start_ts, o.end_ts, o.all_day, \
     o.status, e.ical_uid, e.color_id, c.color_bg, c.color_fg, e.attendees, e.organizer_self, e.hangout_link, e.conference, \
-    (o.master_id IS NOT NULL), e.transparency \
+    (o.master_id IS NOT NULL), e.transparency, e.location \
     FROM occurrences o \
     JOIN events e ON e.account_id = o.account_id AND e.calendar_id = o.calendar_id AND e.id = o.event_id \
     JOIN calendars c ON c.account_id = o.account_id AND c.id = o.calendar_id \
@@ -74,6 +75,7 @@ fn joined_from_row(r: &rusqlite::Row<'_>) -> rusqlite::Result<JoinedOccurrence> 
         conference: r.get(18)?,
         is_recurring: r.get::<_, i64>(19)? != 0,
         transparency: r.get(20)?,
+        location: r.get(21)?,
     })
 }
 
@@ -122,10 +124,17 @@ pub fn parse_attendees(json: &str) -> Vec<AttendeeInfo> {
         .collect()
 }
 
-fn my_response(attendees: &[AttendeeInfo]) -> Option<String> {
+/// The user's own response: the attendee Google flags as `self`, or, on a copy held by another
+/// calendar of the same account (where Google omits the flag), the attendee with the account's
+/// e-mail address.
+fn my_response(attendees: &[AttendeeInfo], account_email: Option<&str>) -> Option<String> {
     attendees
         .iter()
         .find(|a| a.is_self)
+        .or_else(|| {
+            let email = account_email?;
+            attendees.iter().find(|a| a.email.eq_ignore_ascii_case(email))
+        })
         .map(|a| a.response_status.clone())
 }
 
@@ -227,6 +236,10 @@ pub fn get_view(conn: &Connection, from: i64, to: i64, _tz: &str) -> Result<View
         ));
     }
     let rows = load_occurrences(conn, from, to, true)?;
+    let emails: std::collections::HashMap<String, String> = accounts::list_accounts(conn)?
+        .into_iter()
+        .filter_map(|a| Some((a.id, a.email?)))
+        .collect();
     let (groups, _) = deduplicate(rows);
     let winners: Vec<JoinedOccurrence> = groups.iter().map(|(w, _)| w.clone()).collect();
     let conflict_map = conflicts(&winners);
@@ -234,6 +247,7 @@ pub fn get_view(conn: &Connection, from: i64, to: i64, _tz: &str) -> Result<View
         .into_iter()
         .map(|(o, others)| {
             let attendees = parse_attendees(&o.attendees);
+            let my = my_response(&attendees, emails.get(&o.account_id).map(String::as_str));
             ViewOccurrence {
                 id: o.id.clone(),
                 event_id: o.event_id,
@@ -247,7 +261,7 @@ pub fn get_view(conn: &Connection, from: i64, to: i64, _tz: &str) -> Result<View
                 color_fg: o.calendar_fg,
                 color_id: o.color_id,
                 status: o.status,
-                my_response: my_response(&attendees),
+                my_response: my,
                 is_recurring: o.is_recurring,
                 has_meet: meet_link(o.hangout_link.as_deref(), o.conference.as_deref()).is_some(),
                 attendee_count: attendees.len() as i64,
@@ -255,6 +269,7 @@ pub fn get_view(conn: &Connection, from: i64, to: i64, _tz: &str) -> Result<View
                 also_in: others.into_iter().map(|x| x.account_id).collect(),
                 is_local: o.is_local,
                 transparency: o.transparency,
+                location: o.location,
             }
         })
         .collect();
@@ -367,7 +382,7 @@ pub fn get_event(conn: &Connection, occurrence_id: &str) -> Result<EventDetail, 
             optional: false,
         })
     });
-    let my = my_response(&attendees);
+    let my = my_response(&attendees, account.email.as_deref());
     let (use_default, overrides) = parse_reminders(&row.reminders);
     let reminders = if use_default {
         parse_default_reminders(&calendar.default_reminders)

@@ -22,7 +22,8 @@
       "conflict_with": null,
       "also_in": [],
       "is_local": false,
-      "transparency": "opaque"
+      "transparency": "opaque",
+      "location": "Room 4"
     }
   ],
   "calendars": [

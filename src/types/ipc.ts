@@ -71,6 +71,8 @@ export interface ViewOccurrence {
   also_in: string[];
   is_local: boolean;
   transparency: Transparency | null;
+  /** Shown as the chip's third line, like Google. */
+  location: string | null;
 }
 
 export interface ViewPayload {
@@ -236,3 +238,5 @@ export const EVENT_CALENDAR_UPDATED = 'calendar:updated';
 export const EVENT_SYNC_STATUS = 'sync:status';
 export const EVENT_ACCOUNT_CHANGED = 'account:changed';
 export const EVENT_WINDOW_SHOW_EVENT = 'window:show-event';
+/** Emitted by Rust at every minute boundary; payload is the UTC timestamp (docs/99 F4-T4). */
+export const EVENT_CLOCK_MINUTE = 'clock:minute';

@@ -25,6 +25,7 @@ function occ(id: string, startMin: number, endMin: number, all_day = false): Vie
     also_in: [],
     is_local: false,
     transparency: null,
+    location: null,
   };
 }
 

@@ -3,6 +3,7 @@ import { listen, type UnlistenFn } from '@tauri-apps/api/event';
 import {
   EVENT_ACCOUNT_CHANGED,
   EVENT_CALENDAR_UPDATED,
+  EVENT_CLOCK_MINUTE,
   EVENT_SYNC_STATUS,
   EVENT_WINDOW_SHOW_EVENT,
   type AccountInfo,
@@ -19,6 +20,9 @@ export const onSyncStatus = (cb: (p: SyncStatus) => void): Promise<UnlistenFn> =
 
 export const onAccountChanged = (cb: (p: AccountInfo[]) => void): Promise<UnlistenFn> =>
   listen<AccountInfo[]>(EVENT_ACCOUNT_CHANGED, (e) => cb(e.payload));
+
+export const onClockMinute = (cb: (ts: number) => void): Promise<UnlistenFn> =>
+  listen<number>(EVENT_CLOCK_MINUTE, (e) => cb(e.payload));
 
 export const onShowEvent = (cb: (p: ShowEvent) => void): Promise<UnlistenFn> =>
   listen<ShowEvent>(EVENT_WINDOW_SHOW_EVENT, (e) => cb(e.payload));
