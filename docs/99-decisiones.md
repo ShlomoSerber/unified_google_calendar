@@ -80,6 +80,13 @@ Formato:
 - Motivo: F4-T1 requiere que el usuario mida calendar.google.com con su sesión de Chrome; el modelo no puede iniciar sesión en su cuenta. Las fases 5 y 6 no dependen de ningún token de diseño. El usuario pidió avanzar sin interrupciones.
 - Afecta: `docs/08-plan-de-implementacion.md` (regla "No se empieza una fase sin cerrar la anterior").
 
+## 2026-09-14 — Fase 5: detalles del webhook y del listener de suspensión
+- Quién: implementación
+- Fase/tarea: F5-T1 a F5-T3
+- Decisión: (1) El límite de cuerpo de 64 KB se aplica con `DefaultBodyLimit` de axum y el handler nunca lee el cuerpo. (2) El rate limit es una tabla en memoria por IP (`X-Forwarded-For` de Tailscale, o el peer) con ventana fija de 60 s. (3) Un `watch` que responde 400 o cuya `reason` menciona webhook/push/unauthorized/domain apaga `push_enabled` y guarda el mensaje en `settings.push_error`. (4) El listener de `PrepareForSleep` usa el bus de sistema con `zbus`; si no hay bus, solo se registra en el log y queda el polling. (5) El indicador de estado de la barra superior se implementa con la UI de la fase 4 (F4-T3). Las pruebas manuales (crear evento en la web y verlo en menos de 5 s, suspender y despertar) quedan en la lista final.
+- Motivo: los documentos no fijan el mecanismo concreto de estos puntos.
+- Afecta: `docs/05-sincronizacion.md` secciones 3.1, 3.3 y 4.
+
 ## Mediciones de RAM por fase
 
 | Fase | Fecha | Proceso Rust PSS | WebKitWebProcess PSS | Total | Nota |
