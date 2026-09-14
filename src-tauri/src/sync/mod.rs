@@ -5,6 +5,7 @@ pub mod calendar_list;
 pub mod ctx;
 pub mod engine;
 pub mod full;
+pub mod holidays;
 pub mod incremental;
 pub mod map;
 
