@@ -101,6 +101,20 @@ Formato:
 - Motivo: comportamiento del bundler de Tauri 2.11.
 - Afecta: `docs/07-empaquetado.md` secciones 3 y 4 (nombre del archivo).
 
+## 2026-09-14 — `removeUnusedCommands` y el `dist/` en desarrollo
+- Quién: implementación
+- Fase/tarea: F2-T2 (prueba manual)
+- Decisión: `removeUnusedCommands: true` hace que el build de Rust recorte los comandos IPC que no aparecen invocados en `frontendDist` (`dist/`), también en `npm run tauri dev`. Si `dist/` está viejo, la UI en dev recibe "Command X not found". Regla de trabajo: correr `npm run build` antes de `npm run tauri dev` cada vez que el frontend empiece a invocar comandos nuevos. Se mantiene la opción porque `docs/02` sección 6 la exige para la RAM.
+- Motivo: observado al probar `add_account` desde la UI provisoria.
+- Afecta: `CLAUDE.md` comandos (nota operativa).
+
+## 2026-09-14 — Ícono de la app
+- Quién: usuario
+- Fase/tarea: F0-T2 (revisión)
+- Decisión: el ícono sigue el estilo del de `claude_code_display_plugin`: cuadrado naranja `#D97757` con esquinas redondeadas y un glifo blanco con borde negro, en este caso `calendar-multiple` de Material Design Icons (Apache-2.0). Fuente en `src-tauri/icons/app-icon.svg`; PNG generados con `tauri icon`.
+- Motivo: pedido del usuario. Sigue sin usar ningún logo de Google (`docs/04` sección 9).
+- Afecta: `docs/04-fidelidad-visual.md` sección 9.
+
 ## Mediciones de RAM por fase
 
 | Fase | Fecha | Proceso Rust PSS | WebKitWebProcess PSS | Total | Nota |
