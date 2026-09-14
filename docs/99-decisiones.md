@@ -115,6 +115,13 @@ Formato:
 - Motivo: pedido del usuario. Sigue sin usar ningún logo de Google (`docs/04` sección 9).
 - Afecta: `docs/04-fidelidad-visual.md` sección 9.
 
+## 2026-09-14 — Calendarios iCal por URL (dirección secreta), adelantados de la versión 2
+- Quién: usuario
+- Fase/tarea: F3 (extensión)
+- Decisión: la app acepta calendarios `.ics` por URL, solo lectura. Motivo concreto: el admin de RappiCard bloquea toda app OAuth de terceros (`Error 400: access_not_configured`), incluida GNOME Online Accounts; la "dirección secreta en formato iCal" de calendar.google.com es la única vía. Modelo: una cuenta con `kind = 'ical'` por URL (id uuid, `display_name` elegido por el usuario) y un calendario `access_role = 'reader'`. La URL es un secreto y se guarda en `tokens.bin` (campo `ical_urls`), nunca en SQLite ni en logs. Sync: descarga y parseo en cada ciclo del poll de respaldo (60 s sin push, 10 min con push), con `If-None-Match`/hash del cuerpo para no reprocesar; parser propio de iCalendar (`sync/ics.rs`) que cubre VEVENT, RRULE/EXDATE/RDATE, RECURRENCE-ID, TZID IANA, día completo, STATUS, ATTENDEE y ORGANIZER. Sin escritura, sin RSVP, sin mover eventos desde ese calendario, sin canales push. El resto (vista, popup, conflictos, recordatorios, espejo EDS, bandeja) funciona igual que para Google.
+- Motivo: sin esto la cuenta de RappiCard no puede verse en ninguna app; el usuario prefiere tenerla aquí aunque sea de solo lectura.
+- Afecta: `docs/01-requisitos.md` R3.4 y sección 4 (versión 2); `docs/03-modelo-de-datos.md` sección 1 (`accounts.kind` admite `ical`); `docs/02-arquitectura.md` sección 5 (comando `add_ical_calendar`).
+
 ## Mediciones de RAM por fase
 
 | Fase | Fecha | Proceso Rust PSS | WebKitWebProcess PSS | Total | Nota |
