@@ -2,5 +2,6 @@
 
 pub mod accounts;
 pub mod calendars;
+pub mod channels;
 pub mod events;
 pub mod settings;
