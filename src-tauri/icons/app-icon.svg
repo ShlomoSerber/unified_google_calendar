@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!-- Own icon for Unified Google Calendar. Not derived from any Google asset (docs/04 section 9). -->
+  <rect x="64" y="64" width="896" height="896" rx="176" fill="#1e3a5f"/>
+  <rect x="160" y="232" width="704" height="592" rx="56" fill="#f5f7fa"/>
+  <rect x="160" y="232" width="704" height="152" rx="56" fill="#2f6fb5"/>
+  <rect x="160" y="320" width="704" height="64" fill="#2f6fb5"/>
+  <rect x="272" y="168" width="64" height="152" rx="32" fill="#f5f7fa"/>
+  <rect x="688" y="168" width="64" height="152" rx="32" fill="#f5f7fa"/>
+  <rect x="232" y="448" width="128" height="96" rx="20" fill="#e67c73"/>
+  <rect x="392" y="448" width="128" height="96" rx="20" fill="#33b679"/>
+  <rect x="552" y="448" width="128" height="96" rx="20" fill="#f6bf26"/>
+  <rect x="712" y="448" width="88" height="96" rx="20" fill="#7986cb"/>
+  <rect x="232" y="576" width="288" height="96" rx="20" fill="#039be5"/>
+  <rect x="552" y="576" width="248" height="96" rx="20" fill="#8e24aa"/>
+  <rect x="232" y="704" width="128" height="64" rx="20" fill="#0b8043"/>
+  <rect x="392" y="704" width="408" height="64" rx="20" fill="#d0d7e2"/>
+</svg>
