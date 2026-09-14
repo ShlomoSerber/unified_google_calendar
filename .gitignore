@@ -1,0 +1,8 @@
+node_modules/
+dist/
+src-tauri/target/
+src-tauri/gen/
+.chrome-measure/
+*.log
+docs/design/measurements/*.png
+!docs/design/measurements/.gitkeep
