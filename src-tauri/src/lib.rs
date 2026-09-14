@@ -73,6 +73,12 @@ pub fn run() {
         .invoke_handler(commands::handler())
         .setup(|_app| {
             db::init(&config::db_path())?;
+            match auth::oauth::init() {
+                Ok(_) => tracing::info!("oauth configured"),
+                Err(e) => {
+                    tracing::warn!(error = %e, "Google sign-in unavailable until oauth.json exists")
+                }
+            }
             Ok(())
         })
         .on_window_event(|window, event| {

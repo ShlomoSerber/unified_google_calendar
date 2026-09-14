@@ -38,16 +38,7 @@ pub async fn list_accounts() -> CmdResult<Vec<types::AccountInfo>> {
     db::call(|c| {
         Ok(db::queries::accounts::list_accounts(c)?
             .into_iter()
-            .map(|a| types::AccountInfo {
-                id: a.id,
-                kind: a.kind,
-                email: a.email,
-                display_name: a.display_name,
-                sort_order: a.sort_order,
-                sync_state: a.sync_state,
-                sync_error: a.sync_error,
-                last_sync_at: a.last_sync_at,
-            })
+            .map(account_info)
             .collect())
     })
     .await
@@ -194,6 +185,80 @@ pub async fn move_event_account(
     .map_err(to_ipc)?;
     emit_updated(&app, &touched);
     Ok(detail)
+}
+
+fn account_info(a: db::queries::accounts::AccountRow) -> types::AccountInfo {
+    types::AccountInfo {
+        id: a.id,
+        kind: a.kind,
+        email: a.email,
+        display_name: a.display_name,
+        sort_order: a.sort_order,
+        sync_state: a.sync_state,
+        sync_error: a.sync_error,
+        last_sync_at: a.last_sync_at,
+    }
+}
+
+/// Emit `account:changed` with the current account list.
+pub async fn emit_accounts(app: &tauri::AppHandle) {
+    if let Ok(list) = db::call(|c| {
+        Ok(db::queries::accounts::list_accounts(c)?
+            .into_iter()
+            .map(account_info)
+            .collect::<Vec<_>>())
+    })
+    .await
+    {
+        let _ = app.emit(types::EVENT_ACCOUNT_CHANGED, &list);
+    }
+}
+
+#[tauri::command]
+pub async fn add_account(app: tauri::AppHandle) -> CmdResult<types::AccountInfo> {
+    let info = crate::auth::add_account(&app).await.map_err(to_ipc)?;
+    emit_accounts(&app).await;
+    Ok(info)
+}
+
+#[tauri::command]
+pub async fn remove_account(app: tauri::AppHandle, account_id: String) -> CmdResult<()> {
+    if events::is_local(&account_id) {
+        return Err(AppError::invalid("The local account cannot be removed").user_message());
+    }
+    let id = account_id.clone();
+    db::call(move |c| {
+        // Tokens first, so a crash leaves no orphan credentials behind.
+        let _ = crate::auth::oauth::remove_tokens(&id);
+        let n = db::queries::accounts::delete_account(c, &id)?;
+        if n == 0 {
+            return Err(AppError::NotFound("The account".into()));
+        }
+        Ok(())
+    })
+    .await
+    .map_err(to_ipc)?;
+    emit_accounts(&app).await;
+    emit_updated(
+        &app,
+        &events::Touched {
+            from: 0,
+            to: i64::MAX,
+            calendars: vec![],
+        },
+    );
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn open_url(app: tauri::AppHandle, url: String) -> CmdResult<()> {
+    use tauri_plugin_opener::OpenerExt;
+    if !url.starts_with("https://") {
+        return Err(AppError::invalid("Only https links can be opened").user_message());
+    }
+    app.opener()
+        .open_url(&url, None::<&str>)
+        .map_err(|e| format!("The link could not be opened ({e})."))
 }
 
 /// Commands registered with the Tauri builder.
