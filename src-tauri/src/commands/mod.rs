@@ -218,7 +218,26 @@ pub async fn emit_accounts(app: &tauri::AppHandle) {
 pub async fn add_account(app: tauri::AppHandle) -> CmdResult<types::AccountInfo> {
     let info = crate::auth::add_account(&app).await.map_err(to_ipc)?;
     emit_accounts(&app).await;
+    // calendarList + full sync of every calendar of the new account (docs/05 section 1.2 step 8).
+    if let Ok(engine) = crate::sync::engine::engine() {
+        let id = info.id.clone();
+        tauri::async_runtime::spawn(async move {
+            if let Err(e) = engine.sync_account(&id, "add_account").await {
+                tracing::warn!(account = %id, error = %e, "initial sync failed");
+            }
+        });
+    }
     Ok(info)
+}
+
+#[tauri::command]
+pub async fn sync_now(app: tauri::AppHandle) -> CmdResult<()> {
+    let engine = crate::sync::engine::engine().map_err(to_ipc)?;
+    tauri::async_runtime::spawn(async move {
+        let _ = engine.sync_all("manual").await;
+    });
+    emit_accounts(&app).await;
+    Ok(())
 }
 
 #[tauri::command]
