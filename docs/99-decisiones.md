@@ -94,6 +94,13 @@ Formato:
 - Motivo: comportamiento observado de EDS y GNOME en la máquina del usuario.
 - Afecta: `docs/06-integracion-gnome.md` secciones 1, 2 y 4.4; `docs/01-requisitos.md` sección 10 (estado de la extensión).
 
+## 2026-09-14 — Build de release y nombre del .deb
+- Quién: implementación
+- Fase/tarea: F8-T1 (prueba anticipada)
+- Decisión: `TAURI_LINUX_AYATANA_APPINDICATOR=1 npm run tauri build -- --bundles deb` produce `src-tauri/target/release/bundle/deb/Unified Google Calendar_0.1.0_amd64.deb` (Tauri usa `productName` con espacios en el nombre del archivo, no `unified-google-calendar_0.1.0_amd64.deb` como dice `docs/07` sección 3). El paquete declara `Depends: libayatana-appindicator3-1, evolution-data-server, libwebkit2gtk-4.1-0, libgtk-3-0`, instala el binario en `/usr/bin/unified-google-calendar`, las fuentes en `/usr/lib/Unified Google Calendar/resources/fonts/`, los íconos en hicolor y el `.desktop` de la plantilla propia. Se hizo esta prueba antes de la fase 4 para detectar problemas de empaquetado temprano; la fase 8 se cierra al final con la UI terminada.
+- Motivo: comportamiento del bundler de Tauri 2.11.
+- Afecta: `docs/07-empaquetado.md` secciones 3 y 4 (nombre del archivo).
+
 ## Mediciones de RAM por fase
 
 | Fase | Fecha | Proceso Rust PSS | WebKitWebProcess PSS | Total | Nota |

@@ -25,7 +25,7 @@ Phase gates: `bash scripts/check-phase.sh <N>`.
 ## Install
 
 ```bash
-sudo apt install ./src-tauri/target/release/bundle/deb/unified-google-calendar_0.1.0_amd64.deb
+sudo apt install "./src-tauri/target/release/bundle/deb/Unified Google Calendar_0.1.0_amd64.deb"
 ```
 
 Before the first run create `~/.config/unified-google-calendar/oauth.json` with your Google Cloud
