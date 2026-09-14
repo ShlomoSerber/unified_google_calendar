@@ -78,3 +78,39 @@ pub fn resolve_bg<'a>(color_id: Option<&str>, calendar_bg: &'a str) -> &'a str {
         None => calendar_bg,
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn all_eleven_ids_map_to_the_modern_palette() {
+        let expected = [
+            ("1", "Lavender", "#7986cb"),
+            ("2", "Sage", "#33b679"),
+            ("3", "Grape", "#8e24aa"),
+            ("4", "Flamingo", "#e67c73"),
+            ("5", "Banana", "#f6bf26"),
+            ("6", "Tangerine", "#f4511e"),
+            ("7", "Peacock", "#039be5"),
+            ("8", "Graphite", "#616161"),
+            ("9", "Blueberry", "#3f51b5"),
+            ("10", "Basil", "#0b8043"),
+            ("11", "Tomato", "#d50000"),
+        ];
+        assert_eq!(EVENT_PALETTE.len(), 11);
+        for (id, name, bg) in expected {
+            let c = by_id(id).unwrap_or_else(|| panic!("missing id {id}"));
+            assert_eq!((c.name, c.bg), (name, bg));
+            assert_eq!(resolve_bg(Some(id), "#000000"), bg);
+        }
+        assert!(by_id("0").is_none());
+        assert!(by_id("12").is_none());
+        assert_eq!(resolve_bg(None, "#abcdef"), "#abcdef");
+        assert_eq!(
+            resolve_bg(Some("99"), "#abcdef"),
+            "#abcdef",
+            "unknown ids fall back to the calendar color"
+        );
+    }
+}

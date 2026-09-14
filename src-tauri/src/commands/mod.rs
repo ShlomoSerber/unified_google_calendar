@@ -280,6 +280,20 @@ pub async fn open_url(app: tauri::AppHandle, url: String) -> CmdResult<()> {
         .map_err(|e| format!("The link could not be opened ({e})."))
 }
 
+#[tauri::command]
+pub fn get_colors() -> CmdResult<types::ColorPalette> {
+    Ok(types::ColorPalette {
+        events: crate::google::colors::EVENT_PALETTE
+            .iter()
+            .map(|c| types::ColorEntry {
+                id: c.id.into(),
+                name: c.name.into(),
+                bg: c.bg.into(),
+            })
+            .collect(),
+    })
+}
+
 /// Commands registered with the Tauri builder.
 pub fn handler() -> impl Fn(tauri::ipc::Invoke) -> bool + Send + Sync + 'static {
     tauri::generate_handler![
