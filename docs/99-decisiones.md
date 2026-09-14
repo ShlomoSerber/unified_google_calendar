@@ -66,6 +66,13 @@ Formato:
 - Motivo: probar el motor con wiremock sin construir una app Tauri.
 - Afecta: `docs/08-plan-de-implementacion.md` sección 12.
 
+## 2026-09-14 — Fase 3: detalles de implementación de las escrituras contra Google
+- Quién: implementación
+- Fase/tarea: F3-T1 a F3-T4
+- Decisión: (1) Antes de usar el id de instancia construido (`master_YYYYMMDDTHHMMSSZ`), la app hace `events.get` sobre él; si responde 404 usa `events.instances?originalStart=` para obtener el id real. Con esto el fallback de `docs/03` sección 4 se aplica sin intento de escritura fallido. (2) Al mover entre cuentas distintas se importa solo el master; las excepciones del master no viajan (el `import` de Google no las acepta) y quedan como diferencia conocida de la versión 1. (3) Al editar "all" la app desplaza la serie por el mismo delta que el usuario aplicó a la instancia (misma regla que en local) y borra las excepciones locales si cambió la hora, igual que Google. (4) El cuerpo del RSVP toma el array `attendees` de `raw` del master cuando la ocurrencia no tiene excepción propia. (5) `get_settings`/`set_settings` se implementaron ya en esta fase porque `holidays_account` los necesita; las pruebas manuales de la fase quedan en la lista final de verificación.
+- Motivo: casos no cubiertos literalmente por los documentos.
+- Afecta: `docs/03-modelo-de-datos.md` secciones 4 y 7.
+
 ## Mediciones de RAM por fase
 
 | Fase | Fecha | Proceso Rust PSS | WebKitWebProcess PSS | Total | Nota |
