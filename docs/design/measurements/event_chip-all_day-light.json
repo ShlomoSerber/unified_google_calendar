@@ -1,0 +1,163 @@
+{
+ "url": "https://calendar.google.com/calendar/u/0/r/week",
+ "dpr": 1,
+ "viewport": [
+  1440,
+  900
+ ],
+ "theme": null,
+ "colorScheme": "normal",
+ "rootRect": [
+  375.34375,
+  148,
+  137.703125,
+  22
+ ],
+ "nodes": [
+  {
+   "path": "div",
+   "tag": "div",
+   "cls": "KF4T6b jKgTF QGRmIf",
+   "role": "button",
+   "aria": null,
+   "rect": [
+    0,
+    0,
+    137.7,
+    22
+   ],
+   "abs": [
+    375.34,
+    148
+   ],
+   "style": {
+    "display": "flex",
+    "fontSize": "12px",
+    "fontWeight": "500",
+    "lineHeight": "20px",
+    "color": "rgb(255, 255, 255)",
+    "backgroundColor": "rgb(124, 179, 66)",
+    "borderTop": "1px solid rgba(0, 0, 0, 0)",
+    "borderRight": "1px solid rgba(0, 0, 0, 0)",
+    "borderBottom": "1px solid rgba(0, 0, 0, 0)",
+    "borderLeft": "1px solid rgba(0, 0, 0, 0)",
+    "borderRadius": "6px",
+    "paddingRight": "8px",
+    "paddingLeft": "8px",
+    "width": "137.703px",
+    "height": "22px",
+    "alignItems": "center",
+    "overflow": "hidden",
+    "outline": "rgb(255, 255, 255) none 3px",
+    "cursor": "pointer"
+   }
+  },
+  {
+   "path": "div/span[0]",
+   "tag": "span",
+   "cls": "nHqeVd",
+   "role": null,
+   "aria": null,
+   "rect": [
+    9,
+    1,
+    64.55,
+    20
+   ],
+   "abs": [
+    384.34,
+    149
+   ],
+   "style": {
+    "display": "flex",
+    "fontSize": "12px",
+    "fontWeight": "500",
+    "lineHeight": "20px",
+    "color": "rgb(255, 255, 255)",
+    "borderTop": "0px none rgb(255, 255, 255)",
+    "borderRight": "0px none rgb(255, 255, 255)",
+    "borderBottom": "0px none rgb(255, 255, 255)",
+    "borderLeft": "0px none rgb(255, 255, 255)",
+    "width": "64.5469px",
+    "height": "20px",
+    "minWidth": "auto",
+    "minHeight": "auto",
+    "alignItems": "center",
+    "overflow": "hidden",
+    "outline": "rgb(255, 255, 255) none 3px",
+    "cursor": "pointer"
+   }
+  },
+  {
+   "path": "div/span[0]/span[0]",
+   "tag": "span",
+   "cls": "WBi6vc",
+   "role": null,
+   "aria": null,
+   "text": "All-day one",
+   "rect": [
+    9,
+    1,
+    64.55,
+    20
+   ],
+   "abs": [
+    384.34,
+    149
+   ],
+   "style": {
+    "fontSize": "12px",
+    "fontWeight": "500",
+    "lineHeight": "20px",
+    "color": "rgb(255, 255, 255)",
+    "borderTop": "0px none rgb(255, 255, 255)",
+    "borderRight": "0px none rgb(255, 255, 255)",
+    "borderBottom": "0px none rgb(255, 255, 255)",
+    "borderLeft": "0px none rgb(255, 255, 255)",
+    "width": "64.5469px",
+    "height": "20px",
+    "minWidth": "auto",
+    "minHeight": "auto",
+    "whiteSpace": "nowrap",
+    "overflow": "hidden",
+    "outline": "rgb(255, 255, 255) none 3px",
+    "cursor": "pointer"
+   }
+  },
+  {
+   "path": "div/span[1]",
+   "tag": "span",
+   "cls": "XuJrye",
+   "role": null,
+   "aria": null,
+   "text": "All day, All-day one, Calendar: UGC Fixtures, No location, September 14, 2026",
+   "rect": [
+    9,
+    10.5,
+    1,
+    1
+   ],
+   "abs": [
+    384.34,
+    158.5
+   ],
+   "style": {
+    "position": "absolute",
+    "fontSize": "12px",
+    "fontWeight": "500",
+    "lineHeight": "20px",
+    "color": "rgb(255, 255, 255)",
+    "borderTop": "0px none rgb(255, 255, 255)",
+    "borderRight": "0px none rgb(255, 255, 255)",
+    "borderBottom": "0px none rgb(255, 255, 255)",
+    "borderLeft": "0px none rgb(255, 255, 255)",
+    "width": "1px",
+    "height": "1px",
+    "whiteSpace": "nowrap",
+    "overflow": "hidden",
+    "outline": "rgb(255, 255, 255) none 3px",
+    "cursor": "pointer"
+   }
+  }
+ ]
+}

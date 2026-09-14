@@ -1,0 +1,46 @@
+{
+ "url": "https://calendar.google.com/calendar/u/0/r/week",
+ "dpr": 1,
+ "viewport": [
+  1440,
+  900
+ ],
+ "theme": null,
+ "colorScheme": "normal",
+ "rootRect": [
+  375.34375,
+  824,
+  148.796875,
+  2
+ ],
+ "nodes": [
+  {
+   "path": "div",
+   "tag": "div",
+   "cls": "rGFpCd",
+   "role": null,
+   "aria": null,
+   "rect": [
+    0,
+    0,
+    148.8,
+    2
+   ],
+   "abs": [
+    375.34,
+    824
+   ],
+   "style": {
+    "position": "absolute",
+    "color": "rgb(31, 31, 31)",
+    "borderTop": "2px solid rgb(219, 55, 45)",
+    "borderRight": "0px none rgb(31, 31, 31)",
+    "borderBottom": "0px none rgb(31, 31, 31)",
+    "borderLeft": "0px none rgb(31, 31, 31)",
+    "width": "148.797px",
+    "zIndex": "507",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  }
+ ]
+}

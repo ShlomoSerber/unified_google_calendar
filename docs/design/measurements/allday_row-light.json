@@ -1,0 +1,1416 @@
+{
+ "url": "https://calendar.google.com/calendar/u/0/r/week",
+ "dpr": 1,
+ "viewport": [
+  1440,
+  900
+ ],
+ "theme": null,
+ "colorScheme": "normal",
+ "rootRect": [
+  366.34375,
+  148,
+  1057.65625,
+  48
+ ],
+ "nodes": [
+  {
+   "path": "div",
+   "tag": "div",
+   "cls": "Qotkjb",
+   "role": "row",
+   "aria": null,
+   "rect": [
+    0,
+    0,
+    1057.66,
+    48
+   ],
+   "abs": [
+    366.34,
+    148
+   ],
+   "style": {
+    "display": "flex",
+    "position": "relative",
+    "fontSize": "24px",
+    "color": "rgb(31, 31, 31)",
+    "borderTop": "0px none rgb(31, 31, 31)",
+    "borderRight": "0px none rgb(31, 31, 31)",
+    "borderBottom": "0px none rgb(31, 31, 31)",
+    "borderLeft": "0px none rgb(31, 31, 31)",
+    "width": "1057.66px",
+    "height": "48px",
+    "minWidth": "auto",
+    "minHeight": "auto",
+    "overflow": "scroll hidden",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  },
+  {
+   "path": "div/div[0]",
+   "tag": "div",
+   "cls": "FDbe8b",
+   "role": null,
+   "aria": null,
+   "rect": [
+    0,
+    0,
+    9,
+    48
+   ],
+   "abs": [
+    366.34,
+    148
+   ],
+   "style": {
+    "fontSize": "24px",
+    "color": "rgb(31, 31, 31)",
+    "borderTop": "0px none rgb(31, 31, 31)",
+    "borderRight": "0px none rgb(31, 31, 31)",
+    "borderBottom": "0px none rgb(31, 31, 31)",
+    "borderLeft": "0px none rgb(31, 31, 31)",
+    "width": "9px",
+    "height": "48px",
+    "minWidth": "9px",
+    "minHeight": "auto",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  },
+  {
+   "path": "div/div[1]",
+   "tag": "div",
+   "cls": "ZDEHt",
+   "role": "presentation",
+   "aria": null,
+   "rect": [
+    8,
+    0,
+    1049.66,
+    48
+   ],
+   "abs": [
+    374.34,
+    148
+   ],
+   "style": {
+    "position": "relative",
+    "fontSize": "24px",
+    "color": "rgb(31, 31, 31)",
+    "borderTop": "0px none rgb(31, 31, 31)",
+    "borderRight": "1px solid rgba(0, 0, 0, 0)",
+    "borderBottom": "0px none rgb(31, 31, 31)",
+    "borderLeft": "1px solid rgb(221, 227, 234)",
+    "marginLeft": "-1px",
+    "width": "1047.66px",
+    "height": "48px",
+    "minWidth": "auto",
+    "minHeight": "auto",
+    "overflow": "hidden",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  },
+  {
+   "path": "div/div[1]/ul[0]",
+   "tag": "ul",
+   "cls": "bOyeud",
+   "role": null,
+   "aria": null,
+   "rect": [
+    9,
+    0,
+    1047.66,
+    48
+   ],
+   "abs": [
+    375.34,
+    148
+   ],
+   "style": {
+    "display": "flex",
+    "position": "absolute",
+    "fontSize": "24px",
+    "color": "rgb(31, 31, 31)",
+    "borderTop": "0px none rgb(31, 31, 31)",
+    "borderRight": "0px none rgb(31, 31, 31)",
+    "borderBottom": "0px none rgb(31, 31, 31)",
+    "borderLeft": "0px none rgb(31, 31, 31)",
+    "width": "1047.66px",
+    "height": "48px",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  },
+  {
+   "path": "div/div[1]/ul[0]/li[0]",
+   "tag": "li",
+   "cls": "gZ8fdb F262Ye",
+   "role": null,
+   "aria": null,
+   "rect": [
+    9,
+    0,
+    149.8,
+    48
+   ],
+   "abs": [
+    375.34,
+    148
+   ],
+   "style": {
+    "display": "list-item",
+    "fontSize": "24px",
+    "color": "rgb(31, 31, 31)",
+    "backgroundColor": "rgb(255, 255, 255)",
+    "borderTop": "0px none rgb(31, 31, 31)",
+    "borderRight": "1px solid rgb(221, 227, 234)",
+    "borderBottom": "0px none rgb(31, 31, 31)",
+    "borderLeft": "0px none rgb(31, 31, 31)",
+    "width": "148.797px",
+    "height": "48px",
+    "minWidth": "80px",
+    "minHeight": "auto",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  },
+  {
+   "path": "div/div[1]/ul[0]/li[1]",
+   "tag": "li",
+   "cls": "gZ8fdb",
+   "role": null,
+   "aria": null,
+   "rect": [
+    158.8,
+    0,
+    149.81,
+    48
+   ],
+   "abs": [
+    525.14,
+    148
+   ],
+   "style": {
+    "display": "list-item",
+    "fontSize": "24px",
+    "color": "rgb(31, 31, 31)",
+    "borderTop": "0px none rgb(31, 31, 31)",
+    "borderRight": "1px solid rgb(221, 227, 234)",
+    "borderBottom": "0px none rgb(31, 31, 31)",
+    "borderLeft": "0px none rgb(31, 31, 31)",
+    "width": "148.812px",
+    "height": "48px",
+    "minWidth": "80px",
+    "minHeight": "auto",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  },
+  {
+   "path": "div/div[1]/ul[0]/li[2]",
+   "tag": "li",
+   "cls": "gZ8fdb",
+   "role": null,
+   "aria": null,
+   "rect": [
+    308.61,
+    0,
+    149.8,
+    48
+   ],
+   "abs": [
+    674.95,
+    148
+   ],
+   "style": {
+    "display": "list-item",
+    "fontSize": "24px",
+    "color": "rgb(31, 31, 31)",
+    "borderTop": "0px none rgb(31, 31, 31)",
+    "borderRight": "1px solid rgb(221, 227, 234)",
+    "borderBottom": "0px none rgb(31, 31, 31)",
+    "borderLeft": "0px none rgb(31, 31, 31)",
+    "width": "148.797px",
+    "height": "48px",
+    "minWidth": "80px",
+    "minHeight": "auto",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  },
+  {
+   "path": "div/div[1]/ul[0]/li[3]",
+   "tag": "li",
+   "cls": "gZ8fdb",
+   "role": null,
+   "aria": null,
+   "rect": [
+    458.41,
+    0,
+    149.81,
+    48
+   ],
+   "abs": [
+    824.75,
+    148
+   ],
+   "style": {
+    "display": "list-item",
+    "fontSize": "24px",
+    "color": "rgb(31, 31, 31)",
+    "borderTop": "0px none rgb(31, 31, 31)",
+    "borderRight": "1px solid rgb(221, 227, 234)",
+    "borderBottom": "0px none rgb(31, 31, 31)",
+    "borderLeft": "0px none rgb(31, 31, 31)",
+    "width": "148.812px",
+    "height": "48px",
+    "minWidth": "80px",
+    "minHeight": "auto",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  },
+  {
+   "path": "div/div[1]/ul[0]/li[4]",
+   "tag": "li",
+   "cls": "gZ8fdb",
+   "role": null,
+   "aria": null,
+   "rect": [
+    608.22,
+    0,
+    149.81,
+    48
+   ],
+   "abs": [
+    974.56,
+    148
+   ],
+   "style": {
+    "display": "list-item",
+    "fontSize": "24px",
+    "color": "rgb(31, 31, 31)",
+    "borderTop": "0px none rgb(31, 31, 31)",
+    "borderRight": "1px solid rgb(221, 227, 234)",
+    "borderBottom": "0px none rgb(31, 31, 31)",
+    "borderLeft": "0px none rgb(31, 31, 31)",
+    "width": "148.812px",
+    "height": "48px",
+    "minWidth": "80px",
+    "minHeight": "auto",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  },
+  {
+   "path": "div/div[1]/ul[0]/li[5]",
+   "tag": "li",
+   "cls": "gZ8fdb",
+   "role": null,
+   "aria": null,
+   "rect": [
+    758.03,
+    0,
+    149.81,
+    48
+   ],
+   "abs": [
+    1124.38,
+    148
+   ],
+   "style": {
+    "display": "list-item",
+    "fontSize": "24px",
+    "color": "rgb(31, 31, 31)",
+    "borderTop": "0px none rgb(31, 31, 31)",
+    "borderRight": "1px solid rgb(221, 227, 234)",
+    "borderBottom": "0px none rgb(31, 31, 31)",
+    "borderLeft": "0px none rgb(31, 31, 31)",
+    "width": "148.812px",
+    "height": "48px",
+    "minWidth": "80px",
+    "minHeight": "auto",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  },
+  {
+   "path": "div/div[1]/ul[0]/li[6]",
+   "tag": "li",
+   "cls": "gZ8fdb",
+   "role": null,
+   "aria": null,
+   "rect": [
+    907.84,
+    0,
+    148.81,
+    48
+   ],
+   "abs": [
+    1274.19,
+    148
+   ],
+   "style": {
+    "display": "list-item",
+    "fontSize": "24px",
+    "color": "rgb(31, 31, 31)",
+    "borderTop": "0px none rgb(31, 31, 31)",
+    "borderRight": "0px none rgb(31, 31, 31)",
+    "borderBottom": "0px none rgb(31, 31, 31)",
+    "borderLeft": "0px none rgb(31, 31, 31)",
+    "width": "148.812px",
+    "height": "48px",
+    "minWidth": "80px",
+    "minHeight": "auto",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]",
+   "tag": "div",
+   "cls": "PTdDEc ChfiMc enpite",
+   "role": "presentation",
+   "aria": null,
+   "rect": [
+    9,
+    0,
+    1047.66,
+    48
+   ],
+   "abs": [
+    375.34,
+    148
+   ],
+   "style": {
+    "display": "flex",
+    "position": "relative",
+    "fontSize": "24px",
+    "color": "rgb(31, 31, 31)",
+    "borderTop": "0px none rgb(31, 31, 31)",
+    "borderRight": "0px none rgb(31, 31, 31)",
+    "borderBottom": "0px none rgb(31, 31, 31)",
+    "borderLeft": "0px none rgb(31, 31, 31)",
+    "width": "1047.66px",
+    "height": "48px",
+    "minWidth": "100%",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]/div[0]",
+   "tag": "div",
+   "cls": "qLWd9c",
+   "role": "gridcell",
+   "aria": null,
+   "rect": [
+    9,
+    0,
+    149.8,
+    48
+   ],
+   "abs": [
+    375.34,
+    148
+   ],
+   "style": {
+    "fontSize": "24px",
+    "color": "rgb(31, 31, 31)",
+    "borderTop": "0px none rgb(31, 31, 31)",
+    "borderRight": "1px solid rgba(0, 0, 0, 0)",
+    "borderBottom": "0px none rgb(31, 31, 31)",
+    "borderLeft": "0px none rgb(31, 31, 31)",
+    "width": "148.797px",
+    "height": "48px",
+    "minWidth": "80px",
+    "minHeight": "auto",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]/div[0]/h2[0]",
+   "tag": "h2",
+   "cls": "CqwSk XuJrye",
+   "role": null,
+   "aria": null,
+   "text": "1 all day event, Monday, September 14, today",
+   "rect": [
+    9,
+    0,
+    1,
+    1
+   ],
+   "abs": [
+    375.34,
+    148
+   ],
+   "style": {
+    "position": "absolute",
+    "fontSize": "36px",
+    "fontWeight": "700",
+    "color": "rgb(31, 31, 31)",
+    "borderTop": "0px none rgb(31, 31, 31)",
+    "borderRight": "0px none rgb(31, 31, 31)",
+    "borderBottom": "0px none rgb(31, 31, 31)",
+    "borderLeft": "0px none rgb(31, 31, 31)",
+    "width": "1px",
+    "height": "1px",
+    "whiteSpace": "nowrap",
+    "overflow": "hidden",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]/div[0]/div[1]",
+   "tag": "div",
+   "cls": "",
+   "role": "presentation",
+   "aria": null,
+   "rect": [
+    9,
+    0,
+    148.8,
+    0
+   ],
+   "abs": [
+    375.34,
+    148
+   ],
+   "style": {
+    "fontSize": "24px",
+    "color": "rgb(31, 31, 31)",
+    "borderTop": "0px none rgb(31, 31, 31)",
+    "borderRight": "0px none rgb(31, 31, 31)",
+    "borderBottom": "0px none rgb(31, 31, 31)",
+    "borderLeft": "0px none rgb(31, 31, 31)",
+    "width": "148.797px",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]/div[0]/div[1]/div[0]",
+   "tag": "div",
+   "cls": "vEJ0bc ChfiMc rFUW1c",
+   "role": null,
+   "aria": null,
+   "rect": [
+    9,
+    0,
+    149.7,
+    24
+   ],
+   "abs": [
+    375.34,
+    148
+   ],
+   "style": {
+    "position": "absolute",
+    "fontSize": "24px",
+    "color": "rgb(31, 31, 31)",
+    "borderTop": "0px none rgb(124, 179, 66)",
+    "borderRight": "0px none rgb(124, 179, 66)",
+    "borderBottom": "0px none rgb(124, 179, 66)",
+    "borderLeft": "0px none rgb(124, 179, 66)",
+    "paddingRight": "12px",
+    "width": "149.703px",
+    "height": "24px",
+    "zIndex": "5",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]/div[0]/div[1]/div[0]/div[0]",
+   "tag": "div",
+   "cls": "KF4T6b jKgTF QGRmIf",
+   "role": "button",
+   "aria": null,
+   "rect": [
+    9,
+    0,
+    137.7,
+    22
+   ],
+   "abs": [
+    375.34,
+    148
+   ],
+   "style": {
+    "display": "flex",
+    "fontSize": "12px",
+    "fontWeight": "500",
+    "lineHeight": "20px",
+    "color": "rgb(255, 255, 255)",
+    "backgroundColor": "rgb(124, 179, 66)",
+    "borderTop": "1px solid rgba(0, 0, 0, 0)",
+    "borderRight": "1px solid rgba(0, 0, 0, 0)",
+    "borderBottom": "1px solid rgba(0, 0, 0, 0)",
+    "borderLeft": "1px solid rgba(0, 0, 0, 0)",
+    "borderRadius": "6px",
+    "paddingRight": "8px",
+    "paddingLeft": "8px",
+    "width": "137.703px",
+    "height": "22px",
+    "alignItems": "center",
+    "overflow": "hidden",
+    "outline": "rgb(255, 255, 255) none 3px",
+    "cursor": "pointer"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]/div[0]/div[1]/div[0]/div[0]/span[0]",
+   "tag": "span",
+   "cls": "nHqeVd",
+   "role": null,
+   "aria": null,
+   "rect": [
+    18,
+    1,
+    64.55,
+    20
+   ],
+   "abs": [
+    384.34,
+    149
+   ],
+   "style": {
+    "display": "flex",
+    "fontSize": "12px",
+    "fontWeight": "500",
+    "lineHeight": "20px",
+    "color": "rgb(255, 255, 255)",
+    "borderTop": "0px none rgb(255, 255, 255)",
+    "borderRight": "0px none rgb(255, 255, 255)",
+    "borderBottom": "0px none rgb(255, 255, 255)",
+    "borderLeft": "0px none rgb(255, 255, 255)",
+    "width": "64.5469px",
+    "height": "20px",
+    "minWidth": "auto",
+    "minHeight": "auto",
+    "alignItems": "center",
+    "overflow": "hidden",
+    "outline": "rgb(255, 255, 255) none 3px",
+    "cursor": "pointer"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]/div[0]/div[1]/div[0]/div[0]/span[0]/span[0]",
+   "tag": "span",
+   "cls": "WBi6vc",
+   "role": null,
+   "aria": null,
+   "text": "All-day one",
+   "rect": [
+    18,
+    1,
+    64.55,
+    20
+   ],
+   "abs": [
+    384.34,
+    149
+   ],
+   "style": {
+    "fontSize": "12px",
+    "fontWeight": "500",
+    "lineHeight": "20px",
+    "color": "rgb(255, 255, 255)",
+    "borderTop": "0px none rgb(255, 255, 255)",
+    "borderRight": "0px none rgb(255, 255, 255)",
+    "borderBottom": "0px none rgb(255, 255, 255)",
+    "borderLeft": "0px none rgb(255, 255, 255)",
+    "width": "64.5469px",
+    "height": "20px",
+    "minWidth": "auto",
+    "minHeight": "auto",
+    "whiteSpace": "nowrap",
+    "overflow": "hidden",
+    "outline": "rgb(255, 255, 255) none 3px",
+    "cursor": "pointer"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]/div[0]/div[1]/div[0]/div[0]/span[1]",
+   "tag": "span",
+   "cls": "XuJrye",
+   "role": null,
+   "aria": null,
+   "text": "All day, All-day one, Calendar: UGC Fixtures, No location, September 14, 2026",
+   "rect": [
+    18,
+    10.5,
+    1,
+    1
+   ],
+   "abs": [
+    384.34,
+    158.5
+   ],
+   "style": {
+    "position": "absolute",
+    "fontSize": "12px",
+    "fontWeight": "500",
+    "lineHeight": "20px",
+    "color": "rgb(255, 255, 255)",
+    "borderTop": "0px none rgb(255, 255, 255)",
+    "borderRight": "0px none rgb(255, 255, 255)",
+    "borderBottom": "0px none rgb(255, 255, 255)",
+    "borderLeft": "0px none rgb(255, 255, 255)",
+    "width": "1px",
+    "height": "1px",
+    "whiteSpace": "nowrap",
+    "overflow": "hidden",
+    "outline": "rgb(255, 255, 255) none 3px",
+    "cursor": "pointer"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]/div[1]",
+   "tag": "div",
+   "cls": "qLWd9c",
+   "role": "gridcell",
+   "aria": null,
+   "rect": [
+    158.8,
+    0,
+    149.81,
+    48
+   ],
+   "abs": [
+    525.14,
+    148
+   ],
+   "style": {
+    "fontSize": "24px",
+    "color": "rgb(31, 31, 31)",
+    "borderTop": "0px none rgb(31, 31, 31)",
+    "borderRight": "1px solid rgba(0, 0, 0, 0)",
+    "borderBottom": "0px none rgb(31, 31, 31)",
+    "borderLeft": "0px none rgb(31, 31, 31)",
+    "width": "148.812px",
+    "height": "48px",
+    "minWidth": "80px",
+    "minHeight": "auto",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]/div[1]/h2[0]",
+   "tag": "h2",
+   "cls": "CqwSk XuJrye",
+   "role": null,
+   "aria": null,
+   "text": "2 all day events, Tuesday, September 15",
+   "rect": [
+    158.8,
+    0,
+    1,
+    1
+   ],
+   "abs": [
+    525.14,
+    148
+   ],
+   "style": {
+    "position": "absolute",
+    "fontSize": "36px",
+    "fontWeight": "700",
+    "color": "rgb(31, 31, 31)",
+    "borderTop": "0px none rgb(31, 31, 31)",
+    "borderRight": "0px none rgb(31, 31, 31)",
+    "borderBottom": "0px none rgb(31, 31, 31)",
+    "borderLeft": "0px none rgb(31, 31, 31)",
+    "width": "1px",
+    "height": "1px",
+    "whiteSpace": "nowrap",
+    "overflow": "hidden",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]/div[1]/div[1]",
+   "tag": "div",
+   "cls": "",
+   "role": "presentation",
+   "aria": null,
+   "rect": [
+    158.8,
+    0,
+    148.81,
+    0
+   ],
+   "abs": [
+    525.14,
+    148
+   ],
+   "style": {
+    "fontSize": "24px",
+    "color": "rgb(31, 31, 31)",
+    "borderTop": "0px none rgb(31, 31, 31)",
+    "borderRight": "0px none rgb(31, 31, 31)",
+    "borderBottom": "0px none rgb(31, 31, 31)",
+    "borderLeft": "0px none rgb(31, 31, 31)",
+    "width": "148.812px",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]/div[1]/div[1]/div[0]",
+   "tag": "div",
+   "cls": "vEJ0bc ChfiMc rFUW1c",
+   "role": null,
+   "aria": null,
+   "rect": [
+    158.7,
+    0,
+    149.7,
+    24
+   ],
+   "abs": [
+    525.05,
+    148
+   ],
+   "style": {
+    "position": "absolute",
+    "fontSize": "24px",
+    "color": "rgb(31, 31, 31)",
+    "borderTop": "0px none rgb(124, 179, 66)",
+    "borderRight": "0px none rgb(124, 179, 66)",
+    "borderBottom": "0px none rgb(124, 179, 66)",
+    "borderLeft": "0px none rgb(124, 179, 66)",
+    "paddingRight": "12px",
+    "width": "149.703px",
+    "height": "24px",
+    "zIndex": "5",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]/div[1]/div[1]/div[0]/div[0]",
+   "tag": "div",
+   "cls": "KF4T6b jKgTF QGRmIf",
+   "role": "button",
+   "aria": null,
+   "rect": [
+    158.7,
+    0,
+    137.7,
+    22
+   ],
+   "abs": [
+    525.05,
+    148
+   ],
+   "style": {
+    "display": "flex",
+    "fontSize": "12px",
+    "fontWeight": "500",
+    "lineHeight": "20px",
+    "color": "rgb(255, 255, 255)",
+    "backgroundColor": "rgb(124, 179, 66)",
+    "borderTop": "1px solid rgba(0, 0, 0, 0)",
+    "borderRight": "1px solid rgba(0, 0, 0, 0)",
+    "borderBottom": "1px solid rgba(0, 0, 0, 0)",
+    "borderLeft": "1px solid rgba(0, 0, 0, 0)",
+    "borderRadius": "6px",
+    "paddingRight": "8px",
+    "paddingLeft": "8px",
+    "width": "137.703px",
+    "height": "22px",
+    "alignItems": "center",
+    "overflow": "hidden",
+    "outline": "rgb(255, 255, 255) none 3px",
+    "cursor": "pointer"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]/div[1]/div[1]/div[0]/div[0]/span[0]",
+   "tag": "span",
+   "cls": "nHqeVd",
+   "role": null,
+   "aria": null,
+   "rect": [
+    167.7,
+    1,
+    75.63,
+    20
+   ],
+   "abs": [
+    534.05,
+    149
+   ],
+   "style": {
+    "display": "flex",
+    "fontSize": "12px",
+    "fontWeight": "500",
+    "lineHeight": "20px",
+    "color": "rgb(255, 255, 255)",
+    "borderTop": "0px none rgb(255, 255, 255)",
+    "borderRight": "0px none rgb(255, 255, 255)",
+    "borderBottom": "0px none rgb(255, 255, 255)",
+    "borderLeft": "0px none rgb(255, 255, 255)",
+    "width": "75.625px",
+    "height": "20px",
+    "minWidth": "auto",
+    "minHeight": "auto",
+    "alignItems": "center",
+    "overflow": "hidden",
+    "outline": "rgb(255, 255, 255) none 3px",
+    "cursor": "pointer"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]/div[1]/div[1]/div[0]/div[0]/span[0]/span[0]",
+   "tag": "span",
+   "cls": "WBi6vc",
+   "role": null,
+   "aria": null,
+   "text": "All-day two A",
+   "rect": [
+    167.7,
+    1,
+    75.63,
+    20
+   ],
+   "abs": [
+    534.05,
+    149
+   ],
+   "style": {
+    "fontSize": "12px",
+    "fontWeight": "500",
+    "lineHeight": "20px",
+    "color": "rgb(255, 255, 255)",
+    "borderTop": "0px none rgb(255, 255, 255)",
+    "borderRight": "0px none rgb(255, 255, 255)",
+    "borderBottom": "0px none rgb(255, 255, 255)",
+    "borderLeft": "0px none rgb(255, 255, 255)",
+    "width": "75.625px",
+    "height": "20px",
+    "minWidth": "auto",
+    "minHeight": "auto",
+    "whiteSpace": "nowrap",
+    "overflow": "hidden",
+    "outline": "rgb(255, 255, 255) none 3px",
+    "cursor": "pointer"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]/div[1]/div[1]/div[0]/div[0]/span[1]",
+   "tag": "span",
+   "cls": "XuJrye",
+   "role": null,
+   "aria": null,
+   "text": "All day, All-day two A, Calendar: UGC Fixtures, No location, September 15, 2026",
+   "rect": [
+    167.7,
+    10.5,
+    1,
+    1
+   ],
+   "abs": [
+    534.05,
+    158.5
+   ],
+   "style": {
+    "position": "absolute",
+    "fontSize": "12px",
+    "fontWeight": "500",
+    "lineHeight": "20px",
+    "color": "rgb(255, 255, 255)",
+    "borderTop": "0px none rgb(255, 255, 255)",
+    "borderRight": "0px none rgb(255, 255, 255)",
+    "borderBottom": "0px none rgb(255, 255, 255)",
+    "borderLeft": "0px none rgb(255, 255, 255)",
+    "width": "1px",
+    "height": "1px",
+    "whiteSpace": "nowrap",
+    "overflow": "hidden",
+    "outline": "rgb(255, 255, 255) none 3px",
+    "cursor": "pointer"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]/div[1]/div[1]/div[1]",
+   "tag": "div",
+   "cls": "vEJ0bc ChfiMc rFUW1c",
+   "role": null,
+   "aria": null,
+   "rect": [
+    158.7,
+    24,
+    149.7,
+    24
+   ],
+   "abs": [
+    525.05,
+    172
+   ],
+   "style": {
+    "position": "absolute",
+    "fontSize": "24px",
+    "color": "rgb(31, 31, 31)",
+    "borderTop": "0px none rgb(124, 179, 66)",
+    "borderRight": "0px none rgb(124, 179, 66)",
+    "borderBottom": "0px none rgb(124, 179, 66)",
+    "borderLeft": "0px none rgb(124, 179, 66)",
+    "paddingRight": "12px",
+    "width": "149.703px",
+    "height": "24px",
+    "zIndex": "5",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]/div[1]/div[1]/div[1]/div[0]",
+   "tag": "div",
+   "cls": "KF4T6b jKgTF QGRmIf",
+   "role": "button",
+   "aria": null,
+   "rect": [
+    158.7,
+    24,
+    137.7,
+    22
+   ],
+   "abs": [
+    525.05,
+    172
+   ],
+   "style": {
+    "display": "flex",
+    "fontSize": "12px",
+    "fontWeight": "500",
+    "lineHeight": "20px",
+    "color": "rgb(255, 255, 255)",
+    "backgroundColor": "rgb(124, 179, 66)",
+    "borderTop": "1px solid rgba(0, 0, 0, 0)",
+    "borderRight": "1px solid rgba(0, 0, 0, 0)",
+    "borderBottom": "1px solid rgba(0, 0, 0, 0)",
+    "borderLeft": "1px solid rgba(0, 0, 0, 0)",
+    "borderRadius": "6px",
+    "paddingRight": "8px",
+    "paddingLeft": "8px",
+    "width": "137.703px",
+    "height": "22px",
+    "alignItems": "center",
+    "overflow": "hidden",
+    "outline": "rgb(255, 255, 255) none 3px",
+    "cursor": "pointer"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]/div[1]/div[1]/div[1]/div[0]/span[0]",
+   "tag": "span",
+   "cls": "nHqeVd",
+   "role": null,
+   "aria": null,
+   "rect": [
+    167.7,
+    25,
+    75.33,
+    20
+   ],
+   "abs": [
+    534.05,
+    173
+   ],
+   "style": {
+    "display": "flex",
+    "fontSize": "12px",
+    "fontWeight": "500",
+    "lineHeight": "20px",
+    "color": "rgb(255, 255, 255)",
+    "borderTop": "0px none rgb(255, 255, 255)",
+    "borderRight": "0px none rgb(255, 255, 255)",
+    "borderBottom": "0px none rgb(255, 255, 255)",
+    "borderLeft": "0px none rgb(255, 255, 255)",
+    "width": "75.3281px",
+    "height": "20px",
+    "minWidth": "auto",
+    "minHeight": "auto",
+    "alignItems": "center",
+    "overflow": "hidden",
+    "outline": "rgb(255, 255, 255) none 3px",
+    "cursor": "pointer"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]/div[1]/div[1]/div[1]/div[0]/span[0]/span[0]",
+   "tag": "span",
+   "cls": "WBi6vc",
+   "role": null,
+   "aria": null,
+   "text": "All-day two B",
+   "rect": [
+    167.7,
+    25,
+    75.33,
+    20
+   ],
+   "abs": [
+    534.05,
+    173
+   ],
+   "style": {
+    "fontSize": "12px",
+    "fontWeight": "500",
+    "lineHeight": "20px",
+    "color": "rgb(255, 255, 255)",
+    "borderTop": "0px none rgb(255, 255, 255)",
+    "borderRight": "0px none rgb(255, 255, 255)",
+    "borderBottom": "0px none rgb(255, 255, 255)",
+    "borderLeft": "0px none rgb(255, 255, 255)",
+    "width": "75.3281px",
+    "height": "20px",
+    "minWidth": "auto",
+    "minHeight": "auto",
+    "whiteSpace": "nowrap",
+    "overflow": "hidden",
+    "outline": "rgb(255, 255, 255) none 3px",
+    "cursor": "pointer"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]/div[1]/div[1]/div[1]/div[0]/span[1]",
+   "tag": "span",
+   "cls": "XuJrye",
+   "role": null,
+   "aria": null,
+   "text": "All day, All-day two B, Calendar: UGC Fixtures, No location, September 15, 2026",
+   "rect": [
+    167.7,
+    34.5,
+    1,
+    1
+   ],
+   "abs": [
+    534.05,
+    182.5
+   ],
+   "style": {
+    "position": "absolute",
+    "fontSize": "12px",
+    "fontWeight": "500",
+    "lineHeight": "20px",
+    "color": "rgb(255, 255, 255)",
+    "borderTop": "0px none rgb(255, 255, 255)",
+    "borderRight": "0px none rgb(255, 255, 255)",
+    "borderBottom": "0px none rgb(255, 255, 255)",
+    "borderLeft": "0px none rgb(255, 255, 255)",
+    "width": "1px",
+    "height": "1px",
+    "whiteSpace": "nowrap",
+    "overflow": "hidden",
+    "outline": "rgb(255, 255, 255) none 3px",
+    "cursor": "pointer"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]/div[2]",
+   "tag": "div",
+   "cls": "qLWd9c",
+   "role": "gridcell",
+   "aria": null,
+   "rect": [
+    308.61,
+    0,
+    149.8,
+    48
+   ],
+   "abs": [
+    674.95,
+    148
+   ],
+   "style": {
+    "fontSize": "24px",
+    "color": "rgb(31, 31, 31)",
+    "borderTop": "0px none rgb(31, 31, 31)",
+    "borderRight": "1px solid rgba(0, 0, 0, 0)",
+    "borderBottom": "0px none rgb(31, 31, 31)",
+    "borderLeft": "0px none rgb(31, 31, 31)",
+    "width": "148.797px",
+    "height": "48px",
+    "minWidth": "80px",
+    "minHeight": "auto",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]/div[2]/h2[0]",
+   "tag": "h2",
+   "cls": "CqwSk XuJrye",
+   "role": null,
+   "aria": null,
+   "text": "No all day events, Wednesday, September 16",
+   "rect": [
+    308.61,
+    0,
+    1,
+    1
+   ],
+   "abs": [
+    674.95,
+    148
+   ],
+   "style": {
+    "position": "absolute",
+    "fontSize": "36px",
+    "fontWeight": "700",
+    "color": "rgb(31, 31, 31)",
+    "borderTop": "0px none rgb(31, 31, 31)",
+    "borderRight": "0px none rgb(31, 31, 31)",
+    "borderBottom": "0px none rgb(31, 31, 31)",
+    "borderLeft": "0px none rgb(31, 31, 31)",
+    "width": "1px",
+    "height": "1px",
+    "whiteSpace": "nowrap",
+    "overflow": "hidden",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]/div[3]",
+   "tag": "div",
+   "cls": "qLWd9c",
+   "role": "gridcell",
+   "aria": null,
+   "rect": [
+    458.41,
+    0,
+    149.81,
+    48
+   ],
+   "abs": [
+    824.75,
+    148
+   ],
+   "style": {
+    "fontSize": "24px",
+    "color": "rgb(31, 31, 31)",
+    "borderTop": "0px none rgb(31, 31, 31)",
+    "borderRight": "1px solid rgba(0, 0, 0, 0)",
+    "borderBottom": "0px none rgb(31, 31, 31)",
+    "borderLeft": "0px none rgb(31, 31, 31)",
+    "width": "148.812px",
+    "height": "48px",
+    "minWidth": "80px",
+    "minHeight": "auto",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]/div[3]/h2[0]",
+   "tag": "h2",
+   "cls": "CqwSk XuJrye",
+   "role": null,
+   "aria": null,
+   "text": "No all day events, Thursday, September 17",
+   "rect": [
+    458.41,
+    0,
+    1,
+    1
+   ],
+   "abs": [
+    824.75,
+    148
+   ],
+   "style": {
+    "position": "absolute",
+    "fontSize": "36px",
+    "fontWeight": "700",
+    "color": "rgb(31, 31, 31)",
+    "borderTop": "0px none rgb(31, 31, 31)",
+    "borderRight": "0px none rgb(31, 31, 31)",
+    "borderBottom": "0px none rgb(31, 31, 31)",
+    "borderLeft": "0px none rgb(31, 31, 31)",
+    "width": "1px",
+    "height": "1px",
+    "whiteSpace": "nowrap",
+    "overflow": "hidden",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]/div[4]",
+   "tag": "div",
+   "cls": "qLWd9c",
+   "role": "gridcell",
+   "aria": null,
+   "rect": [
+    608.22,
+    0,
+    149.81,
+    48
+   ],
+   "abs": [
+    974.56,
+    148
+   ],
+   "style": {
+    "fontSize": "24px",
+    "color": "rgb(31, 31, 31)",
+    "borderTop": "0px none rgb(31, 31, 31)",
+    "borderRight": "1px solid rgba(0, 0, 0, 0)",
+    "borderBottom": "0px none rgb(31, 31, 31)",
+    "borderLeft": "0px none rgb(31, 31, 31)",
+    "width": "148.812px",
+    "height": "48px",
+    "minWidth": "80px",
+    "minHeight": "auto",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]/div[4]/h2[0]",
+   "tag": "h2",
+   "cls": "CqwSk XuJrye",
+   "role": null,
+   "aria": null,
+   "text": "No all day events, Friday, September 18",
+   "rect": [
+    608.22,
+    0,
+    1,
+    1
+   ],
+   "abs": [
+    974.56,
+    148
+   ],
+   "style": {
+    "position": "absolute",
+    "fontSize": "36px",
+    "fontWeight": "700",
+    "color": "rgb(31, 31, 31)",
+    "borderTop": "0px none rgb(31, 31, 31)",
+    "borderRight": "0px none rgb(31, 31, 31)",
+    "borderBottom": "0px none rgb(31, 31, 31)",
+    "borderLeft": "0px none rgb(31, 31, 31)",
+    "width": "1px",
+    "height": "1px",
+    "whiteSpace": "nowrap",
+    "overflow": "hidden",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]/div[5]",
+   "tag": "div",
+   "cls": "qLWd9c",
+   "role": "gridcell",
+   "aria": null,
+   "rect": [
+    758.03,
+    0,
+    149.81,
+    48
+   ],
+   "abs": [
+    1124.38,
+    148
+   ],
+   "style": {
+    "fontSize": "24px",
+    "color": "rgb(31, 31, 31)",
+    "borderTop": "0px none rgb(31, 31, 31)",
+    "borderRight": "1px solid rgba(0, 0, 0, 0)",
+    "borderBottom": "0px none rgb(31, 31, 31)",
+    "borderLeft": "0px none rgb(31, 31, 31)",
+    "width": "148.812px",
+    "height": "48px",
+    "minWidth": "80px",
+    "minHeight": "auto",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]/div[5]/h2[0]",
+   "tag": "h2",
+   "cls": "CqwSk XuJrye",
+   "role": null,
+   "aria": null,
+   "text": "No all day events, Saturday, September 19",
+   "rect": [
+    758.03,
+    0,
+    1,
+    1
+   ],
+   "abs": [
+    1124.38,
+    148
+   ],
+   "style": {
+    "position": "absolute",
+    "fontSize": "36px",
+    "fontWeight": "700",
+    "color": "rgb(31, 31, 31)",
+    "borderTop": "0px none rgb(31, 31, 31)",
+    "borderRight": "0px none rgb(31, 31, 31)",
+    "borderBottom": "0px none rgb(31, 31, 31)",
+    "borderLeft": "0px none rgb(31, 31, 31)",
+    "width": "1px",
+    "height": "1px",
+    "whiteSpace": "nowrap",
+    "overflow": "hidden",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]/div[6]",
+   "tag": "div",
+   "cls": "qLWd9c",
+   "role": "gridcell",
+   "aria": null,
+   "rect": [
+    907.84,
+    0,
+    148.81,
+    48
+   ],
+   "abs": [
+    1274.19,
+    148
+   ],
+   "style": {
+    "fontSize": "24px",
+    "color": "rgb(31, 31, 31)",
+    "borderTop": "0px none rgb(31, 31, 31)",
+    "borderRight": "0px none rgb(31, 31, 31)",
+    "borderBottom": "0px none rgb(31, 31, 31)",
+    "borderLeft": "0px none rgb(31, 31, 31)",
+    "width": "148.812px",
+    "height": "48px",
+    "minWidth": "80px",
+    "minHeight": "auto",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  },
+  {
+   "path": "div/div[1]/div[1]/div[6]/h2[0]",
+   "tag": "h2",
+   "cls": "CqwSk XuJrye",
+   "role": null,
+   "aria": null,
+   "text": "No all day events, Sunday, September 20",
+   "rect": [
+    907.84,
+    0,
+    1,
+    1
+   ],
+   "abs": [
+    1274.19,
+    148
+   ],
+   "style": {
+    "position": "absolute",
+    "fontSize": "36px",
+    "fontWeight": "700",
+    "color": "rgb(31, 31, 31)",
+    "borderTop": "0px none rgb(31, 31, 31)",
+    "borderRight": "0px none rgb(31, 31, 31)",
+    "borderBottom": "0px none rgb(31, 31, 31)",
+    "borderLeft": "0px none rgb(31, 31, 31)",
+    "width": "1px",
+    "height": "1px",
+    "whiteSpace": "nowrap",
+    "overflow": "hidden",
+    "outline": "rgb(31, 31, 31) none 3px"
+   }
+  }
+ ]
+}

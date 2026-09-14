@@ -46,6 +46,17 @@ impl Client {
         .await
     }
 
+    /// `calendars.insert`: create a secondary calendar (used by the fixture seeding tool).
+    pub async fn calendar_insert(&self, token: &str, summary: &str, time_zone: &str) -> Result<serde_json::Value, AppError> {
+        self.send(token, Method::POST, "/calendars", &[], Some(&json!({ "summary": summary, "timeZone": time_zone }))).await
+    }
+
+    /// `calendars.delete`: remove a secondary calendar owned by the account.
+    pub async fn calendar_delete(&self, token: &str, calendar_id: &str) -> Result<(), AppError> {
+        self.send_text(token, Method::DELETE, &format!("/calendars/{}", Client::seg(calendar_id)), &[], None).await?;
+        Ok(())
+    }
+
     pub async fn watch_calendar_list(
         &self,
         token: &str,
