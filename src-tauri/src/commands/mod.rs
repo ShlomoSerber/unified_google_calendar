@@ -456,6 +456,98 @@ pub fn handler() -> impl Fn(tauri::ipc::Invoke) -> bool + Send + Sync + 'static 
         get_event,
         list_accounts,
         list_calendars,
-        set_calendar_visible
+        set_calendar_visible,
+        create_event,
+        update_event,
+        delete_event,
+        move_event_account,
+        add_account,
+        remove_account,
+        open_url,
+        sync_now,
+        get_colors,
+        rsvp,
+        get_settings,
+        set_settings,
+        test_push,
+        goa_status,
+        goa_disable_calendars
     ]
+}
+
+/// Names of every IPC command, for the consistency test against `build.rs` and the capability.
+pub const COMMAND_NAMES: &[&str] = &[
+    "get_view",
+    "get_event",
+    "list_accounts",
+    "list_calendars",
+    "set_calendar_visible",
+    "create_event",
+    "update_event",
+    "delete_event",
+    "move_event_account",
+    "add_account",
+    "remove_account",
+    "open_url",
+    "sync_now",
+    "get_colors",
+    "rsvp",
+    "get_settings",
+    "set_settings",
+    "test_push",
+    "goa_status",
+    "goa_disable_calendars",
+];
+
+#[cfg(test)]
+mod tests {
+    use super::COMMAND_NAMES;
+
+    /// `generate_handler!`, `build.rs` and `capabilities/default.json` must list the same commands.
+    #[test]
+    fn command_lists_agree() {
+        let src =
+            std::fs::read_to_string(concat!(env!("CARGO_MANIFEST_DIR"), "/src/commands/mod.rs"))
+                .unwrap();
+        let handler = src
+            .split("tauri::generate_handler![")
+            .nth(1)
+            .unwrap()
+            .split(']')
+            .next()
+            .unwrap();
+        let build =
+            std::fs::read_to_string(concat!(env!("CARGO_MANIFEST_DIR"), "/build.rs")).unwrap();
+        let cap = std::fs::read_to_string(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/capabilities/default.json"
+        ))
+        .unwrap();
+        for name in COMMAND_NAMES {
+            assert!(
+                handler
+                    .split(|c: char| !c.is_alphanumeric() && c != '_')
+                    .any(|w| w == *name),
+                "{name} missing in generate_handler!"
+            );
+            assert!(
+                build.contains(&format!("\"{name}\"")),
+                "{name} missing in build.rs"
+            );
+            let perm = format!("\"allow-{}\"", name.replace('_', "-"));
+            assert!(
+                cap.contains(&perm),
+                "{perm} missing in capabilities/default.json"
+            );
+        }
+        let in_handler = handler
+            .split(|c: char| !c.is_alphanumeric() && c != '_')
+            .filter(|w| !w.is_empty())
+            .count();
+        assert_eq!(
+            in_handler,
+            COMMAND_NAMES.len(),
+            "generate_handler! has extra commands"
+        );
+    }
 }
