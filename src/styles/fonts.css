@@ -1,1 +1,55 @@
-/* Font faces are declared in F4-T2 once the OFL files are in src-tauri/resources/fonts. See docs/04 section 6. */
+/* Bundled OFL / Apache fonts (docs/04-fidelidad-visual.md section 6). Files live in
+   src-tauri/resources/fonts and are served from /fonts through the public/fonts symlink.
+   Family names match the ones Google Calendar uses so measured CSS resolves the same way. */
+
+@font-face {
+  font-family: 'Google Sans Flex';
+  src: url('/fonts/GoogleSansFlex-VF.ttf') format('truetype');
+  font-weight: 1 1000;
+  font-stretch: 25% 151%;
+  font-style: oblique 0deg 10deg;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('/fonts/Roboto-VF.ttf') format('truetype');
+  font-weight: 100 900;
+  font-stretch: 75% 100%;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('/fonts/Roboto-Italic-VF.ttf') format('truetype');
+  font-weight: 100 900;
+  font-stretch: 75% 100%;
+  font-style: italic;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Material Symbols Outlined';
+  src: url('/fonts/MaterialSymbolsOutlined-subset.woff2') format('woff2');
+  font-weight: 100 700;
+  font-style: normal;
+  font-display: block;
+}
+
+/* Icon ligatures: the element text is the icon name (docs/design/icons.txt). */
+.icon {
+  font-family: var(--font-family-icons);
+  font-weight: normal;
+  font-style: normal;
+  display: inline-block;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  direction: ltr;
+  font-feature-settings: 'liga';
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
