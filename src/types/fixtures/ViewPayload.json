@@ -1,0 +1,35 @@
+{
+  "from": 1789000000,
+  "to": 1789604800,
+  "occurrences": [
+    {
+      "id": "104857600000000000001|primary|abc|1789012345",
+      "event_id": "abc",
+      "calendar_id": "primary",
+      "account_id": "104857600000000000001",
+      "title": "Daily standup",
+      "start": 1789012345,
+      "end": 1789013245,
+      "all_day": false,
+      "color_bg": "#0b8043",
+      "color_fg": "#ffffff",
+      "color_id": "10",
+      "status": "confirmed",
+      "my_response": "accepted",
+      "is_recurring": true,
+      "has_meet": true,
+      "attendee_count": 3,
+      "conflict_with": null,
+      "also_in": [],
+      "is_local": false,
+      "transparency": "opaque"
+    }
+  ],
+  "calendars": [
+    {
+      "account_id": "104857600000000000001",
+      "id": "primary",
+      "visible": true
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "id": "local",
+    "kind": "local",
+    "email": null,
+    "display_name": "This computer",
+    "sort_order": 0,
+    "sync_state": "idle",
+    "sync_error": null,
+    "last_sync_at": null
+  },
+  {
+    "id": "104857600000000000001",
+    "kind": "google",
+    "email": "someone@example.com",
+    "display_name": "someone@example.com",
+    "sort_order": 1,
+    "sync_state": "error",
+    "sync_error": "The app could not reach Google (timeout).",
+    "last_sync_at": 1789000000
+  }
+]

@@ -1,0 +1,84 @@
+{
+  "occurrence_id": "104857600000000000001|primary|abc|1789012345",
+  "event_id": "abc",
+  "master_id": "abc",
+  "calendar_id": "primary",
+  "account_id": "104857600000000000001",
+  "account_name": "someone@example.com",
+  "account_email": "someone@example.com",
+  "calendar_name": "someone@example.com",
+  "is_local": false,
+  "title": "Daily standup",
+  "description": "Description line",
+  "location": "Location text",
+  "start": 1789012345,
+  "end": 1789013245,
+  "all_day": false,
+  "time_zone": "America/Argentina/Buenos_Aires",
+  "status": "confirmed",
+  "color_bg": "#0b8043",
+  "color_fg": "#ffffff",
+  "color_id": "10",
+  "transparency": "opaque",
+  "visibility": "default",
+  "is_recurring": true,
+  "is_exception": false,
+  "recurrence_text": "Weekly on Monday",
+  "recurrence": [
+    "RRULE:FREQ=WEEKLY;BYDAY=MO"
+  ],
+  "meet_link": "https://meet.google.com/abc-defg-hij",
+  "conference_label": "Google Meet",
+  "html_link": "https://www.google.com/calendar/event?eid=abc",
+  "attendees": [
+    {
+      "email": "someone@example.com",
+      "display_name": "someone",
+      "response_status": "accepted",
+      "organizer": true,
+      "self": true,
+      "optional": false
+    },
+    {
+      "email": "guest@example.com",
+      "display_name": "guest",
+      "response_status": "needsAction",
+      "organizer": false,
+      "self": false,
+      "optional": false
+    }
+  ],
+  "organizer": {
+    "email": "someone@example.com",
+    "display_name": "someone",
+    "response_status": "accepted",
+    "organizer": true,
+    "self": true,
+    "optional": false
+  },
+  "my_response": "accepted",
+  "use_default_reminders": true,
+  "reminders": [
+    {
+      "method": "popup",
+      "minutes": 10
+    }
+  ],
+  "also_in": [
+    {
+      "account_id": "104857600000000000002",
+      "account_name": "other@example.com",
+      "occurrence_id": "104857600000000000002|primary|xyz|1789012345"
+    }
+  ],
+  "conflict_with": {
+    "occurrence_id": "local|local-personal|uuid|1789012000",
+    "title": "Dentist",
+    "start": 1789012000,
+    "end": 1789015600,
+    "account_name": "This computer"
+  },
+  "can_edit": true,
+  "can_delete": true,
+  "can_rsvp": true
+}

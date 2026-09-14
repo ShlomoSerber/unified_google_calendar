@@ -1,0 +1,10 @@
+{
+  "from": 1789000000,
+  "to": 1789604800,
+  "calendar_ids": [
+    {
+      "account_id": "local",
+      "calendar_id": "local-personal"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+[
+  {
+    "id": "primary",
+    "account_id": "104857600000000000001",
+    "summary": "someone@example.com",
+    "description": null,
+    "color_bg": "#039be5",
+    "color_fg": "#000000",
+    "access_role": "owner",
+    "is_primary": true,
+    "visible": true,
+    "hidden_remote": false,
+    "time_zone": "America/Argentina/Buenos_Aires",
+    "default_reminders": [
+      {
+        "method": "popup",
+        "minutes": 10
+      }
+    ],
+    "sort_order": 0,
+    "is_local": false
+  }
+]

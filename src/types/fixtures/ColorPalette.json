@@ -1,0 +1,59 @@
+{
+  "events": [
+    {
+      "id": "1",
+      "name": "Lavender",
+      "bg": "#7986cb"
+    },
+    {
+      "id": "2",
+      "name": "Sage",
+      "bg": "#33b679"
+    },
+    {
+      "id": "3",
+      "name": "Grape",
+      "bg": "#8e24aa"
+    },
+    {
+      "id": "4",
+      "name": "Flamingo",
+      "bg": "#e67c73"
+    },
+    {
+      "id": "5",
+      "name": "Banana",
+      "bg": "#f6bf26"
+    },
+    {
+      "id": "6",
+      "name": "Tangerine",
+      "bg": "#f4511e"
+    },
+    {
+      "id": "7",
+      "name": "Peacock",
+      "bg": "#039be5"
+    },
+    {
+      "id": "8",
+      "name": "Graphite",
+      "bg": "#616161"
+    },
+    {
+      "id": "9",
+      "name": "Blueberry",
+      "bg": "#3f51b5"
+    },
+    {
+      "id": "10",
+      "name": "Basil",
+      "bg": "#0b8043"
+    },
+    {
+      "id": "11",
+      "name": "Tomato",
+      "bg": "#d50000"
+    }
+  ]
+}

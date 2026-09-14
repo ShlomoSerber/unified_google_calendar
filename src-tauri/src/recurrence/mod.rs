@@ -1,5 +1,6 @@
-//! Recurrence expansion and edit scopes. See docs/03-modelo-de-datos.md sections 3 and 4.
+//! Recurrence expansion, edit scopes and text. See docs/03-modelo-de-datos.md sections 3, 4 and 9.
 
+pub mod describe;
 pub mod edit_scope;
 pub mod expand;
 

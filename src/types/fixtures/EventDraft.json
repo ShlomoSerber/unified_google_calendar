@@ -1,0 +1,20 @@
+{
+  "account_id": "local",
+  "calendar_id": "local-personal",
+  "title": "Dentist",
+  "description": null,
+  "location": null,
+  "all_day": false,
+  "start": 1789012000,
+  "end": 1789015600,
+  "start_date": null,
+  "end_date": null,
+  "time_zone": "America/Argentina/Buenos_Aires",
+  "recurrence": [],
+  "attendees": [],
+  "reminders": null,
+  "color_id": null,
+  "add_meet": false,
+  "transparency": null,
+  "visibility": null
+}
