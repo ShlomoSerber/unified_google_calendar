@@ -16,26 +16,33 @@ export type Dialog =
   | { kind: 'edit-scope'; occurrenceId: string; action: 'update' | 'delete' }
   | { kind: 'settings' }
   | { kind: 'welcome' }
-  | { kind: 'goa' };
+  | { kind: 'goa' }
+  | { kind: 'view-menu' }
+  | { kind: 'create-menu' };
 
 export interface UiState {
   /** Anchor date of the visible range, UTC seconds (any instant inside the day). */
   date: number;
+  /** Current time, UTC seconds; advanced by the Rust `clock:minute` event. */
+  now: number;
   view: ViewKind;
   tz: string;
   secondaryTz: string | null;
   dialog: Dialog;
+  sidebarOpen: boolean;
   settings: Settings | null;
   accounts: AccountInfo[];
   calendars: CalendarInfo[];
   syncStatus: Record<string, SyncStatus>;
   setView: (view: ViewKind) => void;
   setDate: (ts: number) => void;
+  setNow: (ts: number) => void;
   today: () => void;
   next: () => void;
   prev: () => void;
   openDialog: (dialog: Dialog) => void;
   closeDialog: () => void;
+  toggleSidebar: () => void;
   setSettings: (s: Settings) => void;
   setAccounts: (a: AccountInfo[]) => void;
   setCalendars: (c: CalendarInfo[]) => void;
@@ -59,21 +66,25 @@ export function step(date: number, view: ViewKind, direction: 1 | -1, tz: string
 
 export const useUi = create<UiState>((set, get) => ({
   date: Math.floor(Date.now() / 1000),
+  now: Math.floor(Date.now() / 1000),
   view: 'week',
   tz: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
   secondaryTz: null,
   dialog: { kind: 'none' },
+  sidebarOpen: true,
   settings: null,
   accounts: [],
   calendars: [],
   syncStatus: {},
   setView: (view) => set({ view }),
   setDate: (date) => set({ date }),
-  today: () => set({ date: Math.floor(Date.now() / 1000) }),
+  setNow: (now) => set({ now }),
+  today: () => set({ date: get().now }),
   next: () => set({ date: step(get().date, get().view, 1, get().tz) }),
   prev: () => set({ date: step(get().date, get().view, -1, get().tz) }),
   openDialog: (dialog) => set({ dialog }),
   closeDialog: () => set({ dialog: { kind: 'none' } }),
+  toggleSidebar: () => set({ sidebarOpen: !get().sidebarOpen }),
   setSettings: (settings) => set({ settings, tz: settings.primary_tz, secondaryTz: settings.secondary_tz }),
   setAccounts: (accounts) => set({ accounts }),
   setCalendars: (calendars) => set({ calendars }),

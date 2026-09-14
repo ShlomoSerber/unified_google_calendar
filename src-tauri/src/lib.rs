@@ -1,6 +1,7 @@
 //! Tauri builder, plugins and setup. See docs/02-arquitectura.md sections 2 and 3.1.
 
 pub mod auth;
+pub mod clock;
 pub mod commands;
 pub mod config;
 pub mod db;
@@ -93,9 +94,10 @@ pub fn run() {
                 })
                 .unwrap_or(config::DEFAULT_WEBHOOK_PORT);
             if let Ok(h) = db::handle() {
-                webhook::start(h, ticks, port);
+                webhook::start(app.handle().clone(), h, ticks, port);
             }
             reminders::start(app.handle().clone());
+            clock::start(app.handle().clone());
             eds::start(app.handle().clone());
             match tray::build(app.handle()) {
                 Ok(()) => tray::start(app.handle().clone()),

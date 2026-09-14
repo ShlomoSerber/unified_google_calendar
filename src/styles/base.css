@@ -1,10 +1,5 @@
-/* Base reset. Values here are structural, not measured from Google. See docs/04 section 6. */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
+/* Base reset plus the page defaults measured on calendar.google.com (docs/design/measurements/
+   gm3-light.json roles.body). Structural values only; every visual value is a token. */
 html,
 body,
 #root {
@@ -14,9 +9,12 @@ body,
 }
 
 body {
+  font-family: var(--font-family-body);
+  font-size: var(--font-body-size);
+  color: var(--color-body-text);
+  background: var(--color-surface);
   font-synthesis: none;
   -webkit-text-size-adjust: 100%;
-  text-rendering: optimizeLegibility;
   overflow: hidden;
 }
 
@@ -26,4 +24,22 @@ textarea,
 select {
   font: inherit;
   color: inherit;
+}
+
+button {
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Google's icon font glyphs are ligatures on the icon name. */
+i {
+  font-style: normal;
 }

@@ -1,0 +1,92 @@
+/* Measured rules live in src/styles/measured.css (.sidebar-*). This file adds only what the
+   measurement cannot express: dynamic calendar colours, flow instead of Google's virtual
+   list, the hover state, and the account avatar and type label of docs/08 F4-T3. */
+
+/* Google positions every row absolutely (virtualised list); ours flow in order. */
+.sidebar-list-row-wrap {
+  position: relative;
+  left: auto;
+  top: auto;
+}
+
+.sidebar-list-row-inner:hover {
+  background-color: var(--sidebar-list-row-hover-background-color);
+}
+
+/* The checkbox takes the calendar's own colour (CalendarInfo.color_bg via --data-calendar-color). */
+.sidebar-list-check-mark,
+.sidebar-list-check-mark-on {
+  border-color: var(--data-calendar-color);
+}
+
+.sidebar-list-check-mark-on {
+  background-color: var(--data-calendar-color);
+}
+
+.sidebar-list-check-input {
+  margin: 0;
+  cursor: pointer;
+}
+
+/* The tick is a stroked polyline; unchecked boxes keep it hidden. */
+.sidebar-list-check-path-on {
+  stroke: var(--sidebar-list-check-path-on-stroke);
+  stroke-width: var(--sidebar-list-check-path-on-stroke-width);
+}
+
+.sidebar-list-check-path {
+  stroke: none;
+}
+
+/* Account avatar in a section header: the 20px icon slot, today's disc colours. */
+.sidebar-list-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: var(--sidebar-list-add-icon-width);
+  height: var(--sidebar-list-add-icon-height);
+  margin-right: var(--sidebar-list-check-area-padding-left);
+  border-radius: var(--sidebar-minical-day-border-radius);
+  background-color: var(--sidebar-minical-day-today-background-color);
+  color: var(--sidebar-minical-day-today-color);
+  font-size: var(--sidebar-minical-dow-font-size);
+  font-weight: var(--sidebar-minical-dow-font-weight);
+}
+
+.sidebar-list-header-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Type label after an iCal calendar name, in the mini calendar's small caption style. */
+.sidebar-list-type {
+  margin-left: var(--sidebar-list-check-area-padding-left);
+  font-size: var(--sidebar-minical-dow-font-size);
+  font-weight: var(--sidebar-minical-dow-font-weight);
+  color: var(--sidebar-minical-dow-color);
+}
+
+/* Google's drawer scrolls without a visible bar (component 21, measured in phase 7). */
+.sidebar-scroll {
+  scrollbar-width: none;
+}
+
+.sidebar-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.sidebar-people-input {
+  background: none;
+  border: 0;
+  padding: 0;
+  outline: 0;
+}
+
+.sidebar-booking-button:disabled,
+.sidebar-booking-add:disabled {
+  cursor: default;
+}

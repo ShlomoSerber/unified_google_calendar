@@ -1,0 +1,19 @@
+/* Every measured rule lives in src/styles/measured.css (.topbar-*). This file only adds what
+   the measurement cannot express: our own avatar and organisation label rendered as text. */
+.topbar-avatar-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--topbar-avatar-border-radius);
+  background: var(--color-primary-container);
+  color: var(--color-on-surface);
+  font-family: var(--font-family-display);
+}
+
+.topbar-org-name {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-family-display);
+  color: var(--color-on-surface);
+  letter-spacing: var(--font-topbar-title-letter-spacing);
+}

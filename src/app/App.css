@@ -1,7 +1,26 @@
 .app {
+  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   height: 100%;
+}
+
+.app-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.app-main {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* The grid card leaves 16px free on the right and at the bottom (layout.main_gap_*). */
+.app-main {
+  padding-right: var(--layout-main-gap-right);
+  padding-bottom: var(--layout-main-gap-bottom);
 }

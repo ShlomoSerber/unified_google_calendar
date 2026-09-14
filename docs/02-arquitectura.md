@@ -227,3 +227,7 @@ Log con `tracing` a `~/.local/share/unified-google-calendar/logs/app.log`, rotac
 ## 10. Lo que la versión 1 no hace
 
 Sin cola offline, sin arrastrar y soltar, sin búsqueda, sin Tasks, sin `.ics`, sin auto arranque, sin auto actualización. Están listados en `01-requisitos.md`. No implementar nada de esto aunque parezca fácil.
+
+## Registro de cambios
+
+- 2026-09-14 — Evento `clock:minute` (Rust → UI, cada minuto) y campo `location` en `ViewOccurrence`; `set_calendar_visible` emite `calendar:updated`: ver `docs/99-decisiones.md` (F4-T3, F4-T4).

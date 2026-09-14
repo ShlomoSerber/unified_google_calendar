@@ -1,0 +1,32 @@
+/* Measured rules live in src/styles/measured.css (.create-button-*, .create-menu-*). Google
+   parks the button and its menu on the page, outside the drawer; the offsets are the dumps'
+   rootRect (layout.create_button_*, layout.create_menu_*): the button relative to .app, the
+   menu relative to the button's anchor. */
+.create-button-anchor {
+  position: absolute;
+  left: var(--layout-create-button-left);
+  top: var(--layout-create-button-top);
+}
+
+.create-button-root {
+  cursor: pointer;
+}
+
+.create-menu-root {
+  left: calc(var(--layout-create-menu-left) - var(--layout-create-button-left));
+  top: calc(var(--layout-create-menu-top) - var(--layout-create-button-top) - var(--create-menu-root-margin-top));
+}
+
+.create-menu-list {
+  list-style: none;
+}
+
+.create-menu-item,
+.create-menu-item-last {
+  cursor: pointer;
+}
+
+.create-menu-item[aria-disabled='true'],
+.create-menu-item-last[aria-disabled='true'] {
+  cursor: default;
+}

@@ -2,6 +2,7 @@
 //!
 //! Every `#[tauri::command]` converts `AppError` into its `user_message()` at this boundary.
 
+pub mod dev;
 pub mod events;
 pub mod google_events;
 pub mod settings;
@@ -76,10 +77,15 @@ pub async fn list_calendars() -> CmdResult<Vec<types::CalendarInfo>> {
 
 #[tauri::command]
 pub async fn set_calendar_visible(
+    app: tauri::AppHandle,
     account_id: String,
     calendar_id: String,
     visible: bool,
 ) -> CmdResult<()> {
+    let key = types::CalendarKey {
+        account_id: account_id.clone(),
+        calendar_id: calendar_id.clone(),
+    };
     db::call(move |c| {
         let n = db::queries::calendars::set_visible(c, &account_id, &calendar_id, visible)?;
         if n == 0 {
@@ -88,7 +94,17 @@ pub async fn set_calendar_visible(
         Ok(())
     })
     .await
-    .map_err(to_ipc)
+    .map_err(to_ipc)?;
+    // `get_view` only returns visible calendars, so the open views must reload (docs/02 section 5).
+    emit_updated(
+        &app,
+        &events::Touched {
+            from: i64::MIN,
+            to: i64::MAX,
+            calendars: vec![key],
+        },
+    );
+    Ok(())
 }
 
 /// Emit `calendar:updated` for a touched range (docs/02 section 5).
@@ -463,6 +479,12 @@ pub async fn goa_disable_calendars(disable: bool) -> CmdResult<types::GoaStatus>
     goa_status().await
 }
 
+/// Dev only: store a webview `dumpRegion` result for `scripts/measure/diff-layout.mjs`.
+#[tauri::command]
+pub fn dev_dump(name: String, json: String) -> CmdResult<String> {
+    dev::write_dump(&name, &json).map_err(to_ipc)
+}
+
 #[tauri::command]
 pub fn get_colors() -> CmdResult<types::ColorPalette> {
     Ok(types::ColorPalette {
@@ -500,7 +522,8 @@ pub fn handler() -> impl Fn(tauri::ipc::Invoke) -> bool + Send + Sync + 'static 
         test_push,
         goa_status,
         goa_disable_calendars,
-        add_ical_calendar
+        add_ical_calendar,
+        dev_dump
     ]
 }
 
@@ -527,6 +550,7 @@ pub const COMMAND_NAMES: &[&str] = &[
     "goa_status",
     "goa_disable_calendars",
     "add_ical_calendar",
+    "dev_dump",
 ];
 
 #[cfg(test)]
