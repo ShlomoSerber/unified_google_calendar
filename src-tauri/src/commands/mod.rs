@@ -3,6 +3,8 @@
 //! Every `#[tauri::command]` converts `AppError` into its `user_message()` at this boundary.
 
 pub mod events;
+pub mod google_events;
+pub mod settings;
 pub mod types;
 pub mod view;
 
@@ -101,14 +103,8 @@ pub fn emit_updated(app: &tauri::AppHandle, t: &events::Touched) {
     }
 }
 
-fn not_google_yet(account_id: &str) -> Result<(), AppError> {
-    if events::is_local(account_id) {
-        Ok(())
-    } else {
-        Err(AppError::invalid(
-            "Writing to Google accounts is not available in this build yet",
-        ))
-    }
+fn sync_ctx() -> Result<crate::sync::SyncCtx, AppError> {
+    Ok(crate::sync::engine::engine()?.ctx.clone())
 }
 
 #[tauri::command]
@@ -116,12 +112,18 @@ pub async fn create_event(
     app: tauri::AppHandle,
     draft: types::EventDraft,
 ) -> CmdResult<types::EventDetail> {
-    not_google_yet(&draft.account_id).map_err(to_ipc)?;
-    let (detail, touched) = db::call(move |c| {
-        let w = Window::current(c)?;
-        events::create_local(c, &draft, w)
-    })
-    .await
+    let (detail, touched) = if events::is_local(&draft.account_id) {
+        db::call(move |c| {
+            let w = Window::current(c)?;
+            events::create_local(c, &draft, w)
+        })
+        .await
+    } else {
+        match sync_ctx() {
+            Ok(ctx) => google_events::create(&ctx, &draft).await,
+            Err(e) => Err(e),
+        }
+    }
     .map_err(to_ipc)?;
     emit_updated(&app, &touched);
     Ok(detail)
@@ -134,12 +136,21 @@ pub async fn update_event(
     draft: types::EventDraft,
     scope: types::EditScope,
 ) -> CmdResult<types::EventDetail> {
-    not_google_yet(&draft.account_id).map_err(to_ipc)?;
-    let (detail, touched) = db::call(move |c| {
-        let w = Window::current(c)?;
-        events::update_local(c, &occurrence_id, &draft, scope, w)
-    })
-    .await
+    let (account_id, _, _) = db::queries::events::parse_occurrence_id(&occurrence_id)
+        .ok_or_else(|| AppError::NotFound("The event".into()))
+        .map_err(to_ipc)?;
+    let (detail, touched) = if events::is_local(&account_id) {
+        db::call(move |c| {
+            let w = Window::current(c)?;
+            events::update_local(c, &occurrence_id, &draft, scope, w)
+        })
+        .await
+    } else {
+        match sync_ctx() {
+            Ok(ctx) => google_events::update(&ctx, &occurrence_id, &draft, scope).await,
+            Err(e) => Err(e),
+        }
+    }
     .map_err(to_ipc)?;
     emit_updated(&app, &touched);
     Ok(detail)
@@ -151,17 +162,39 @@ pub async fn delete_event(
     occurrence_id: String,
     scope: types::EditScope,
 ) -> CmdResult<()> {
-    let touched = db::call(move |c| {
-        let (account_id, _, _) = db::queries::events::parse_occurrence_id(&occurrence_id)
-            .ok_or_else(|| AppError::NotFound("The event".into()))?;
-        not_google_yet(&account_id)?;
-        let w = Window::current(c)?;
-        events::delete_local(c, &occurrence_id, scope, w)
-    })
-    .await
+    let (account_id, _, _) = db::queries::events::parse_occurrence_id(&occurrence_id)
+        .ok_or_else(|| AppError::NotFound("The event".into()))
+        .map_err(to_ipc)?;
+    let touched = if events::is_local(&account_id) {
+        db::call(move |c| {
+            let w = Window::current(c)?;
+            events::delete_local(c, &occurrence_id, scope, w)
+        })
+        .await
+    } else {
+        match sync_ctx() {
+            Ok(ctx) => google_events::delete(&ctx, &occurrence_id, scope).await,
+            Err(e) => Err(e),
+        }
+    }
     .map_err(to_ipc)?;
     emit_updated(&app, &touched);
     Ok(())
+}
+
+#[tauri::command]
+pub async fn rsvp(
+    app: tauri::AppHandle,
+    occurrence_id: String,
+    status: String,
+    send_updates: bool,
+) -> CmdResult<types::EventDetail> {
+    let ctx = sync_ctx().map_err(to_ipc)?;
+    let (detail, touched) = google_events::rsvp(&ctx, &occurrence_id, &status, send_updates)
+        .await
+        .map_err(to_ipc)?;
+    emit_updated(&app, &touched);
+    Ok(detail)
 }
 
 #[tauri::command]
@@ -171,16 +204,13 @@ pub async fn move_event_account(
     target_account_id: String,
     target_calendar_id: String,
 ) -> CmdResult<types::EventDetail> {
-    let (detail, touched) = db::call(move |c| {
-        let w = Window::current(c)?;
-        events::move_local_to_local(
-            c,
-            &occurrence_id,
-            &target_account_id,
-            &target_calendar_id,
-            w,
-        )
-    })
+    let ctx = sync_ctx().map_err(to_ipc)?;
+    let (detail, touched) = google_events::move_event(
+        &ctx,
+        &occurrence_id,
+        &target_account_id,
+        &target_calendar_id,
+    )
     .await
     .map_err(to_ipc)?;
     emit_updated(&app, &touched);
@@ -218,10 +248,17 @@ pub async fn emit_accounts(app: &tauri::AppHandle) {
 pub async fn add_account(app: tauri::AppHandle) -> CmdResult<types::AccountInfo> {
     let info = crate::auth::add_account(&app).await.map_err(to_ipc)?;
     emit_accounts(&app).await;
-    // calendarList + full sync of every calendar of the new account (docs/05 section 1.2 step 8).
+    // Holidays on the first Gmail account, then calendarList + full sync of every calendar
+    // (docs/05 section 1.2 step 8, docs/09 section E).
     if let Ok(engine) = crate::sync::engine::engine() {
         let id = info.id.clone();
+        let email = info.email.clone().unwrap_or_default();
         tauri::async_runtime::spawn(async move {
+            if let Err(e) =
+                crate::sync::holidays::ensure_holidays(&engine.ctx, &id, &email, false).await
+            {
+                tracing::warn!(account = %id, error = %e, "holiday subscription failed");
+            }
             if let Err(e) = engine.sync_account(&id, "add_account").await {
                 tracing::warn!(account = %id, error = %e, "initial sync failed");
             }
@@ -278,6 +315,40 @@ pub async fn open_url(app: tauri::AppHandle, url: String) -> CmdResult<()> {
     app.opener()
         .open_url(&url, None::<&str>)
         .map_err(|e| format!("The link could not be opened ({e})."))
+}
+
+#[tauri::command]
+pub async fn get_settings() -> CmdResult<types::Settings> {
+    db::call(|c| settings::load(c)).await.map_err(to_ipc)
+}
+
+#[tauri::command]
+pub async fn set_settings(
+    app: tauri::AppHandle,
+    settings: types::Settings,
+) -> CmdResult<types::Settings> {
+    let before = db::call(|c| settings::load(c)).await.map_err(to_ipc)?;
+    let v = settings.clone();
+    db::call(move |c| settings::save(c, &v))
+        .await
+        .map_err(to_ipc)?;
+    if settings.holidays_account.is_some() && settings.holidays_account != before.holidays_account {
+        if let (Some(acc), Ok(engine)) = (
+            settings.holidays_account.clone(),
+            crate::sync::engine::engine(),
+        ) {
+            tauri::async_runtime::spawn(async move {
+                match crate::sync::holidays::ensure_holidays(&engine.ctx, &acc, "", true).await {
+                    Ok(_) => {
+                        let _ = engine.sync_account(&acc, "holidays").await;
+                    }
+                    Err(e) => tracing::warn!(error = %e, "moving the holiday subscription failed"),
+                }
+            });
+        }
+    }
+    emit_accounts(&app).await;
+    db::call(|c| settings::load(c)).await.map_err(to_ipc)
 }
 
 #[tauri::command]
