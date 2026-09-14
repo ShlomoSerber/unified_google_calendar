@@ -8,7 +8,9 @@ pub mod full;
 pub mod holidays;
 pub mod incremental;
 pub mod map;
+pub mod poll;
 pub mod push;
+pub mod sleep;
 
 pub use ctx::SyncCtx;
 pub use engine::{start, sync_all, Engine, SyncTick};

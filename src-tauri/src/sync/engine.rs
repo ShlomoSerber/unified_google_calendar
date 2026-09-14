@@ -269,6 +269,8 @@ pub fn start(app: tauri::AppHandle) -> mpsc::Sender<SyncTick> {
         });
         let renew_ctx = engine.ctx.clone();
         tauri::async_runtime::spawn(crate::sync::push::renew_loop(renew_ctx));
+        tauri::async_runtime::spawn(crate::sync::poll::run(engine.clone()));
+        crate::sync::sleep::start(engine.clone());
     }
     engine.ticks()
 }

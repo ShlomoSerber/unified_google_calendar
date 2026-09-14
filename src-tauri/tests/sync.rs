@@ -421,3 +421,43 @@ async fn engine_sync_account_runs_list_then_every_calendar() {
         .unwrap();
     assert_eq!(state, "error");
 }
+
+#[tokio::test]
+async fn poll_interval_follows_push_setting_and_window_refresh_prunes() {
+    use unified_google_calendar_lib::sync::poll;
+    let s = server().await;
+    let db = test_db();
+    let rec = Arc::new(Recorder::default());
+    let ctx = ctx(&s, db.clone(), rec);
+    assert_eq!(poll::interval_for(&ctx).await, poll::POLL_WITHOUT_PUSH);
+    db.call(|c| {
+        c.execute("INSERT INTO settings (key, value) VALUES ('push_enabled', 'true')", [])?;
+        // An occurrence far outside any window, and a stale one to be rebuilt.
+        c.execute(
+            "INSERT INTO events (account_id, calendar_id, id, status, start_ts, end_ts, all_day) VALUES (?1, ?2, 'old', 'confirmed', 100, 200, 0)",
+            params![ACC, CAL],
+        )?;
+        c.execute(
+            "INSERT INTO occurrences (id, account_id, calendar_id, event_id, start_ts, end_ts, all_day, status) VALUES ('x', ?1, ?2, 'old', 100, 200, 0, 'confirmed')",
+            params![ACC, CAL],
+        )?;
+        Ok(())
+    })
+    .await
+    .unwrap();
+    assert_eq!(poll::interval_for(&ctx).await, poll::POLL_WITH_PUSH);
+    let w = poll::refresh_window(&ctx).await.unwrap();
+    assert!(w.from_ts > 200);
+    assert_eq!(
+        count(&db, "SELECT count(*) FROM occurrences WHERE id='x'").await,
+        0
+    );
+    assert_eq!(
+        count(
+            &db,
+            "SELECT count(*) FROM sync_log WHERE detail='data window refreshed'"
+        )
+        .await,
+        1
+    );
+}
