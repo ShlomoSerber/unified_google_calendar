@@ -281,6 +281,21 @@ pub struct ShowEvent {
     pub occurrence_id: String,
 }
 
+/// A Google account registered in GNOME Online Accounts (docs/06 section 4.6).
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct GoaAccount {
+    pub id: String,
+    pub identity: String,
+    pub calendar_disabled: bool,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct GoaStatus {
+    pub accounts: Vec<GoaAccount>,
+    /// True once the user answered the first-run dialog (yes or no).
+    pub prompt_done: bool,
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PushTestResult {
     pub ok: bool,
@@ -526,6 +541,17 @@ mod tests {
             &PushTestResult {
                 ok: false,
                 message: "GET https://pc.tail.ts.net/healthz failed: timeout".into(),
+            },
+        );
+        write(
+            "GoaStatus",
+            &GoaStatus {
+                accounts: vec![GoaAccount {
+                    id: "account_1750163003_0".into(),
+                    identity: "someone@example.com".into(),
+                    calendar_disabled: false,
+                }],
+                prompt_done: false,
             },
         );
         write(

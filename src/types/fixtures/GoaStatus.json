@@ -1,0 +1,10 @@
+{
+  "accounts": [
+    {
+      "id": "account_1750163003_0",
+      "identity": "someone@example.com",
+      "calendar_disabled": false
+    }
+  ],
+  "prompt_done": false
+}

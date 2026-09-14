@@ -9,6 +9,7 @@ import type {
   EditScope,
   EventDetail,
   EventDraft,
+  GoaStatus,
   PushTestResult,
   Settings,
   ShowEvent,
@@ -22,6 +23,7 @@ import colorPalette from './fixtures/ColorPalette.json';
 import editScope from './fixtures/EditScope.json';
 import eventDetail from './fixtures/EventDetail.json';
 import eventDraft from './fixtures/EventDraft.json';
+import goaStatus from './fixtures/GoaStatus.json';
 import pushTestResult from './fixtures/PushTestResult.json';
 import settings from './fixtures/Settings.json';
 import showEvent from './fixtures/ShowEvent.json';
@@ -47,6 +49,7 @@ const scopes = editScope satisfies Widen<EditScope>[];
 const detail = eventDetail satisfies Widen<EventDetail>;
 const draft = eventDraft satisfies Widen<EventDraft>;
 const pushResult = pushTestResult satisfies Widen<PushTestResult>;
+const goa = goaStatus satisfies Widen<GoaStatus>;
 const settingsValue = settings satisfies Widen<Settings>;
 const show = showEvent satisfies Widen<ShowEvent>;
 const status = syncStatus satisfies Widen<SyncStatus>;
@@ -76,6 +79,7 @@ describe('IPC fixtures', () => {
     expect(status.state).toBe('syncing');
     expect(show.occurrence_id).toBeTruthy();
     expect(pushResult.ok).toBe(false);
+    expect(goa.accounts[0]?.calendar_disabled).toBe(false);
   });
 
   it('use only the literal values of the unions', () => {

@@ -216,6 +216,17 @@ export interface ShowEvent {
   occurrence_id: string;
 }
 
+export interface GoaAccount {
+  id: string;
+  identity: string;
+  calendar_disabled: boolean;
+}
+
+export interface GoaStatus {
+  accounts: GoaAccount[];
+  prompt_done: boolean;
+}
+
 export interface PushTestResult {
   ok: boolean;
   message: string;
