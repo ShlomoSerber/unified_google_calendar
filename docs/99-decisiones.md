@@ -73,6 +73,13 @@ Formato:
 - Motivo: casos no cubiertos literalmente por los documentos.
 - Afecta: `docs/03-modelo-de-datos.md` secciones 4 y 7.
 
+## 2026-09-14 — Orden de fases: 5 y 6 antes de cerrar la 4
+- Quién: implementación
+- Fase/tarea: F4-T1
+- Decisión: las fases 5 (push y sincronización continua) y 6 (integración con GNOME) se implementan antes de F4-T1, F4-T3, F4-T4 y F4-T5. F4-T2 (fuentes e íconos) se hace en cuanto termina la 6. La fase 4 se cierra cuando el usuario entregue las mediciones de los componentes 1 a 10.
+- Motivo: F4-T1 requiere que el usuario mida calendar.google.com con su sesión de Chrome; el modelo no puede iniciar sesión en su cuenta. Las fases 5 y 6 no dependen de ningún token de diseño. El usuario pidió avanzar sin interrupciones.
+- Afecta: `docs/08-plan-de-implementacion.md` (regla "No se empieza una fase sin cerrar la anterior").
+
 ## Mediciones de RAM por fase
 
 | Fase | Fecha | Proceso Rust PSS | WebKitWebProcess PSS | Total | Nota |
