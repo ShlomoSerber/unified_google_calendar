@@ -71,7 +71,7 @@ pub fn run() {
         }))
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(commands::handler())
-        .setup(|_app| {
+        .setup(|app| {
             db::init(&config::db_path())?;
             match auth::oauth::init() {
                 Ok(_) => tracing::info!("oauth configured"),
@@ -79,6 +79,29 @@ pub fn run() {
                     tracing::warn!(error = %e, "Google sign-in unavailable until oauth.json exists")
                 }
             }
+            // Nothing below blocks window creation (docs/05 section 6, docs/02 section 3.1).
+            let ticks = sync::start(app.handle().clone());
+            let port = db::handle()
+                .and_then(|h| {
+                    h.call_blocking(|c| {
+                        db::queries::settings::get_or(
+                            c,
+                            "webhook_port",
+                            config::DEFAULT_WEBHOOK_PORT,
+                        )
+                    })
+                })
+                .unwrap_or(config::DEFAULT_WEBHOOK_PORT);
+            if let Ok(h) = db::handle() {
+                webhook::start(h, ticks, port);
+            }
+            reminders::start(app.handle().clone());
+            eds::start(app.handle().clone());
+            match tray::build(app.handle()) {
+                Ok(()) => tray::start(app.handle().clone()),
+                Err(e) => tracing::warn!(error = %e, "tray unavailable"),
+            }
+            tracing::info!("setup complete");
             Ok(())
         })
         .on_window_event(|window, event| {
