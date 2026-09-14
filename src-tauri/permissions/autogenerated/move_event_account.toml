@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-move-event-account"
+description = "Enables the move_event_account command without any pre-configured scope."
+commands.allow = ["move_event_account"]
+
+[[permission]]
+identifier = "deny-move-event-account"
+description = "Denies the move_event_account command without any pre-configured scope."
+commands.deny = ["move_event_account"]

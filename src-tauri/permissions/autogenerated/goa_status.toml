@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-goa-status"
+description = "Enables the goa_status command without any pre-configured scope."
+commands.allow = ["goa_status"]
+
+[[permission]]
+identifier = "deny-goa-status"
+description = "Denies the goa_status command without any pre-configured scope."
+commands.deny = ["goa_status"]

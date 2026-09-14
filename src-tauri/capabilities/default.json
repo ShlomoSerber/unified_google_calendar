@@ -2,12 +2,38 @@
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
   "description": "Main window: core IPC, open https URLs in the system browser, and the app's own commands.",
-  "windows": ["main"],
+  "windows": [
+    "main"
+  ],
   "permissions": [
     "core:default",
     {
       "identifier": "opener:allow-open-url",
-      "allow": [{ "url": "https://*" }]
-    }
+      "allow": [
+        {
+          "url": "https://*"
+        }
+      ]
+    },
+    "allow-get-view",
+    "allow-get-event",
+    "allow-list-accounts",
+    "allow-list-calendars",
+    "allow-set-calendar-visible",
+    "allow-create-event",
+    "allow-update-event",
+    "allow-delete-event",
+    "allow-move-event-account",
+    "allow-add-account",
+    "allow-remove-account",
+    "allow-open-url",
+    "allow-sync-now",
+    "allow-get-colors",
+    "allow-rsvp",
+    "allow-get-settings",
+    "allow-set-settings",
+    "allow-test-push",
+    "allow-goa-status",
+    "allow-goa-disable-calendars"
   ]
 }
