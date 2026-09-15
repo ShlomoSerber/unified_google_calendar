@@ -22,6 +22,13 @@ Development: `npm run tauri dev`. Checks: `cargo clippy --manifest-path src-taur
 `cargo test --manifest-path src-tauri/Cargo.toml`, `npm run lint && npm run typecheck && npm test`.
 Phase gates: `bash scripts/check-phase.sh <N>`.
 
+Pixel fidelity (`docs/04-fidelidad-visual.md`): `node scripts/measure/capture.mjs` dumps
+calendar.google.com components with the `~/.chrome-measure` profile, `scripts/measure/extract-tokens.mjs`
++ `scripts/gen-tokens.mjs` + `scripts/gen-measured-css.mjs` turn the dumps into `docs/design/tokens.json`
+and the generated stylesheets, `scripts/measure/app-capture.mjs` dumps the app on a private Xvfb
+display and `scripts/measure/report.mjs [--gate 4|7]` compares both sides. Results per component
+are in `docs/design/measurements/<component>.md`.
+
 ## Install
 
 ```bash
