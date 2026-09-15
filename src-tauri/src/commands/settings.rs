@@ -27,6 +27,7 @@ pub fn load(conn: &Connection) -> Result<Settings, AppError> {
         push_enabled: s::get_or(conn, "push_enabled", d.push_enabled)?,
         holidays_account: s::get::<String>(conn, "holidays_account")?.filter(|u| !u.is_empty()),
         push_error: s::get::<String>(conn, "push_error")?.filter(|u| !u.is_empty()),
+        oauth_configured: crate::auth::oauth::OAuthConfig::load().is_ok(),
     })
 }
 
@@ -96,14 +97,17 @@ mod tests {
     #[test]
     fn defaults_round_trip_and_validation() {
         let conn = crate::db::open_memory().unwrap();
-        let d = load(&conn).unwrap();
+        let mut d = load(&conn).unwrap();
+        d.oauth_configured = false; // depends on the developer machine
         assert_eq!(d, Settings::default());
         let mut v = d.clone();
         v.secondary_tz = None;
         v.public_base_url = Some("https://pc.tail.ts.net".into());
         v.holidays_account = Some("acc".into());
         save(&conn, &v).unwrap();
-        assert_eq!(load(&conn).unwrap(), v);
+        let mut loaded = load(&conn).unwrap();
+        loaded.oauth_configured = false;
+        assert_eq!(loaded, v);
         v.public_base_url = Some("http://x".into());
         assert!(save(&conn, &v).is_err());
         v.public_base_url = None;

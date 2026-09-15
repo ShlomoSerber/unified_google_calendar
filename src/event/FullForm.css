@@ -1,0 +1,187 @@
+/* Measured rules live in src/styles/measured.css (.ff-*). Added here: the page placement
+   (Google replaces the main area with the edit page), the inert toolbar, menus, notification
+   rows, guest chips and the colour swatches, all from neighbouring tokens. */
+.ff-main {
+  inset: 0 var(--layout-main-gap-right) 0 0;
+  z-index: var(--create-menu-root-z-index);
+}
+
+/* The Save button sits at the top of the header row (probe pending: align-self is not in the dump). */
+.ff-save {
+  align-self: flex-start;
+}
+
+.ff-sr,
+.ff-guests-sr,
+.ff-details-sr {
+  margin: 0;
+}
+
+.ff-title-input,
+.ff-location-input,
+.ff-guests-input,
+.ff-start-date,
+.ff-end-date,
+.ff-start-time,
+.ff-end-time {
+  outline: 0;
+  padding: 0;
+  width: 100%;
+  min-width: 0;
+}
+
+.ff-title-input::placeholder,
+.ff-location-input::placeholder,
+.ff-guests-input::placeholder {
+  color: var(--color-on-surface-variant);
+}
+
+.ff-n98,
+.ff-n159,
+.ff-n170,
+.ff-n181 {
+  margin: 0;
+}
+
+.ff-allday-check-on {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.ff-close,
+.ff-save,
+.ff-meet-button,
+.ff-notif-add,
+.ff-color-button,
+.ff-recurrence-combo,
+.ff-calendar-combo,
+.ff-showas-combo,
+.ff-visibility-combo,
+.ff-color-swatch,
+.ff-guest-remove,
+.ff-notif-remove {
+  cursor: pointer;
+}
+
+.ff-tz-button:disabled,
+.ff-tab-find:disabled,
+.ff-drive-button:disabled,
+.ff-notes-button:disabled,
+.ff-bold[aria-disabled='true'],
+.ff-italic[aria-disabled='true'],
+.ff-underline[aria-disabled='true'],
+.ff-numbered[aria-disabled='true'],
+.ff-bulleted[aria-disabled='true'],
+.ff-link[aria-disabled='true'],
+.ff-clear[aria-disabled='true'] {
+  cursor: default;
+}
+
+.ff-description-box {
+  outline: 0;
+}
+
+/* Menus open under their combobox, in the Create-menu surface. */
+.ff-menu {
+  left: 0;
+  top: 100%;
+  list-style: none;
+  z-index: var(--create-menu-root-z-index);
+}
+
+.ff-recurrence-combo,
+.ff-calendar-combo,
+.ff-color-button {
+  overflow: visible;
+}
+
+.ff-color-menu {
+  display: flex;
+  flex-wrap: wrap;
+  width: calc(var(--ff-color-dot-width) * 6 + var(--create-menu-item-padding-left) * 2 + var(--create-menu-item-padding-top) * 10);
+  padding: var(--create-menu-item-padding-left);
+  gap: var(--create-menu-item-padding-top);
+}
+
+.ff-color-swatch {
+  width: var(--ff-color-dot-width);
+  height: var(--ff-color-dot-height);
+  border-radius: var(--ff-color-dot-border-radius);
+  background-color: var(--data-chip-bg);
+}
+
+.ff-color-swatch[aria-selected='true'] {
+  outline: var(--sidebar-list-check-mark-border-top);
+  outline-offset: var(--create-menu-item-padding-top);
+}
+
+.ff-color-dot {
+  background-color: var(--data-chip-bg);
+}
+
+.ff-notif-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ff-notif-item {
+  display: flex;
+  align-items: center;
+  gap: var(--create-menu-item-padding-top);
+  min-height: var(--ff-notif-add-height);
+}
+
+.ff-notif-method,
+.ff-notif-minutes {
+  height: var(--ff-recurrence-combo-height);
+  padding: 0 var(--ff-recurrence-combo-padding-left);
+  border: 0;
+  border-radius: var(--ff-recurrence-combo-border-radius);
+  background: var(--ff-recurrence-combo-background-color);
+  color: var(--ff-recurrence-combo-color);
+}
+
+.ff-notif-minutes {
+  width: calc(var(--ff-recurrence-combo-padding-left) * 5);
+}
+
+.ff-notif-unit {
+  color: var(--color-on-surface-variant);
+}
+
+.ff-notif-remove,
+.ff-guest-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--popup-meet-copy-width);
+  height: var(--popup-meet-copy-height);
+  border-radius: var(--popup-meet-copy-border-radius);
+  color: var(--color-on-surface-variant);
+}
+
+.ff-notif-remove-icon,
+.ff-guest-remove-icon {
+  font-family: var(--font-family-icons);
+  font-size: var(--popup-meet-copy-icon-font-size);
+}
+
+.ff-guest {
+  display: flex;
+  align-items: center;
+  min-height: var(--popup-treeitem-height);
+  padding: 0 var(--popup-treeitem-padding-right);
+}
+
+.ff-guest-email {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ff-error {
+  color: var(--week-now-dot-background-color);
+}

@@ -36,6 +36,11 @@ export const LAYOUT = {
   qc_width: "509.69px",
   qc_left: "305px",
   qc_top: "222px",
+  ff_width: "1424px",
+  ff_left: "0px",
+  vsel_left: "1002.98px",
+  vsel_top: "56px",
+  vsel_width: "202.39px",
 } as const;
 
 /** Numeric part of a layout token ("60px" → 60, "1.7" → 1.7). */

@@ -25,16 +25,14 @@
   min-height: 0;
 }
 
-/* Google's grid scrolls without a visible bar (component 21, measured in phase 7). */
-.week-scroller,
-.week-gutter,
-.allday-root {
+/* Component 20: Google's grid scrollbar is an overlay bar (tokens.json component.scrollbar_note);
+   WebKitGTK draws GTK's overlay scrollbar when the element is left unstyled. The hour gutter
+   scrolls in sync with the grid and never shows a bar. */
+.week-gutter {
   scrollbar-width: none;
 }
 
-.week-scroller::-webkit-scrollbar,
-.week-gutter::-webkit-scrollbar,
-.allday-root::-webkit-scrollbar {
+.week-gutter::-webkit-scrollbar {
   display: none;
 }
 

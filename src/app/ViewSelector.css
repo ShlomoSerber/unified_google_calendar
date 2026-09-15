@@ -1,0 +1,21 @@
+/* Measured rules live in src/styles/measured.css (.vsel-*). Placed under the Week button at the
+   measured page offsets (layout.vsel_*). */
+.vsel-root {
+  left: var(--layout-vsel-left);
+  top: var(--layout-vsel-top);
+  z-index: var(--create-menu-root-z-index);
+}
+
+.vsel-menu,
+.vsel-group {
+  list-style: none;
+}
+
+.vsel-item {
+  cursor: pointer;
+}
+
+.vsel-item[aria-disabled='true'],
+.vsel-check[aria-disabled='true'] {
+  cursor: default;
+}

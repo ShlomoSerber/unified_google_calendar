@@ -13,7 +13,8 @@ export type Dialog =
   | { kind: 'event'; occurrenceId: string; anchor: DOMRect | null }
   | { kind: 'quick-create'; startTs: number; endTs: number; allDay: boolean; anchor: DOMRect | null }
   | { kind: 'full-form'; occurrenceId: string | null; startTs: number; endTs: number; allDay: boolean; draft?: EventDraft }
-  | { kind: 'edit-scope'; occurrenceId: string; action: 'update' | 'delete' }
+  | { kind: 'edit-scope'; occurrenceId: string; action: 'update' | 'delete'; draft?: EventDraft }
+  | { kind: 'recurrence'; rrule: string | null; startTs: number }
   | { kind: 'settings' }
   | { kind: 'welcome' }
   | { kind: 'goa' }
@@ -29,7 +30,11 @@ export interface UiState {
   tz: string;
   secondaryTz: string | null;
   dialog: Dialog;
+  /** A second dialog stacked over `dialog` (recurrence and scope dialogs opened from a form). */
+  overlay: Dialog;
   sidebarOpen: boolean;
+  /** Rule chosen in the custom recurrence dialog, picked up by the open form (undefined: none pending). */
+  pendingRrule: string | null | undefined;
   settings: Settings | null;
   accounts: AccountInfo[];
   calendars: CalendarInfo[];
@@ -42,7 +47,10 @@ export interface UiState {
   prev: () => void;
   openDialog: (dialog: Dialog) => void;
   closeDialog: () => void;
+  openOverlay: (dialog: Dialog) => void;
+  closeOverlay: () => void;
   toggleSidebar: () => void;
+  setPendingRrule: (rrule: string | null | undefined) => void;
   setSettings: (s: Settings) => void;
   setAccounts: (a: AccountInfo[]) => void;
   setCalendars: (c: CalendarInfo[]) => void;
@@ -71,7 +79,9 @@ export const useUi = create<UiState>((set, get) => ({
   tz: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
   secondaryTz: null,
   dialog: { kind: 'none' },
+  overlay: { kind: 'none' },
   sidebarOpen: true,
+  pendingRrule: undefined,
   settings: null,
   accounts: [],
   calendars: [],
@@ -83,8 +93,11 @@ export const useUi = create<UiState>((set, get) => ({
   next: () => set({ date: step(get().date, get().view, 1, get().tz) }),
   prev: () => set({ date: step(get().date, get().view, -1, get().tz) }),
   openDialog: (dialog) => set({ dialog }),
-  closeDialog: () => set({ dialog: { kind: 'none' } }),
+  closeDialog: () => set({ dialog: { kind: 'none' }, overlay: { kind: 'none' } }),
+  openOverlay: (overlay) => set({ overlay }),
+  closeOverlay: () => set({ overlay: { kind: 'none' } }),
   toggleSidebar: () => set({ sidebarOpen: !get().sidebarOpen }),
+  setPendingRrule: (pendingRrule) => set({ pendingRrule }),
   setSettings: (settings) => set({ settings, tz: settings.primary_tz, secondaryTz: settings.secondary_tz }),
   setAccounts: (accounts) => set({ accounts }),
   setCalendars: (calendars) => set({ calendars }),

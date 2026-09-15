@@ -37,7 +37,7 @@ const EXPORTED = ['display', 'position', 'fontFamily', 'fontSize', 'fontWeight',
   'backgroundColor', 'borderTop', 'borderRight', 'borderBottom', 'borderLeft', 'borderRadius', 'paddingTop', 'paddingRight',
   'paddingBottom', 'paddingLeft', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft', 'boxShadow', 'opacity', 'minWidth',
   'minHeight', 'gap', 'flexDirection', 'alignItems', 'justifyContent', 'textTransform', 'whiteSpace', 'overflow', 'zIndex', 'cursor', 'fill',
-  'backgroundImage', 'textDecorationLine', 'textAlign', 'boxSizing', 'flex', 'verticalAlign', 'textOverflow', 'borderSpacing', 'borderCollapse', 'float', 'order'];
+  'backgroundImage', 'textDecorationLine', 'textAlign', 'boxSizing', 'flex', 'verticalAlign', 'textOverflow', 'borderSpacing', 'borderCollapse', 'float', 'order', 'alignSelf'];
 
 // Inherited properties are emitted for every node, default or not: a node that shows the page
 // default in Google may sit under a parent that does not, and the omitted value would otherwise
@@ -53,6 +53,9 @@ const UA_RESET = {
   input: ['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'borderTop', 'borderRight', 'borderBottom', 'borderLeft', 'backgroundColor', 'letterSpacing'],
   table: ['borderSpacing', 'borderCollapse'], th: ['fontWeight', 'textAlign', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft'],
   td: ['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft'],
+  fieldset: ['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'borderTop', 'borderRight', 'borderBottom', 'borderLeft', 'marginLeft', 'marginRight', 'minWidth'],
+  legend: ['paddingLeft', 'paddingRight'],
+  select: ['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'borderTop', 'borderRight', 'borderBottom', 'borderLeft', 'backgroundColor'],
 };
 
 // Values dumpRegion omits because they equal a plain div's computed style on calendar.google.com
@@ -69,7 +72,7 @@ const DEFAULTS = {
   alignItems: 'normal', justifyContent: 'normal', textTransform: 'none', whiteSpace: 'normal', overflow: 'visible',
   zIndex: 'auto', cursor: 'auto', fill: 'rgb(0, 0, 0)',
   backgroundImage: 'none', textDecorationLine: 'none', textAlign: 'start', boxSizing: 'content-box', flex: '0 1 auto',
-  verticalAlign: 'baseline', textOverflow: 'clip', borderSpacing: '0px 0px', borderCollapse: 'separate', float: 'none', order: '0',
+  verticalAlign: 'baseline', textOverflow: 'clip', borderSpacing: '0px 0px', borderCollapse: 'separate', float: 'none', order: '0', alignSelf: 'auto',
 };
 
 const cache = new Map();

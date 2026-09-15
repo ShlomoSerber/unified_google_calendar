@@ -134,10 +134,10 @@ export function EventPopup({ occurrenceId, anchor }: EventPopupProps) {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') close();
+      if (e.key === 'Escape' && useUi.getState().overlay.kind === 'none') close();
     };
     const onDown = (e: MouseEvent) => {
-      if (e.target instanceof Element && !e.target.closest('.popup-root')) close();
+      if (e.target instanceof Element && !e.target.closest('.popup-root, .scope-scrim-page')) close();
     };
     document.addEventListener('keydown', onKey);
     document.addEventListener('mousedown', onDown);
@@ -169,7 +169,7 @@ export function EventPopup({ occurrenceId, anchor }: EventPopupProps) {
   const edit = () => useUi.getState().openDialog({ kind: 'full-form', occurrenceId: d.occurrence_id, startTs: d.start, endTs: d.end, allDay: d.all_day });
   const remove = () => {
     if (d.is_recurring) {
-      useUi.getState().openDialog({ kind: 'edit-scope', occurrenceId: d.occurrence_id, action: 'delete' });
+      useUi.getState().openOverlay({ kind: 'edit-scope', occurrenceId: d.occurrence_id, action: 'delete' });
       return;
     }
     ipc.deleteEvent(d.occurrence_id, 'this').then(close).catch((e: unknown) => setError(String(e)));

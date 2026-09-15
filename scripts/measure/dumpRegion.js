@@ -11,7 +11,7 @@
     'textTransform','whiteSpace','overflow','zIndex','fill','outline','cursor',
     // Added for docs/99 entry F4-T4: stripes, strike-through and box model of event chips.
     'backgroundImage','textDecorationLine','textAlign','boxSizing','flex','verticalAlign','textOverflow',
-    'borderSpacing','borderCollapse','top','left','float','order'];
+    'borderSpacing','borderCollapse','top','left','float','order','alignSelf'];
   const DEFAULTS = (() => {
     const d = document.createElement('div'); document.body.appendChild(d);
     const cs = getComputedStyle(d); const o = {}; PROPS.forEach(p => o[p] = cs[p]);

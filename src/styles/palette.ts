@@ -42,3 +42,18 @@ export const COLOR_MAP: Record<string, { light: ChipColors; dark: ChipColors }> 
   "#0b8043": {"light":{"bg":"#0b8043","fg":"#ffffff"},"dark":{"bg":"#489160","fg":"#131314"}},
   "#d50000": {"light":{"bg":"#d50000","fg":"#ffffff"},"dark":{"bg":"#da5234","fg":"#131314"}},
 };
+
+/** Event colorId → Google's colour name (docs/04 section 7). */
+export const EVENT_COLOR_NAMES: Record<string, string> = {
+  "1": "Lavender",
+  "2": "Sage",
+  "3": "Grape",
+  "4": "Flamingo",
+  "5": "Banana",
+  "6": "Tangerine",
+  "7": "Peacock",
+  "8": "Graphite",
+  "9": "Blueberry",
+  "10": "Basil",
+  "11": "Tomato",
+};

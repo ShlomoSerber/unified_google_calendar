@@ -8,9 +8,15 @@ import { CreateButton } from './CreateButton';
 import { WeekView } from '../views/week/WeekView';
 import { MonthView } from '../views/month/MonthView';
 import { AgendaView } from '../views/agenda/AgendaView';
-import { AccountsPanel } from './AccountsPanel';
+import { SettingsDialog } from './SettingsDialog';
+import { WelcomeDialog } from './WelcomeDialog';
+import { GoaDialog } from './GoaDialog';
 import { EventPopup } from '../event/EventPopup';
 import { QuickCreate } from '../event/QuickCreate';
+import { FullForm } from '../event/FullForm';
+import { EditScopeDialog } from '../event/EditScopeDialog';
+import { RecurrenceDialog } from '../event/RecurrenceDialog';
+import { ViewSelector } from './ViewSelector';
 import './App.css';
 
 // Shell: top bar, sidebar and the view router (docs/02 section 4 `src/app/`).
@@ -20,12 +26,20 @@ export function App() {
   const tz = useUi((s) => s.tz);
   const sidebarOpen = useUi((s) => s.sidebarOpen);
   const dialog = useUi((s) => s.dialog);
+  const overlay = useUi((s) => s.overlay);
   const days = weekDays(date, tz);
 
   useEffect(() => {
     const { setAccounts, setCalendars, setNow, setSettings, setSyncStatus } = useUi.getState();
     ipc.getSettings().then(setSettings).catch(() => undefined);
-    ipc.listAccounts().then(setAccounts).catch(() => undefined);
+    ipc
+      .listAccounts()
+      .then((a) => {
+        setAccounts(a);
+        // First run (docs/07 section 5): no account yet → welcome.
+        if (a.length === 0 && useUi.getState().dialog.kind === 'none') useUi.getState().openDialog({ kind: 'welcome' });
+      })
+      .catch(() => undefined);
     ipc.listCalendars().then(setCalendars).catch(() => undefined);
     const subs = [
       onAccountChanged((a) => {
@@ -53,9 +67,15 @@ export function App() {
           {view === 'agenda' ? <AgendaView /> : null}
         </div>
       </div>
-      {dialog.kind === 'settings' ? <AccountsPanel /> : null}
+      {dialog.kind === 'settings' ? <SettingsDialog /> : null}
+      {dialog.kind === 'welcome' ? <WelcomeDialog /> : null}
+      {dialog.kind === 'goa' ? <GoaDialog /> : null}
       {dialog.kind === 'event' ? <EventPopup occurrenceId={dialog.occurrenceId} anchor={dialog.anchor} /> : null}
       {dialog.kind === 'quick-create' ? <QuickCreate startTs={dialog.startTs} endTs={dialog.endTs} allDay={dialog.allDay} anchor={dialog.anchor} /> : null}
+      {dialog.kind === 'full-form' ? <FullForm occurrenceId={dialog.occurrenceId} startTs={dialog.startTs} endTs={dialog.endTs} allDay={dialog.allDay} draft={dialog.draft} /> : null}
+      {overlay.kind === 'edit-scope' ? <EditScopeDialog occurrenceId={overlay.occurrenceId} action={overlay.action} draft={overlay.draft} /> : null}
+      {overlay.kind === 'recurrence' ? <RecurrenceDialog rrule={overlay.rrule} startTs={overlay.startTs} /> : null}
+      {dialog.kind === 'view-menu' ? <ViewSelector /> : null}
     </div>
   );
 }

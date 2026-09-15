@@ -1,0 +1,54 @@
+/* Measured rules live in src/styles/measured.css (.rec-*). Centred like Google's dialog
+   (recurrence_dialog-light.json rootRect [550,204] = (1440−340)/2, (900−492)/2). */
+.rec-scrim-page {
+  position: fixed;
+  inset: 0;
+  z-index: var(--create-menu-root-z-index);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rec-title-row {
+  margin: 0;
+}
+
+.rec-every-input,
+.rec-on-date-input,
+.rec-after-input {
+  outline: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.rec-every-input::-webkit-inner-spin-button,
+.rec-after-input::-webkit-inner-spin-button {
+  display: none;
+}
+
+.rec-n126,
+.rec-n135,
+.rec-n154 {
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.rec-on-block[hidden] {
+  display: none;
+}
+
+.rec-freq-combo,
+.rec-day,
+.rec-day-on,
+.rec-inc,
+.rec-dec,
+.rec-after-inc,
+.rec-after-dec,
+.rec-cancel,
+.rec-done {
+  cursor: pointer;
+}

@@ -208,6 +208,8 @@ export interface Settings {
   push_enabled: boolean;
   holidays_account: string | null;
   push_error: string | null;
+  /** Whether `oauth.json` exists and parses (read-only; drives the welcome screen). */
+  oauth_configured: boolean;
 }
 
 // Events emitted from Rust.

@@ -70,14 +70,9 @@
   color: var(--sidebar-minical-dow-color);
 }
 
-/* Google's drawer scrolls without a visible bar (component 21, measured in phase 7). */
-.sidebar-scroll {
-  scrollbar-width: none;
-}
-
-.sidebar-scroll::-webkit-scrollbar {
-  display: none;
-}
+/* Component 20: Google's drawer scrollbar is an overlay bar (tokens.json component.scrollbar_note);
+   WebKitGTK draws GTK's overlay scrollbar when the element is left unstyled, which is the
+   closest match, so no ::-webkit-scrollbar rule here. */
 
 .sidebar-people-input {
   background: none;

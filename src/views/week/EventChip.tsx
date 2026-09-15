@@ -2,6 +2,7 @@ import type { CSSProperties } from 'react';
 import { hhmm } from '../../lib/dates';
 import { chipBackground, useTheme } from '../../lib/colors';
 import { useUi } from '../../state/ui';
+import { EVENT_COLOR_NAMES } from '../../styles/palette';
 import type { ViewOccurrence } from '../../types/ipc';
 
 // Component 10 of docs/04 section 4. Google renders three shapes by chip height
@@ -24,8 +25,9 @@ export function chipShape(heightPx: number): ChipShape {
 export function chipDescription(o: ViewOccurrence, tz: string, calendarName: string, dateLabel: string): string {
   const title = o.title ?? '(No title)';
   const loc = o.location ? `Location: ${o.location}` : 'No location';
-  if (o.all_day) return `All day, ${title}, Calendar: ${calendarName}, ${loc}, ${dateLabel}`;
-  return `${hhmm(o.start, tz)} to ${hhmm(o.end, tz)}, ${title}, Calendar: ${calendarName}, ${loc}, ${dateLabel}`;
+  const color = o.color_id && EVENT_COLOR_NAMES[o.color_id] ? `, Color: ${EVENT_COLOR_NAMES[o.color_id]}` : '';
+  if (o.all_day) return `All day, ${title}, Calendar: ${calendarName}, ${loc}${color}, ${dateLabel}`;
+  return `${hhmm(o.start, tz)} to ${hhmm(o.end, tz)}, ${title}, Calendar: ${calendarName}, ${loc}${color}, ${dateLabel}`;
 }
 
 export interface EventChipProps {

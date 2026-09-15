@@ -246,6 +246,9 @@ pub struct Settings {
     pub holidays_account: Option<String>,
     /// Message of the last push setup failure, for the Settings screen.
     pub push_error: Option<String>,
+    /// Whether `oauth.json` exists and parses (read-only; the welcome screen depends on it).
+    #[serde(default)]
+    pub oauth_configured: bool,
 }
 
 impl Default for Settings {
@@ -264,6 +267,7 @@ impl Default for Settings {
             push_enabled: false,
             holidays_account: None,
             push_error: None,
+            oauth_configured: false,
         }
     }
 }

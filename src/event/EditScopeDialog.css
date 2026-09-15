@@ -1,0 +1,34 @@
+/* Measured rules live in src/styles/measured.css (.scope-*). The dialog is centred in the
+   viewport (edit_scope_dialog-light.json rootRect [576,328]: (1440−288)/2, (900−245)/2). */
+.scope-scrim-page {
+  position: fixed;
+  inset: 0;
+  z-index: var(--create-menu-root-z-index);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scope-title-row {
+  margin: 0;
+}
+
+.scope-radio-input,
+.scope-radio2-input {
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.scope-option,
+.scope-option2,
+.scope-cancel,
+.scope-ok {
+  cursor: pointer;
+}
+
+.scope-error {
+  position: absolute;
+  bottom: var(--scope-title-row-height);
+  color: var(--week-now-dot-background-color);
+}

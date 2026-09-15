@@ -21,8 +21,15 @@ const ALLOWED = {
   'hour_grid': 10, // 2 text widths at ±1 px + the deduplicated "Declined" chip (docs/99 F4-T4)
   'event_chip-fifteen': 3, 'event_chip-ninety': 1, // 11-12 px text widths (font metrics)
   'event_chip-tentative': 3, 'event_chip-declined': 4, // deduplicated copy: width and calendar colour
+  'day_view': 4, 'month_view': 3, 'agenda_view': 13, // text widths of titles and date labels (see .md)
+  'event_popup': 6, 'event_popup-meet': 12, 'event_popup-guests': 12, 'event_popup-recurring': 6, // text widths, creator/guest names the app cannot resolve (see .md)
+  'quick_create': 13, 'quick_create-with_title': 13, // text widths and the default calendar (see .md)
+  'full_form': 14, 'recurrence_dialog': 12, 'edit_scope_dialog': 5, // text widths; the third scope option (see .md)
 };
-const PHASE = { 4: ['topbar', 'sidebar', 'create_button', 'mini_calendar', 'calendar_list', 'week_header', 'allday_row', 'hour_grid', 'now_line', 'event_chip'] };
+const PHASE = {
+  4: ['topbar', 'sidebar', 'create_button', 'mini_calendar', 'calendar_list', 'week_header', 'allday_row', 'hour_grid', 'now_line', 'event_chip'],
+  7: ['day_view', 'month_view', 'agenda_view', 'event_popup', 'quick_create', 'full_form', 'view_selector', 'recurrence_dialog', 'edit_scope_dialog'],
+};
 const gateIdx = process.argv.indexOf('--gate');
 const gate = gateIdx >= 0 ? PHASE[process.argv[gateIdx + 1]] : null;
 const names = readdirSync(MEAS).filter((f) => /-(light|dark)-app\.json$/.test(f)).map((f) => f.replace(/-(light|dark)-app\.json$/, '')).filter((v, i, a) => a.indexOf(v) === i).filter((n) => !gate || gate.includes(n.split('-')[0])).sort();

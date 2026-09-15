@@ -90,5 +90,18 @@ APP_COMPONENTS.quick_create = {
   },
 };
 
+// Full form: "More options" from the quick create of the same slot.
+APP_COMPONENTS.full_form = {
+  root: '.ff-main',
+  actions: [...gridBase, { type: 'click_at', x: 366.34 + 9 + 149.8 * 3 + 75, y: 196 + 16 * 60 - 420 + 10 }, { type: 'wait', ms: 500 }, { type: 'click', selector: '.qc-more' }, { type: 'wait', ms: 800 }],
+  reset: [{ type: 'key', key: 'Escape' }],
+};
+
+APP_COMPONENTS.view_selector = { root: '.vsel-root', actions: [...base, { type: 'click', selector: '.topbar-view-button' }, { type: 'wait', ms: 400 }], reset: [{ type: 'key', key: 'Escape' }] };
+// Delete on a recurring chip's popup opens the scope dialog; Escape dismisses it, nothing is deleted.
+APP_COMPONENTS.edit_scope_dialog = { root: '.scope-root', actions: [...popupOn('Weekly repeat'), { type: 'click', selector: '.popup-delete' }, { type: 'wait', ms: 400 }], reset: [{ type: 'key', key: 'Escape' }, { type: 'key', key: 'Escape' }] };
+// "Custom..." in the repeat menu of the full form.
+APP_COMPONENTS.recurrence_dialog = { root: '.rec-root', actions: [...gridBase, { type: 'click_at', x: 366.34 + 9 + 149.8 * 3 + 75, y: 196 + 16 * 60 - 420 + 10 }, { type: 'wait', ms: 500 }, { type: 'click', selector: '.qc-more' }, { type: 'wait', ms: 600 }, { type: 'click', selector: '.ff-recurrence-combo' }, { type: 'wait', ms: 300 }, { type: 'click', selector: '.ff-menu [role="option"]:last-child' }, { type: 'wait', ms: 500 }], reset: [{ type: 'key', key: 'Escape' }, { type: 'key', key: 'Escape' }] };
+
 /** Actions that leave the app as the user had it (every calendar visible). */
 export const RESTORE = showAll;

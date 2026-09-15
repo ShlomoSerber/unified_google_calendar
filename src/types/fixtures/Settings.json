@@ -11,5 +11,6 @@
   "public_base_url": null,
   "push_enabled": false,
   "holidays_account": null,
-  "push_error": null
+  "push_error": null,
+  "oauth_configured": false
 }

@@ -1,0 +1,43 @@
+/* Welcome and Online Accounts dialogs (F7-T6), from the measured dialog tokens (.scope-*). */
+.welcome-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: var(--create-menu-root-z-index);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.welcome-root {
+  width: calc(var(--rec-root-width) + var(--scope-root-width));
+  height: auto;
+}
+
+.welcome-body {
+  padding: 0 var(--scope-title-row-padding-left);
+}
+
+.welcome-text,
+.welcome-message {
+  margin: 0 0 var(--create-menu-item-padding-top);
+  line-height: var(--rec-on-label-line-height);
+}
+
+.welcome-message {
+  color: var(--color-on-surface-variant);
+}
+
+.welcome-code {
+  margin: 0 0 var(--create-menu-item-padding-top);
+  padding: var(--create-menu-item-padding-top) var(--create-menu-item-padding-left);
+  border-radius: var(--ff-recurrence-combo-border-radius);
+  background: var(--ff-recurrence-combo-background-color);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.welcome-steps {
+  margin: 0 0 var(--create-menu-item-padding-top);
+  padding-left: var(--scope-title-row-padding-left);
+  line-height: var(--rec-on-label-line-height);
+}
