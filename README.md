@@ -27,7 +27,9 @@ calendar.google.com components with the `~/.chrome-measure` profile, `scripts/me
 + `scripts/gen-tokens.mjs` + `scripts/gen-measured-css.mjs` turn the dumps into `docs/design/tokens.json`
 and the generated stylesheets, `scripts/measure/app-capture.mjs` dumps the app on a private Xvfb
 display and `scripts/measure/report.mjs [--gate 4|7]` compares both sides. Results per component
-are in `docs/design/measurements/<component>.md`.
+are in `docs/design/measurements/<component>.md`. Motion (`docs/04` section 10): `node scripts/measure/animations.mjs`
+records every Web Animation calendar.google.com runs per scenario into `docs/design/measurements/animations-<theme>.json`;
+the derived tokens live in `tokens.json` under `component.motion`.
 
 ## Install
 

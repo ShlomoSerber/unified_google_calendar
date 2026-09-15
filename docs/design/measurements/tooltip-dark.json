@@ -1,0 +1,120 @@
+{
+ "url": "https://calendar.google.com/calendar/u/0/r/week/2026/9/14",
+ "dpr": 1,
+ "viewport": [
+  1440,
+  900
+ ],
+ "theme": null,
+ "colorScheme": "normal",
+ "rootRect": [
+  375.234375,
+  52,
+  73.109375,
+  24
+ ],
+ "nodes": [
+  {
+   "path": "div",
+   "tag": "div",
+   "cls": "ne2Ple-suEOdc ne2Ple-suEOdc-OWXEXe-pijamc ne2Ple-suEOdc-OWXEXe-TSZdd",
+   "role": null,
+   "aria": null,
+   "rect": [
+    0,
+    0,
+    73.11,
+    24
+   ],
+   "abs": [
+    375.23,
+    52
+   ],
+   "style": {
+    "display": "flex",
+    "position": "fixed",
+    "width": "73.1094px",
+    "height": "24px",
+    "zIndex": "5054",
+    "top": "52px",
+    "left": "375.234px"
+   }
+  },
+  {
+   "path": "div/div[0]",
+   "tag": "div",
+   "cls": "ne2Ple-z59Tgd ne2Ple-z59Tgd-OiiCO",
+   "role": null,
+   "aria": null,
+   "rect": [
+    0,
+    0,
+    73.11,
+    24
+   ],
+   "abs": [
+    375.23,
+    52
+   ],
+   "style": {
+    "fontFamily": "\"Google Sans Flex\", \"Google Sans Text\", \"Google Sans\", Roboto, Arial, sans-serif",
+    "fontSize": "12px",
+    "lineHeight": "16px",
+    "letterSpacing": "0.1px",
+    "color": "rgb(48, 48, 48)",
+    "backgroundColor": "rgb(227, 227, 227)",
+    "borderTop": "0px none rgb(48, 48, 48)",
+    "borderRight": "0px none rgb(48, 48, 48)",
+    "borderBottom": "0px none rgb(48, 48, 48)",
+    "borderLeft": "0px none rgb(48, 48, 48)",
+    "borderRadius": "4px",
+    "paddingTop": "4px",
+    "paddingRight": "8px",
+    "paddingBottom": "4px",
+    "paddingLeft": "8px",
+    "width": "73.1094px",
+    "height": "24px",
+    "minWidth": "40px",
+    "minHeight": "22px",
+    "overflow": "hidden",
+    "outline": "rgb(48, 48, 48) none 3px",
+    "textAlign": "center",
+    "boxSizing": "border-box"
+   }
+  },
+  {
+   "path": "div/div[0]/span[0]",
+   "tag": "span",
+   "cls": "",
+   "role": null,
+   "aria": null,
+   "text": "Next week",
+   "rect": [
+    8,
+    4,
+    57.11,
+    15
+   ],
+   "abs": [
+    383.23,
+    56
+   ],
+   "style": {
+    "display": "inline",
+    "fontFamily": "\"Google Sans Flex\", \"Google Sans Text\", \"Google Sans\", Roboto, Arial, sans-serif",
+    "fontSize": "12px",
+    "lineHeight": "16px",
+    "letterSpacing": "0.1px",
+    "color": "rgb(48, 48, 48)",
+    "borderTop": "0px none rgb(48, 48, 48)",
+    "borderRight": "0px none rgb(48, 48, 48)",
+    "borderBottom": "0px none rgb(48, 48, 48)",
+    "borderLeft": "0px none rgb(48, 48, 48)",
+    "width": "auto",
+    "height": "auto",
+    "outline": "rgb(48, 48, 48) none 3px",
+    "textAlign": "center"
+   }
+  }
+ ]
+}

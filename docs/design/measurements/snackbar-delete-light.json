@@ -1,0 +1,377 @@
+{
+ "url": "https://calendar.google.com/calendar/u/0/r/week",
+ "dpr": 1,
+ "viewport": [
+  1440,
+  900
+ ],
+ "theme": null,
+ "colorScheme": "normal",
+ "rootRect": [
+  576,
+  852,
+  288,
+  48
+ ],
+ "nodes": [
+  {
+   "path": "div",
+   "tag": "div",
+   "cls": "u1KZub VUvTof qSNtwe F7XGdc",
+   "role": null,
+   "aria": null,
+   "rect": [
+    0,
+    0,
+    288,
+    48
+   ],
+   "abs": [
+    576,
+    852
+   ],
+   "style": {
+    "display": "flex",
+    "position": "fixed",
+    "color": "rgb(242, 242, 242)",
+    "backgroundColor": "rgb(48, 48, 48)",
+    "borderTop": "0px none rgb(242, 242, 242)",
+    "borderRight": "0px none rgb(242, 242, 242)",
+    "borderBottom": "0px none rgb(242, 242, 242)",
+    "borderLeft": "0px none rgb(242, 242, 242)",
+    "borderRadius": "4px 4px 0px 0px",
+    "boxShadow": "rgba(0, 0, 0, 0.14) 0px 6px 10px 0px, rgba(0, 0, 0, 0.12) 0px 1px 18px 0px, rgba(0, 0, 0, 0.2) 0px 3px 5px -1px",
+    "width": "288px",
+    "height": "48px",
+    "minWidth": "288px",
+    "minHeight": "48px",
+    "flexDirection": "column",
+    "zIndex": "99999",
+    "outline": "rgb(242, 242, 242) none 3px",
+    "boxSizing": "border-box",
+    "top": "852px",
+    "left": "720px"
+   }
+  },
+  {
+   "path": "div/div[0]",
+   "tag": "div",
+   "cls": "YrbPvc",
+   "role": null,
+   "aria": null,
+   "rect": [
+    0,
+    0,
+    288,
+    48
+   ],
+   "abs": [
+    576,
+    852
+   ],
+   "style": {
+    "display": "flex",
+    "color": "rgb(242, 242, 242)",
+    "borderTop": "0px none rgb(242, 242, 242)",
+    "borderRight": "0px none rgb(242, 242, 242)",
+    "borderBottom": "0px none rgb(242, 242, 242)",
+    "borderLeft": "0px none rgb(242, 242, 242)",
+    "width": "288px",
+    "height": "48px",
+    "minWidth": "auto",
+    "minHeight": "48px",
+    "alignItems": "center",
+    "outline": "rgb(242, 242, 242) none 3px"
+   }
+  },
+  {
+   "path": "div/div[0]/div[0]",
+   "tag": "div",
+   "cls": "VYTiVb",
+   "role": null,
+   "aria": null,
+   "text": "Event saved",
+   "rect": [
+    0,
+    0,
+    194,
+    48
+   ],
+   "abs": [
+    576,
+    852
+   ],
+   "style": {
+    "lineHeight": "20px",
+    "color": "rgb(242, 242, 242)",
+    "borderTop": "0px none rgb(242, 242, 242)",
+    "borderRight": "0px none rgb(242, 242, 242)",
+    "borderBottom": "0px none rgb(242, 242, 242)",
+    "borderLeft": "0px none rgb(242, 242, 242)",
+    "paddingTop": "14px",
+    "paddingRight": "16px",
+    "paddingBottom": "14px",
+    "paddingLeft": "16px",
+    "width": "162px",
+    "height": "20px",
+    "minWidth": "auto",
+    "minHeight": "auto",
+    "overflow": "hidden",
+    "outline": "rgb(242, 242, 242) none 3px",
+    "flex": "1 1 auto",
+    "textOverflow": "ellipsis"
+   }
+  },
+  {
+   "path": "div/div[0]/div[1]",
+   "tag": "div",
+   "cls": "IAjCAb  m72qAd",
+   "role": "button",
+   "aria": null,
+   "text": "Undo",
+   "rect": [
+    194,
+    14,
+    52,
+    20
+   ],
+   "abs": [
+    770,
+    866
+   ],
+   "style": {
+    "fontFamily": "\"Google Sans\", Roboto, Arial, sans-serif",
+    "fontWeight": "500",
+    "lineHeight": "20px",
+    "letterSpacing": "0.25px",
+    "color": "rgb(168, 199, 250)",
+    "borderTop": "0px none rgb(168, 199, 250)",
+    "borderRight": "0px none rgb(168, 199, 250)",
+    "borderBottom": "0px none rgb(168, 199, 250)",
+    "borderLeft": "0px none rgb(168, 199, 250)",
+    "paddingRight": "8px",
+    "paddingLeft": "8px",
+    "width": "36px",
+    "height": "20px",
+    "minWidth": "auto",
+    "minHeight": "auto",
+    "outline": "rgb(168, 199, 250) none 3px",
+    "cursor": "pointer",
+    "flex": "0 0 auto",
+    "float": "right",
+    "alignSelf": "center"
+   }
+  },
+  {
+   "path": "div/div[0]/div[2]",
+   "tag": "div",
+   "cls": "pXn1rb",
+   "role": null,
+   "aria": null,
+   "rect": [
+    246,
+    6,
+    42,
+    36
+   ],
+   "abs": [
+    822,
+    858
+   ],
+   "style": {
+    "lineHeight": "0px",
+    "color": "rgb(242, 242, 242)",
+    "borderTop": "0px none rgb(242, 242, 242)",
+    "borderRight": "0px none rgb(242, 242, 242)",
+    "borderBottom": "0px none rgb(242, 242, 242)",
+    "borderLeft": "0px none rgb(242, 242, 242)",
+    "width": "42px",
+    "height": "36px",
+    "minWidth": "auto",
+    "minHeight": "auto",
+    "outline": "rgb(242, 242, 242) none 3px"
+   }
+  },
+  {
+   "path": "div/div[0]/div[2]/div[0]",
+   "tag": "div",
+   "cls": "uArJ5e Y5FYJe VsxsTb w3FaXb",
+   "role": "button",
+   "aria": "Close",
+   "rect": [
+    246,
+    6,
+    36,
+    36
+   ],
+   "abs": [
+    822,
+    858
+   ],
+   "style": {
+    "display": "inline-block",
+    "position": "relative",
+    "lineHeight": "0px",
+    "color": "rgb(242, 242, 242)",
+    "borderTop": "0px none rgb(242, 242, 242)",
+    "borderRight": "0px none rgb(242, 242, 242)",
+    "borderBottom": "0px none rgb(242, 242, 242)",
+    "borderLeft": "0px none rgb(242, 242, 242)",
+    "borderRadius": "50%",
+    "marginRight": "6px",
+    "width": "36px",
+    "height": "36px",
+    "overflow": "hidden",
+    "zIndex": "0",
+    "fill": "rgb(232, 234, 237)",
+    "outline": "rgb(242, 242, 242) none 3px",
+    "cursor": "pointer",
+    "textAlign": "center",
+    "flex": "0 0 auto",
+    "top": "0px",
+    "left": "0px"
+   }
+  },
+  {
+   "path": "div/div[0]/div[2]/div[0]/span[1]",
+   "tag": "span",
+   "cls": "XuQwKc",
+   "role": null,
+   "aria": null,
+   "rect": [
+    246,
+    6,
+    36,
+    36
+   ],
+   "abs": [
+    822,
+    858
+   ],
+   "style": {
+    "display": "flex",
+    "position": "relative",
+    "lineHeight": "0px",
+    "color": "rgb(242, 242, 242)",
+    "borderTop": "0px none rgb(242, 242, 242)",
+    "borderRight": "0px none rgb(242, 242, 242)",
+    "borderBottom": "0px none rgb(242, 242, 242)",
+    "borderLeft": "0px none rgb(242, 242, 242)",
+    "width": "36px",
+    "height": "36px",
+    "alignItems": "center",
+    "justifyContent": "center",
+    "fill": "rgb(232, 234, 237)",
+    "outline": "rgb(242, 242, 242) none 3px",
+    "cursor": "pointer",
+    "textAlign": "center",
+    "top": "0px",
+    "left": "0px"
+   }
+  },
+  {
+   "path": "div/div[0]/div[2]/div[0]/span[1]/span[0]",
+   "tag": "span",
+   "cls": "GmuOkf",
+   "role": null,
+   "aria": null,
+   "rect": [
+    252,
+    12,
+    24,
+    24
+   ],
+   "abs": [
+    828,
+    864
+   ],
+   "style": {
+    "display": "flex",
+    "position": "relative",
+    "lineHeight": "0px",
+    "color": "rgb(242, 242, 242)",
+    "borderTop": "0px none rgb(242, 242, 242)",
+    "borderRight": "0px none rgb(242, 242, 242)",
+    "borderBottom": "0px none rgb(242, 242, 242)",
+    "borderLeft": "0px none rgb(242, 242, 242)",
+    "width": "24px",
+    "height": "24px",
+    "minWidth": "auto",
+    "minHeight": "auto",
+    "fill": "rgb(232, 234, 237)",
+    "outline": "rgb(242, 242, 242) none 3px",
+    "cursor": "pointer",
+    "textAlign": "center",
+    "top": "0px",
+    "left": "0px"
+   }
+  },
+  {
+   "path": "div/div[0]/div[2]/div[0]/span[1]/span[0]/svg[0]",
+   "tag": "svg",
+   "cls": "[object SVGAnimatedString]",
+   "role": null,
+   "aria": null,
+   "rect": [
+    252,
+    12,
+    24,
+    24
+   ],
+   "abs": [
+    828,
+    864
+   ],
+   "style": {
+    "lineHeight": "0px",
+    "color": "rgb(242, 242, 242)",
+    "borderTop": "0px none rgb(242, 242, 242)",
+    "borderRight": "0px none rgb(242, 242, 242)",
+    "borderBottom": "0px none rgb(242, 242, 242)",
+    "borderLeft": "0px none rgb(242, 242, 242)",
+    "width": "24px",
+    "height": "24px",
+    "minWidth": "auto",
+    "minHeight": "auto",
+    "overflow": "hidden",
+    "fill": "rgb(242, 242, 242)",
+    "outline": "rgb(242, 242, 242) none 3px",
+    "cursor": "pointer",
+    "textAlign": "center",
+    "flex": "0 0 auto"
+   }
+  },
+  {
+   "path": "div/div[0]/div[2]/div[0]/span[1]/span[0]/svg[0]/path[0]",
+   "tag": "path",
+   "cls": "[object SVGAnimatedString]",
+   "role": null,
+   "aria": null,
+   "rect": [
+    257,
+    17,
+    14,
+    14
+   ],
+   "abs": [
+    833,
+    869
+   ],
+   "style": {
+    "display": "inline",
+    "lineHeight": "0px",
+    "color": "rgb(242, 242, 242)",
+    "borderTop": "0px none rgb(242, 242, 242)",
+    "borderRight": "0px none rgb(242, 242, 242)",
+    "borderBottom": "0px none rgb(242, 242, 242)",
+    "borderLeft": "0px none rgb(242, 242, 242)",
+    "width": "auto",
+    "height": "auto",
+    "fill": "rgb(242, 242, 242)",
+    "outline": "rgb(242, 242, 242) none 3px",
+    "cursor": "pointer",
+    "textAlign": "center"
+   }
+  }
+ ]
+}

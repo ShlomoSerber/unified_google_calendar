@@ -5,7 +5,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { Cdp, launchChrome } from './cdp.mjs';
 
 const [url, file, waitMs = '6000', shot] = process.argv.slice(2);
-const chrome = await launchChrome();
+const chrome = await launchChrome({ dark: process.env.DARK === '1' });
 try {
   const cdp = await Cdp.connect();
   await cdp.setViewport(1440, 900);

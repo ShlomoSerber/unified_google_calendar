@@ -101,10 +101,24 @@ export const COMPONENTS = {
   day_view: { url: 'https://calendar.google.com/calendar/u/0/r/day/2026/9/14', grid: true, root: `document.querySelector('[role=main]')` },
   month_view: { url: 'https://calendar.google.com/calendar/u/0/r/month/2026/9/14', root: `document.querySelector('[role=main]')` },
   agenda_view: { url: 'https://calendar.google.com/calendar/u/0/r/agenda/2026/9/14', root: `document.querySelector('[role=main]')` },
+  // Component 23 (docs/99, 2026-09-15): the year view, twelve month grids.
+  year_view: { url: 'https://calendar.google.com/calendar/u/0/r/year/2026/9/14', root: `document.querySelector('[role=main]')` },
   view_selector: {
     url: WEEK,
     prepare: async (cdp) => { await cdp.clickElement(`[...document.querySelectorAll('header button')].find(b => /^Week/.test((b.innerText||'').trim()) && b.getBoundingClientRect().width > 0)`); await cdp.sleep(1200); },
     root: `[...document.querySelectorAll('[role=menu]')].find(m => m.getBoundingClientRect().width > 0).parentElement.parentElement`,
+  },
+  // Component 21 (docs/04 section 10): the visible tooltip of a header button, 540 ms after the
+  // pointer arrives (tokens.json component.motion.tooltip_delay). Google renders it in a portal,
+  // separate from the 1×1 [role=tooltip] the header keeps at -10000px.
+  tooltip: {
+    url: WEEK,
+    prepare: async (cdp) => {
+      const b = await cdp.eval(`(() => { const r = [...document.querySelectorAll('header button')].find(b => (b.getAttribute('aria-label')||'').startsWith('Next ')).getBoundingClientRect(); return { x: r.x + r.width/2, y: r.y + r.height/2 }; })()`);
+      await cdp.send('Input.dispatchMouseEvent', { type: 'mouseMoved', x: b.x, y: b.y });
+      await cdp.sleep(1200);
+    },
+    root: `(() => { const els = [...document.querySelectorAll('div')].filter(d => (d.innerText||'').trim() === 'Next week' && d.getBoundingClientRect().width > 10 && d.getBoundingClientRect().y > 40 && d.getBoundingClientRect().y < 80); return els.length ? els.reduce((a, b) => (a.contains(b) ? a : b)) : null; })()`,
   },
   // Component 14: the detail popup after clicking a chip. Each state records the popup and, in
   // its .md, the chip it anchors to (positioning rules of docs/04 section 8).

@@ -96,7 +96,15 @@
     "component.qc.title_underline_before.top": "-1px",
     "component.qc.title_underline_after.border_bottom": "3px solid rgb(11, 87, 208)",
     "component.qc.title_underline_after.top": "-3px",
-    "component.qc.title_underline_note": "getComputedStyle(underline, \"::before\" / \"::after\") on calendar.google.com (2026-09-14, light): the title field underline is a 1px grey line (::before) plus the 3px primary line (::after) shown while the field is focused; both absolute, left 0, full width, height 0. The full form title (ff-n24) uses the same pattern."
+    "component.qc.title_underline_note": "getComputedStyle(underline, \"::before\" / \"::after\") on calendar.google.com (2026-09-14, light): the title field underline is a 1px grey line (::before) plus the 3px primary line (::after) shown while the field is focused; both absolute, left 0, full width, height 0. The full form title (ff-n24) uses the same pattern.",
+    "layout.tooltip_top_note": "tooltip-light.json root.y = 52px with the hovered header button (Next week) at y 16px, height 32px: the tooltip sits 4px under the button, centred on it (root.x 375.23 + 73.11/2 = 411.8 = button centre).",
+    "layout.tooltip_gap": "4px",
+    "layout.tooltip_gap_note": "tooltip-light.json root.y 52px minus the bottom of the hovered Next week button (topbar-light.json: top 16px + height 32px = 48px): the tooltip box starts 4px under the button and is centred on it.",
+    "layout.vsel_gap": "4px",
+    "layout.vsel_gap_note": "view_selector-light.json root [1002.98, 56] against the view button in topbar-light.json [1002.98, 12, 100.02, 40]: the menu's left edge is the button's left edge and its top is 4px under the button's bottom (52px). The app positions the menu from the button's live rect with these offsets (docs/99, 2026-09-15: the header order changed, so the measured page offsets vsel_left/vsel_top no longer apply).",
+    "layout.year_month_cols_note": "year_view-light.json: twelve blocks of 284×252px in four columns (x 0, 284, 568, 852) and three rows (y 8, 260, 512) inside a 1168×764 grid; the value is the block width. The app lays the blocks out with flex-wrap at that width and scrolls the page when the window is shorter.",
+    "layout.snackbar_bottom": "0px",
+    "layout.snackbar_bottom_note": "snackbar-save-light.json root at y 852 with height 48 in a 900px viewport: the bar sits on the bottom edge, centred (x 576 = (1440 − 288) / 2). It slides up from below (y 900 at 29 ms, 867 at 169 ms, 852 by 375 ms of a 120 ms poll after Save)."
   },
   "font": {
     "topbar_title": {
@@ -519,6 +527,16 @@
     "vsel_width": [
       "view_selector",
       0,
+      "rect.w"
+    ],
+    "tooltip_top": [
+      "tooltip",
+      0,
+      "root.y"
+    ],
+    "year_month_cols": [
+      "year_view",
+      4,
       "rect.w"
     ]
   },
@@ -2665,6 +2683,76 @@
         "item_box",
         "check_label",
         "check_box"
+      ]
+    },
+    "tooltip": {
+      "source": "tooltip",
+      "size": [
+        "*"
+      ],
+      "names": {
+        "0": "root",
+        "1": "box",
+        "2": "label"
+      },
+      "fluid_w": [
+        "root",
+        "box",
+        "label"
+      ]
+    },
+    "year": {
+      "source": "year_view",
+      "only_named": true,
+      "size": [
+        "*"
+      ],
+      "names": {
+        "0": "root",
+        "1": "sr",
+        "2": "page",
+        "3": "grid",
+        "4": "month",
+        "5": "month_inner",
+        "6": "title_box",
+        "7": "title",
+        "8": "table",
+        "9": "thead",
+        "10": "head_row",
+        "11": "th",
+        "12": "th_span",
+        "13": "dow",
+        "46": "tbody",
+        "47": "row",
+        "48": "cell",
+        "49": "day",
+        "50": "day_ripple",
+        "51": "day_label",
+        "1847": "day_today",
+        "1848": "day_today_ripple",
+        "1849": "day_today_label"
+      }
+    },
+    "snackbar": {
+      "source": "snackbar-save",
+      "size": [
+        "*"
+      ],
+      "names": {
+        "0": "root",
+        "1": "row",
+        "2": "text",
+        "3": "close_cell",
+        "4": "close",
+        "5": "close_span",
+        "6": "close_icon_box",
+        "7": "close_icon",
+        "8": "close_path"
+      },
+      "fluid_w": [
+        "root",
+        "row",
+        "text"
       ]
     }
   }

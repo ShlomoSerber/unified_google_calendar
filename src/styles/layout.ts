@@ -3,6 +3,8 @@ export const LAYOUT = {
   topbar_height: "64px",
   sidebar_width: "256px",
   sidebar_padding: "19px",
+  sidebar_transition_duration: "300ms",
+  sidebar_transition_timing: "cubic-bezier(0.4, 0, 0.2, 1)",
   gutter_width: "102.34px",
   gutter_width_two_zones: "102.34px",
   hour_row_height: "60px",
@@ -41,6 +43,11 @@ export const LAYOUT = {
   vsel_left: "1002.98px",
   vsel_top: "56px",
   vsel_width: "202.39px",
+  tooltip_top: "52px",
+  tooltip_gap: "4px",
+  vsel_gap: "4px",
+  year_month_cols: "284px",
+  snackbar_bottom: "0px",
 } as const;
 
 /** Numeric part of a layout token ("60px" → 60, "1.7" → 1.7). */
