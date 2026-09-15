@@ -26,6 +26,7 @@ Then read the documents the task lists. Do not start coding a task without havin
 - **IPC types are mirrored by hand** in `src-tauri/src/commands/types.rs` and `src/types/ipc.ts`. Every change updates both and regenerates fixtures with `cargo test`.
 - **Code and comments in English. Docs in Spanish.** Commit messages in English. Plan tasks used `F<phase>-T<task>: short summary`; maintenance work uses `fix:`, `docs:` or `chore:` followed by a short summary.
 - **Never launch the app on the user's display** and never compile while an app instance is open. Run it on a private Xvfb (`docs/10-mantenimiento.md` section 5), build with `CARGO_BUILD_JOBS=2`, and kill processes by PID (`pgrep -f` with the bracket trick), never with `pkill -f`.
+- **Do not leave dead bytes on disk.** A cache that speeds up the next build stays (`src-tauri/target/` for the current toolchain and `Cargo.lock`, `node_modules`, Vite's cache). Files that will never be read again go: after a `rustup update` or a `Cargo.lock` change run `cargo clean --manifest-path src-tauri/Cargo.toml --profile dev` once the new build has succeeded, remove build artifacts of removed crates, examples or tests, and never leave scratch files, screenshots, measurements or logs in the repo: they belong in the scratchpad or in `docs/design/` when they are deliverables. Before deleting, confirm no app instance or build is running and report what was removed and how much space it freed.
 
 ## Commands
 
