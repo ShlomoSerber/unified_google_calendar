@@ -14,6 +14,7 @@ Este proyecto se implementa siguiendo estos documentos en orden. Quien implement
 | `07-empaquetado.md` | Build del `.deb`, dependencias, instalación, desinstalación, primer arranque. | Implementación y usuario |
 | `08-plan-de-implementacion.md` | Fases, tareas con criterios de aceptación, orden, qué verificar al cerrar cada fase. | Implementación |
 | `09-setup-usuario.md` | Lo que hace el usuario a mano: proyecto en Google Cloud, Tailscale, Online Accounts. | Usuario |
+| `10-mantenimiento.md` | Estado al cierre del plan, pendientes del usuario, limitaciones conocidas y cómo depurar y remedir sin molestar al usuario. | Mantenimiento |
 | `99-decisiones.md` | Registro de decisiones y desvíos durante la implementación. | Todos |
 
 ## Harness de Claude Code

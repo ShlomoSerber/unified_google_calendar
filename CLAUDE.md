@@ -2,14 +2,15 @@
 
 Desktop app for Ubuntu that shows several Google accounts plus local personal events in a pixel-perfect replica of the Google Calendar web UI. Tauri 2 + Rust backend, React + TypeScript frontend, SQLite, Google Calendar API v3, push notifications through Tailscale Funnel, mirror into GNOME's calendar panel via Evolution Data Server.
 
-The design phase is finished. Every architectural decision is already made and written in `docs/`. Your job is to implement exactly what the documents say, one task at a time, in the order of `docs/08-plan-de-implementacion.md`.
+The design phase is finished. Every architectural decision is already made and written in `docs/`. The implementation plan of `docs/08-plan-de-implementacion.md` is complete (phases F0–F8 closed on 2026-09-14) and the `.deb` is installed on the user's machine. The project is now in maintenance: the user reports what they see in the app and you fix it. Read `docs/10-mantenimiento.md` first: it holds the state, the known limitations, and the debugging procedure that keeps the app off the user's display.
 
 ## Read before doing anything
 
 1. `docs/00-indice.md` — what each document is for and the reading rules.
 2. `docs/01-requisitos.md` — scope. Anything listed as "versión 2" is out of scope, even if it looks easy.
 3. `docs/02-arquitectura.md` — stack, modules, IPC contract, RAM budget, security.
-4. `docs/08-plan-de-implementacion.md` — the task you are on, its acceptance criteria, and the documents that task names.
+4. `docs/10-mantenimiento.md` — current state, known limitations, how to reproduce and debug.
+5. `docs/08-plan-de-implementacion.md` — the tasks already delivered, their acceptance criteria, and the documents each one names; reread the task a bug belongs to before touching it.
 
 Then read the documents the task lists. Do not start coding a task without having read them in this session. Use the `start-task` skill.
 
@@ -23,7 +24,8 @@ Then read the documents the task lists. Do not start coding a task without havin
 - **Never act on the user's real Google calendars** except the test calendar the user designates for manual verification. Never send invitations to real people in tests.
 - **Tokens and secrets** never reach the webview, logs, fixtures, or commits. `~/.config/unified-google-calendar/oauth.json` is user-owned and is not read into the repo.
 - **IPC types are mirrored by hand** in `src-tauri/src/commands/types.rs` and `src/types/ipc.ts`. Every change updates both and regenerates fixtures with `cargo test`.
-- **Code and comments in English. Docs in Spanish.** Commit messages in English, format `F<phase>-T<task>: short summary`.
+- **Code and comments in English. Docs in Spanish.** Commit messages in English. Plan tasks used `F<phase>-T<task>: short summary`; maintenance work uses `fix:`, `docs:` or `chore:` followed by a short summary.
+- **Never launch the app on the user's display** and never compile while an app instance is open. Run it on a private Xvfb (`docs/10-mantenimiento.md` section 5), build with `CARGO_BUILD_JOBS=2`, and kill processes by PID (`pgrep -f` with the bracket trick), never with `pkill -f`.
 
 ## Commands
 

@@ -164,6 +164,13 @@ Formato:
 - Motivo: medición de F8-T2.
 - Afecta: `docs/02-arquitectura.md` sección 6 (cifras), `docs/04-fidelidad-visual.md` sección 5 (`measured.css` con valores literales).
 
+## 2026-09-15 — Plan terminado: modo mantenimiento
+- Quién: usuario e implementación
+- Fase/tarea: posterior a F8
+- Decisión: el plan de `08` está completo y el `.deb` instalado en la máquina del usuario. Desde ahora el trabajo es corregir lo que el usuario reporte al usar la app. Los commits pasan a `fix:`, `docs:` y `chore:` en inglés; `F<fase>-T<tarea>` se reserva para el plan ya cerrado. `docs/10-mantenimiento.md` recoge el estado, los pendientes del usuario, las limitaciones conocidas y el procedimiento de depuración (Xvfb propio, `CARGO_BUILD_JOBS=2`, matar por PID) y de remedición. Las reglas de `CLAUDE.md` siguen vigentes sin cambios.
+- Motivo: el usuario cerró la sesión de implementación y abrirá sesiones de depuración con la app instalada.
+- Afecta: `CLAUDE.md` (formato de commit, puntero a `10`), `docs/00-indice.md` (fila nueva).
+
 ## Mediciones de RAM por fase
 
 | Fase | Fecha | Proceso Rust PSS | WebKitWebProcess PSS | Total | Nota |
