@@ -83,8 +83,12 @@ El snippet `dumpRegion` está en el informe de investigación y se copia tal cua
 | 18 | Diálogo de recurrencia personalizada | | |
 | 19 | Diálogo "Edit recurring event" | this, following, all | |
 | 20 | Scrollbars | | |
+| 21 | Tooltip | el portal que aparece bajo un botón del header 540 ms después del puntero | visible |
+| 22 | Animaciones | ver sección 10 | cada escenario de `scripts/measure/animations.mjs` |
+| 23 | Vista año | `[role=main]` en `/r/year/2026/9/14` | normal |
+| 24 | Snackbar | la barra que sube desde el borde inferior al guardar o borrar un evento | "Saving..." |
 
-Componentes 1 a 10 cierran la fase de UI base. 11 a 20 cierran la fase de UI completa. Ver `08-plan-de-implementacion.md`.
+Componentes 1 a 10 cierran la fase de UI base. 11 a 20 cierran la fase de UI completa. Ver `08-plan-de-implementacion.md`. 21 y 22 son de la ronda de animaciones (2026-09-15, mantenimiento).
 
 ## 5. Archivo de tokens
 
@@ -159,10 +163,34 @@ Todo lo que se sospeche distinto se prueba primero con `CSS.supports()` dentro d
 
 ## 9. Logo y nombre
 
-No se usa el logo de Google Calendar ni ninguna variante. El ícono de la app es propio. El nombre "Unified Google Calendar" se usa en la ventana y el `.desktop`. En la barra superior el texto junto al ícono dice "Calendar" para conservar el layout medido, y esa es la única aparición del término.
+No se usa el logo de Google Calendar ni ninguna variante. El ícono de la app es propio. El nombre "Unified Google Calendar" se usa en la ventana y el `.desktop`. En la barra superior el hueco del logo y del título queda vacío con su ancho medido, a pedido del usuario (`docs/99-decisiones.md`, 2026-09-15); el ícono de la bandeja y de la ventana muestra el día del mes (`scripts/gen-day-icons.mjs`).
+
+## 10. Movimiento
+
+Las transiciones se miden con el mismo rigor que el layout. Nada se anima con valores inventados: cada duración, easing, desplazamiento y color de estado sale de `docs/design/measurements/animations-<tema>.json` y vive en `docs/design/tokens.json`, `component.motion`. El resumen legible está en `docs/design/measurements/animations.md`.
+
+Procedimiento, sin el usuario:
+
+```bash
+node scripts/measure/animations.mjs [escenario ...]   # todos por defecto
+node scripts/measure/capture.mjs tooltip               # componente 21: el tooltip visible
+node scripts/measure/extract-tokens.mjs && node scripts/gen-tokens.mjs && node scripts/gen-measured-css.mjs
+```
+
+`animations.mjs` pone calendar.google.com en un estado conocido, inyecta `scripts/measure/animRecorder.js`, dispara la acción (click real por CDP, o hover) y guarda cada Web Animation que corre la página (`document.getAnimations()` muestreado por `requestAnimationFrame`: destino, keyframes, duración, easing) más la caja, opacidad y transform de los elementos vigilados cuadro por cuadro. Los escenarios `hover_*` y `press_*` guardan además la diferencia de estilos computados entre reposo y hover, en claro y oscuro. Todo es de solo lectura sobre la cuenta: los chips se abren y se cierran, la creación rápida y el formulario se descartan sin guardar, la casilla de un calendario se apaga y se vuelve a encender, y el script avisa si alguna quedó apagada.
+
+Los tokens `component.motion` se leen desde CSS como `--motion-*` (`src/styles/motion.css`) y desde JS como `MOTION` (`src/styles/motion.ts`, generado). Las piezas del frontend:
+
+- `src/app/ViewStage.tsx`: deslizamiento de la grilla al navegar y cross-fade al cambiar de vista.
+- `src/lib/motion.ts`: `usePresence` (deja montado un diálogo mientras corre su animación de salida), el ripple Material de cada botón y el tooltip.
+- `src/app/Tooltip.tsx`: el tooltip medido (componente 21), bajo el botón y centrado.
+- `.ugc-state` en los spans de estado que ya existían en el DOM medido: tinte de hover en `::before`, ripple como tinte pulsado.
+
+Fuera de alcance: anillos de foco por teclado (versión 2) y la barra de progreso de la página de Settings.
 
 ## Registro de cambios
 
 - 2026-09-14 — Medición automatizada por CDP, propiedades extra de `dumpRegion`, tokens por nodo, ajustes de la cuenta de referencia y paleta clara/oscura medida: ver `docs/99-decisiones.md` (F4-T1, F4-T3, F4-T4). Criterio `odiff < 0.5 %` no alcanzado por rasterizado de texto: ver la entrada "Criterio de aceptación visual" en `docs/99-decisiones.md`.
 - 2026-09-14 — Componentes 11 a 20 medidos y comparados; regla de anclaje del popup y del quick create sondeada; scrollbars superpuestas: ver `docs/99-decisiones.md` (Fase 7) y `docs/design/measurements/<componente>.md`.
 - 2026-09-14 — `src/styles/measured.css` se genera con los valores medidos en literal (no `var()`), ver `docs/99-decisiones.md` (Fase 8).
+- 2026-09-15 — Ronda de animaciones: sección 10, `scripts/measure/animations.mjs`, tokens `component.motion`, componente 21 (tooltip). Logo y título del header retirados; ícono con el día del mes. Ver `docs/99-decisiones.md` (2026-09-15).

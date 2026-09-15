@@ -5,19 +5,21 @@ Escrito el 2026-09-15, al terminar el plan de `08`. Desde acá el proyecto está
 ## 1. Estado
 
 - Fases F0 a F8 cerradas con sus gates (`bash scripts/check-phase.sh 0..8`). Último commit del plan: `a8094e3` ("F8: phase closed"), en `origin/main`.
-- Paquete: `src-tauri/target/release/bundle/deb/Unified Google Calendar_0.1.0_amd64.deb` (11.5 MB). El usuario lo instaló el 2026-09-15.
-- Cuentas en la app del usuario: dos cuentas Google corporativas de Greelow y un calendario iCal de solo lectura (RappiCard, publicado por un Apps Script a un gist secreto; la URL vive cifrada en `tokens.bin`). El Gmail personal queda para más adelante, por decisión del usuario.
-- Verificación al cierre: `cargo clippy -D warnings`, 117 tests de Rust, `npm run lint`, `npm run typecheck`, 19 tests de vitest, `check-tokens.mjs`, `report.mjs --gate 4` y `--gate 7` sin diferencias de layout fuera de las tolerancias justificadas en `docs/design/measurements/<componente>.md`.
-- Medición: 20 componentes de calendar.google.com en claro y oscuro, más la paleta de 24 colores de calendario y 11 de evento (`docs/design/measurements/`, `docs/design/tokens.json`).
+- Sesión de mantenimiento del 2026-09-15 ("carril rápido", once entregas 0.1.0 → 0.1.5): header reordenado y reducido, ícono con el día del mes en bandeja, ventana y dock, ronda completa de animaciones (componentes 21 a 24: tooltip, animaciones, vista año, snackbar), vista año, formulario de evento como modal, cajón sin bloques inertes, diálogo "Add calendar", popup de evento sin controles inertes, renderer DMABUF apagado, y las correcciones de `docs/99` (entradas del 2026-09-15). La app ya no es una réplica pixel a pixel del header, del formulario ni del cajón: el usuario decidió cada desvío; las mediciones siguen siendo la fuente de cada valor.
+- Paquete: `src-tauri/target/release/bundle/deb/Unified Google Calendar_0.1.5_amd64.deb`. El usuario lo instaló el 2026-09-15. Cada entrega sube la versión con `scripts/bump-version.sh`: `apt install` no reinstala la misma versión. La app queda en la bandeja al cerrar la ventana; hay que hacer **Quit** antes de instalar, y volver a abrirla después, porque la interfaz va embebida en el binario.
+- Cuentas en la app del usuario: dos cuentas Google corporativas de Greelow y un calendario iCal de solo lectura (RappiCard, publicado por un Apps Script a un gist secreto; la URL vive cifrada en `tokens.bin`). El Gmail personal queda para más adelante, por decisión del usuario. El Apps Script emite `X-GOOGLE-CONFERENCE` desde el 2026-09-15 (servicio avanzado Calendar).
+- Verificación al cierre de la sesión del 2026-09-15: `cargo clippy --all-targets -D warnings`, `cargo fmt --check`, 118 tests de Rust, `npm run lint`, `npm run typecheck`, 19 tests de vitest, `check-tokens.mjs`. `report.mjs --gate 4/7` no se volvió a correr: los desvíos pedidos por el usuario (header, cajón, formulario, menús) dejan sin sentido la comparación de layout de esos componentes; los demás no cambiaron.
+- Medición: 24 componentes de calendar.google.com (20 originales más tooltip, animaciones, vista año y snackbar) en claro y oscuro, más la paleta de 24 colores de calendario y 11 de evento (`docs/design/measurements/`, `docs/design/tokens.json`).
+- Sesión del usuario: Wayland, GPU AMD, dos monitores a escala 1. El renderer DMABUF de WebKitGTK 2.50 deja el texto borroso ahí; `main.rs` lo apaga.
 - Memoria en release sobre Xvfb (render por software): 246.6 MB abierta, 91.7 MB el proceso Rust con la ventana oculta. Ver `99`, entrada de F8-T2.
 
 ## 2. Pendiente del lado del usuario
 
-1. Abrir la app en su escritorio y recorrer semana, día, mes, agenda, popup de evento, creación rápida, formulario completo, recurrencia y alcance de edición. Reportar cada diferencia con Google o cada error.
+1. Seguir usando la app y reportar lo que vea. Recorrido hecho el 2026-09-15: semana, día, mes, año, agenda, popup, formulario, recurrencia, alcance de edición, cajón, header, bandeja.
 2. Responder el diálogo de Online Accounts la primera vez (`09` sección D).
 3. Con la app en vista semana, correr `bash scripts/measure-ram.sh` y pegar la tabla en `99`, sección "Mediciones de RAM por fase", con la nota "sesión real con GPU".
 4. Opcional: Tailscale Funnel y la URL pública en Settings (`09` sección B). Sin eso la app hace polling cada 60 s.
-5. Opcional: borrar el calendario de prueba "UGC Fixtures" con `cargo run --example seed_fixtures -- shlomo.serber@greelow.com --delete`. Tiene 25 eventos de referencia más 11 eventos "Color N". Si se borra, no se puede volver a medir chips contra Google sin recrearlo (`--seed`).
+5. Hecho el 2026-09-15: el calendario de prueba "UGC Fixtures" se borró (`docs/99`). Para volver a medir chips contra Google hay que recrearlo con `cargo run --example seed_fixtures -- shlomo.serber@greelow.com --seed` y borrarlo después.
 6. Ajustes de la cuenta Greelow que la medición cambió y siguen así: formato 24 h, semana desde lunes, zona secundaria America/Mexico_City, apariencia "Device default", colores "Modern", densidad "Responsive to your screen", panel lateral oculto. Las casillas de calendarios del sidebar ya están todas marcadas otra vez. El usuario los puede cambiar cuando quiera, salvo si va a remedir.
 
 ## 3. Limitaciones conocidas
@@ -26,10 +28,16 @@ Escrito el 2026-09-15, al terminar el plan de `08`. Desde acá el proyecto está
 |---|---|---|
 | odiff | El criterio de 0.5 % de píxeles distintos no se cumple: WebKitGTK y Chrome rasterizan el texto distinto. El layout (posición y tamaño de cada nodo) sí coincide. | `99`, "Criterio de aceptación visual" |
 | RAM | 246.6 MB abierta contra 150 MB de objetivo; 91.7 MB Rust oculto contra 60 MB. Medido en Xvfb con llvmpipe. Falta la cifra real con GPU. | `99`, F8-T2 |
-| Hover | Los estados hover de chips y filas no están medidos ni implementados. | `99`, Fase 7 |
+| Hover y animaciones | Medidos e implementados el 2026-09-15 (`docs/04` sección 10, `measurements/animations.md`). Los chips no tienen estado hover en Google. Quedan fuera los anillos de foco por teclado (versión 2). | `99`, 2026-09-15 |
+| Renderer del webview | La app arranca con `WEBKIT_DISABLE_DMABUF_RENDERER=1` (`main.rs`) porque el renderer DMABUF dejaba el texto borroso en la sesión del usuario. Si en otra máquina hiciera falta el DMABUF, exportar la variable con `0` antes de lanzar la app. | `99`, 2026-09-15 |
+| Meet en RappiCard | El feed iCal de RappiCard (Apps Script) no trae `X-GOOGLE-CONFERENCE`, ni LOCATION ni DESCRIPTION, así que el popup no puede mostrar el enlace de Meet. Arreglo del lado del script: emitir `X-GOOGLE-CONFERENCE:<hangoutLink>` (servicio avanzado de Calendar en Apps Script, `Calendar.Events.get(...).hangoutLink`) o al menos el enlace en DESCRIPTION; la app lo toma de cualquiera de los tres. | `99`, 2026-09-15 |
+| Ícono del día | Bandeja y ventana lo reciben por Tauri; el dock lo lee de `~/.local/share/icons/hicolor/*/apps/unified-google-calendar.png`, que la app reescribe a medianoche. Si GNOME Shell no refresca su caché de íconos al cambiar el archivo, el dock muestra el día anterior hasta reiniciar la sesión. | `99`, 2026-09-15 |
 | Deduplicación | Google oculta copias de un mismo evento invitado a varias cuentas de forma distinta a la app en el calendario de prueba. | `docs/design/measurements/week.md` |
 | Settings | El diálogo de Settings reutiliza tokens de los diálogos medidos; la página de ajustes de Google no se midió. | `src/app/SettingsDialog.tsx` |
-| Scrollbars | Se dejan las barras overlay de GTK sin estilo; estilizar `::-webkit-scrollbar` fuerza barras clásicas en WebKitGTK. | `docs/design/measurements/scrollbars.md` |
+| Scrollbars | Se dejan las barras overlay de GTK sin estilo; estilizar `::-webkit-scrollbar` fuerza barras clásicas en WebKitGTK. Los scrollers que Google oculta (cabecera, fila de todo el día, gutter) van con `overflow` hidden: su pulgar se dibujaba encima de los menús. | `docs/design/measurements/scrollbars.md`, `99` 2026-09-15 |
+| Desvíos de Google | Header, cajón, botón Create, menú de vista, formulario de evento y popup ya no replican el DOM de Google: son la versión reducida que pidió el usuario, construida con los mismos tokens medidos. `report.mjs` no aplica a esos componentes. | `99`, entradas del 2026-09-15 |
+| Creación rápida | El click en la grilla no abre nada (decisión del usuario); `QuickCreate.tsx` queda sin disparador. | `99`, 2026-09-15 |
+| Undo | El snackbar no ofrece "Undo" tras guardar o borrar. | `docs/design/measurements/snackbar.md` |
 
 ## 4. Cómo se trabaja desde ahora
 
@@ -101,7 +109,10 @@ node scripts/gen-tokens.mjs && node scripts/gen-measured-css.mjs
 node scripts/measure/app-capture.mjs <componente>  # dumps de la app en Xvfb :150
 node scripts/measure/report.mjs --md --gate 7      # comparación; tolerancias en measurements/<comp>.md
 node scripts/measure/reference-state.mjs off       # vuelve a marcar todos los calendarios del usuario
+node scripts/measure/animations.mjs [escenario]    # movimiento: animations-<tema>.json (docs/04 sección 10)
 ```
+
+Los escenarios de `animations.mjs` no necesitan "UGC Fixtures": usan el primer chip visible de la semana actual, la creación rápida se descarta y el formulario completo se cierra sin guardar. El depurador de la app en Xvfb (sección 5) sirve para ver las animaciones con entrada real: `xdotool mousemove/click` y `scrot` en ráfaga (unos 75 ms por captura con llvmpipe).
 
 Si la sesión de Chrome caducó, `scripts/measure/session.mjs` lo detecta; el usuario tiene que iniciar sesión otra vez en ese perfil (`09` sección F). Es la única parte que lo necesita.
 

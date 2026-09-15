@@ -95,3 +95,4 @@ Diferido a la versión 2:
 ## Registro de cambios
 
 - 2026-09-14: versión inicial cerrada con el usuario.
+- 2026-09-15 (mantenimiento, decisiones del usuario en `99-decisiones.md`): R4.1 suma la vista año. R4.2 cambia: los eventos se crean solo desde el botón "Create event" (formulario modal); el click en la grilla no crea nada y el popup rápido de creación queda sin uso. R4.4 se reduce a ver asistentes y su estado: sin responder Yes/No/Maybe ni agregar invitados desde la app. R8.1 se relaja donde el usuario pidió otra cosa (header, cajón, botón Create, menú de vista, formulario, popup): esas piezas son versiones reducidas construidas con los tokens medidos; el resto sigue pixel a pixel. Se agregan al método de `04` las animaciones, el tooltip, la vista año y el snackbar (componentes 21 a 24).

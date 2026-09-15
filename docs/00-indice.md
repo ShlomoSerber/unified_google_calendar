@@ -8,7 +8,7 @@ Este proyecto se implementa siguiendo estos documentos en orden. Quien implement
 | `01-requisitos.md` | Qué tiene que hacer la app y qué no. Cerrado con el usuario. | Todos |
 | `02-arquitectura.md` | Stack, procesos, módulos, flujo de datos, límites de RAM, árbol de directorios. | Implementación |
 | `03-modelo-de-datos.md` | Esquema SQLite, mapeo con la Calendar API, estados de sincronización, recurrencias. | Implementación |
-| `04-fidelidad-visual.md` | Cómo medir Google Calendar real, tokens de diseño, fuentes, método de comparación de capturas. | Implementación de UI |
+| `04-fidelidad-visual.md` | Cómo medir Google Calendar real, tokens de diseño, fuentes, método de comparación de capturas y de animaciones (sección 10). | Implementación de UI |
 | `05-sincronizacion.md` | OAuth, sync tokens, push por Tailscale Funnel, renovación de canales, fallback a polling, conflictos. | Implementación |
 | `06-integracion-gnome.md` | Notificaciones, bandeja, cerrar a segundo plano, espejo en Evolution Data Server. | Implementación |
 | `07-empaquetado.md` | Build del `.deb`, dependencias, instalación, desinstalación, primer arranque. | Implementación y usuario |
