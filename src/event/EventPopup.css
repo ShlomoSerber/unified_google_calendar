@@ -20,7 +20,6 @@
   min-width: 0;
 }
 
-/* Google shows the Meet logo as an <img>; the app draws the videocam glyph of the icon font. */
 .popup-meet-icon {
   font-family: var(--font-family-icons);
   font-size: var(--popup-notes-icon-font-size);
@@ -31,9 +30,6 @@
   background-color: var(--data-chip-bg);
 }
 
-.popup-notes-link,
-.popup-notes-more:disabled,
-.popup-email:disabled,
 .popup-options:disabled {
   cursor: default;
 }
@@ -52,35 +48,13 @@
   top: var(--popup-options-cell-height);
   right: 0;
   left: auto;
+  list-style: none;
 }
 
-/* RSVP ("Going?"): a row under the guest list, in the Create-menu item style; Google's own
-   attendee copy was not measured (the fixtures are organiser copies). */
-.popup-rsvp-row {
-  display: flex;
-  align-items: center;
-  min-height: var(--popup-location-row-min-height);
-  padding-left: var(--popup-tree-padding-left);
-  padding-right: var(--popup-treeitem-padding-right);
-  margin-left: var(--popup-tree-margin-left);
-  gap: var(--create-menu-item-gap);
+.popup-options-menu .create-menu-item {
+  cursor: pointer;
 }
 
-.popup-rsvp {
-  display: flex;
-  gap: var(--create-menu-item-padding-top);
-}
-
-.popup-rsvp-button {
-  padding: 0 var(--create-menu-item-padding-top);
-  border-radius: var(--create-button-root-border-radius);
-  font-weight: var(--popup-notes-link-font-weight);
-  color: var(--popup-notes-link-color);
-}
-
-.popup-rsvp-current {
-  background-color: var(--color-primary-container);
-}
 
 .popup-guest-role {
   margin-left: var(--create-menu-item-padding-top);
@@ -99,4 +73,10 @@
 
 .popup-conflict {
   color: var(--week-now-dot-background-color);
+}
+
+/* The guest list grows with the guests (the dump had three); Google's fixed height overlapped
+   the rows below it with long lists (user report, 2026-09-15). */
+.popup-tree {
+  height: auto;
 }

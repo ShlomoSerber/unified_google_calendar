@@ -1,0 +1,245 @@
+/* Motion of calendar.google.com (docs/04 section 10, docs/design/measurements/animations.md).
+   Every duration, easing, offset and colour is a token of tokens.json component.motion; the
+   classes are applied by src/app/App.tsx (view and dialog layers), src/lib/motion.ts (ripple,
+   tooltip) and the components that carry Google's state-layer spans. */
+
+/* ---- View layers: navigation slide and view cross-fade ---- */
+
+.app-view-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  /* Keep the layer composited: WebKitGTK repaints (a blank frame) when a finished transform
+     animation drops its layer, which the user saw as a stutter at the end of the slide. */
+  will-change: transform, opacity;
+}
+
+.app-view-layer-leaving {
+  pointer-events: none;
+  animation: ugc-fade-out var(--motion-view-fade-duration) var(--motion-easing-standard) both;
+}
+
+.app-view-layer-fade {
+  animation: ugc-fade-in var(--motion-view-fade-duration) var(--motion-easing-standard) both;
+}
+
+.app-view-layer-forward {
+  animation: ugc-nav-forward var(--motion-nav-slide-duration) var(--motion-easing-standard) both;
+}
+
+.app-view-layer-back {
+  animation: ugc-nav-back var(--motion-nav-slide-duration) var(--motion-easing-standard) both;
+}
+
+@keyframes ugc-nav-forward {
+  from {
+    opacity: 0;
+    transform: translateX(var(--motion-nav-slide-offset));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes ugc-nav-back {
+  from {
+    opacity: 0;
+    transform: translateX(calc(-1 * var(--motion-nav-slide-offset)));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes ugc-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ugc-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* ---- Dialog layers ---- */
+
+/* A full-viewport, click-transparent layer; the dialog inside keeps its own position and
+   receives the pointer. Animating the layer animates the dialog (and its scrim) as one. */
+.motion-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: var(--create-menu-root-z-index);
+}
+
+.motion-layer > * {
+  pointer-events: auto;
+}
+
+/* Event popup and quick create: slide away from the chip while fading in; fade out. */
+.motion-popup-right {
+  animation: ugc-popup-from-left var(--motion-popup-open-duration) var(--motion-easing-standard) both;
+}
+
+.motion-popup-left {
+  animation: ugc-popup-from-right var(--motion-popup-open-duration) var(--motion-easing-standard) both;
+}
+
+.motion-popup-exit {
+  animation: ugc-fade-out var(--motion-popup-close-duration) var(--motion-popup-close-easing) both;
+}
+
+@keyframes ugc-popup-from-left {
+  from {
+    opacity: 0;
+    transform: translateX(calc(-1 * var(--motion-popup-open-offset)));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes ugc-popup-from-right {
+  from {
+    opacity: 0;
+    transform: translateX(var(--motion-popup-open-offset));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Menus: opacity in 30 ms, scale from 0.8 in 120 ms about the top-left corner, where Google
+   anchors both menus under their buttons; out in 75 ms. */
+.motion-menu {
+  transform-origin: 0 0;
+  animation:
+    ugc-fade-in var(--motion-menu-open-opacity-duration) linear both,
+    ugc-menu-grow var(--motion-menu-open-scale-duration) var(--motion-easing-decelerate) both;
+}
+
+.motion-menu-exit {
+  animation: ugc-fade-out var(--motion-menu-close-duration) linear both;
+}
+
+@keyframes ugc-menu-grow {
+  from {
+    transform: scale(var(--motion-menu-open-scale-from));
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/* Full form and Settings: Google cross-fades the whole page in 200 ms. */
+.motion-page {
+  animation: ugc-fade-in var(--motion-view-fade-duration) var(--motion-easing-standard) both;
+}
+
+.motion-page-exit {
+  animation: ugc-fade-out var(--motion-view-fade-duration) var(--motion-easing-standard) both;
+}
+
+/* ---- Material state layer: hover tint, pressed tint, ripple ---- */
+
+/* The span every Google button carries (.UTNHae). Its ::before is the hover tint; the pressed
+   tint is the ripple circle (Google's ::after) that src/lib/motion.ts appends on pointer down.
+   The span's own box (position, size, radius, overflow) comes from the measured rules of each
+   button. */
+.ugc-state {
+  pointer-events: none;
+  --data-state-color: var(--motion-state-color-text-button);
+}
+
+.ugc-state::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  background-color: var(--data-state-color);
+  transition: opacity var(--motion-state-hover-duration) linear;
+}
+
+:hover > .ugc-state::before {
+  opacity: var(--motion-state-hover-opacity);
+}
+
+:disabled > .ugc-state::before,
+[aria-disabled='true'] > .ugc-state::before {
+  opacity: 0;
+}
+
+.ugc-state-icon {
+  --data-state-color: var(--motion-state-color-icon-button);
+}
+
+.ugc-state-primary {
+  --data-state-color: var(--motion-state-color-primary);
+}
+
+.ugc-ripple {
+  --data-pressed-opacity: var(--motion-state-pressed-opacity);
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 50%;
+  background-image: radial-gradient(var(--motion-state-pressed-gradient-shape), var(--data-state-color) var(--motion-state-pressed-gradient-inner-stop), transparent var(--motion-state-pressed-gradient-outer-stop));
+  opacity: var(--data-pressed-opacity);
+  pointer-events: none;
+  animation: ugc-ripple-in var(--motion-state-pressed-in-duration) linear both;
+}
+
+[role='menuitem'] .ugc-ripple {
+  --data-pressed-opacity: var(--motion-state-pressed-menu-item-opacity);
+}
+
+@keyframes ugc-ripple-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: var(--data-pressed-opacity);
+  }
+}
+
+/* ---- Tooltip (component 21: measured .tooltip-*; motion tokens tooltip_*) ---- */
+
+.tooltip-root {
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: var(--create-menu-root-z-index);
+}
+
+.tooltip-enter {
+  transform-origin: 50% 0;
+  animation:
+    ugc-fade-in var(--motion-tooltip-show-duration) var(--motion-easing-decelerate) both,
+    ugc-tooltip-grow var(--motion-tooltip-show-duration) var(--motion-easing-decelerate) both;
+}
+
+.tooltip-exit {
+  animation: ugc-fade-out var(--motion-tooltip-hide-duration) var(--motion-easing-accelerate) both;
+}
+
+@keyframes ugc-tooltip-grow {
+  from {
+    transform: translateX(-50%) scale(var(--motion-tooltip-scale-from));
+  }
+  to {
+    transform: translateX(-50%) scale(1);
+  }
+}

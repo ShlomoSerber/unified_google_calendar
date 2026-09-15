@@ -40,15 +40,15 @@ function CalendarRow({ calendar, label, typeLabel }: RowProps) {
         <div className="sidebar-list-row-inner">
           <div className="sidebar-list-check-area">
             <div className="sidebar-list-check-box">
-              <div className="sidebar-list-check">
+              <div className="sidebar-list-check" style={color}>
                 <input className="sidebar-list-check-input" type="checkbox" aria-label={label} checked={on} onChange={toggle} />
-                <div className={`sidebar-list-check-mark${suffix}`} style={color}>
+                <div className={`sidebar-list-check-mark${suffix}`}>
                   <svg className={`sidebar-list-check-svg${suffix}`} viewBox="0 0 24 24" focusable="false">
                     <path className={`sidebar-list-check-path${suffix}`} d={CHECK} fill="none" />
                   </svg>
                   <div className="sidebar-list-check-mixed"></div>
                 </div>
-                <span className="sidebar-list-check-ripple"></span>
+                <span className="sidebar-list-check-ripple ugc-state ugc-state-calendar"></span>
               </div>
             </div>
           </div>
@@ -73,11 +73,11 @@ interface SectionProps {
 
 function Section({ id, title, avatar, tooltip, addButton, children }: SectionProps) {
   const [open, setOpen] = useState(true);
-  const openSettings = () => useUi.getState().openDialog({ kind: 'settings' });
+  const openAddCalendar = () => useUi.getState().openDialog({ kind: 'add-calendar' });
   const n = addButton ? '2' : '';
   const header = (
     <button className={`sidebar-list-header${n}`} type="button" aria-expanded={open} onClick={() => setOpen(!open)} title={tooltip ?? undefined}>
-      <span className={`sidebar-list-header${n}-ripple`}></span>
+      <span className={`sidebar-list-header${n}-ripple ugc-state ugc-state-primary`}></span>
       <div className={`sidebar-list-header${n}-box`}>
         <div className={`sidebar-list-header${n}-row`}>
           {avatar ? (
@@ -100,8 +100,8 @@ function Section({ id, title, avatar, tooltip, addButton, children }: SectionPro
             <div className="sidebar-list-add-box">
               <div className="sidebar-list-add-inner">
                 <span className="sidebar-list-add-span">
-                  <button className="sidebar-list-add" aria-label="Add other calendars" type="button" onClick={openSettings}>
-                    <span className="sidebar-list-add-ripple"></span>
+                  <button className="sidebar-list-add" aria-label="Add other calendars" type="button" onClick={openAddCalendar} data-tooltip="Add other calendars">
+                    <span className="sidebar-list-add-ripple ugc-state ugc-state-icon"></span>
                     <span className="sidebar-list-add-icon-box">
                       <svg className="sidebar-list-add-icon" viewBox="0 0 24 24" focusable="false">
                         <path className="sidebar-list-add-path" d={ADD_PATH} />
@@ -109,9 +109,6 @@ function Section({ id, title, avatar, tooltip, addButton, children }: SectionPro
                     </span>
                     <div className="sidebar-list-add-overlay"></div>
                   </button>
-                  <div className="sidebar-list-add-tooltip" role="tooltip">
-                    Add other calendars
-                  </div>
                 </span>
                 <div className="sidebar-list-add-foot"></div>
               </div>

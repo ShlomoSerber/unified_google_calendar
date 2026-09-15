@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, type CSSProperties, type UIEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type UIEvent } from 'react';
 import { format } from 'date-fns';
 import { dayStart, fromIsoDate, hhmm, inZone, isSameDay, isoDate, minutesOfDay } from '../../lib/dates';
 import { useUi } from '../../state/ui';
@@ -51,8 +51,13 @@ export function WeekView({ days, mode = 'week' }: WeekViewProps) {
 
   const scroller = useRef<HTMLDivElement>(null);
   const gutter = useRef<HTMLDivElement>(null);
+  // Google shows the shadow under the header only once the grid is scrolled (probed 2026-09-15:
+  // the ::before box-shadow of .week-body-inner is gone at scrollTop 0).
+  const [scrolled, setScrolled] = useState(true);
   const syncGutter = (e: UIEvent<HTMLDivElement>) => {
     if (gutter.current) gutter.current.scrollTop = e.currentTarget.scrollTop;
+    const isScrolled = e.currentTarget.scrollTop > 0;
+    if (isScrolled !== scrolled) setScrolled(isScrolled);
   };
   useEffect(() => {
     // Google opens the grid at 07:00 (layout.week_initial_scroll); when the now line falls outside
@@ -133,7 +138,7 @@ export function WeekView({ days, mode = 'week' }: WeekViewProps) {
         </div>
       </div>
       <div className={c('body')}>
-        <div className={c('body-inner')}>
+        <div className={c('body-inner')} data-scrolled={scrolled}>
           <div className={c('gutter')} ref={gutter}>
             {secondaryHours ? gutterCol(secondaryHours, 'week-gutter-col') : null}
             {gutterCol(primaryHours, 'week-gutter-col-primary')}
@@ -155,19 +160,8 @@ export function WeekView({ days, mode = 'week' }: WeekViewProps) {
                 const n = items.length;
                 const sr = n === 0 ? `No events, ${dateLabel}` : `${n} event${n === 1 ? '' : 's'}, ${dateLabel}`;
                 const nowTop = { top: `calc(var(--layout-hour-row-height) * ${minutesOfDay(now, tz) / 60})` } as CSSProperties;
-                const quickCreate = (e: React.MouseEvent<HTMLDivElement>) => {
-                  if (e.target instanceof Element && e.target.closest('[role="button"]')) return;
-                  const col = e.currentTarget.getBoundingClientRect();
-                  const rowHeight = layoutNumber(LAYOUT.hour_row_height);
-                  const minutes = ((e.clientY - col.top) / rowHeight) * 60;
-                  const snapped = Math.floor(minutes / 30) * 30; // Google snaps the new slot to the half hour
-                  const slotTop = col.top + (snapped / 60) * rowHeight;
-                  const anchor = new DOMRect(col.left, slotTop, col.width, rowHeight);
-                  const startTs = start + snapped * 60;
-                  useUi.getState().openDialog({ kind: 'quick-create', startTs, endTs: startTs + 3600, allDay: false, anchor });
-                };
                 return (
-                  <div className={c('daycol')} role="gridcell" key={ts} data-day={ts} onClick={quickCreate}>
+                  <div className={c('daycol')} role="gridcell" key={ts} data-day={ts}>
                     <h2 className="week-daycol-sr">{sr}</h2>
                     {today ? <div className="week-now-line" style={nowTop}></div> : null}
                     {today ? <div className="week-now-dot" style={nowTop}></div> : null}

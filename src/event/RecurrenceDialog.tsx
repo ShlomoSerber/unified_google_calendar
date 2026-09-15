@@ -124,12 +124,11 @@ export function RecurrenceDialog({ rrule, startTs }: RecurrenceDialogProps) {
                         </div>
                       </div>
                     </span>
-                    <div className="rec-n17" role="tooltip"></div>
                   </span>
                 </div>
                 <div className="rec-every-spin">
                   <span className="rec-inc-span">
-                    <button className="rec-inc" aria-label="Increment" type="button" onClick={() => setInterval(interval + 1)}>
+                    <button className="rec-inc" aria-label="Increment" type="button" onClick={() => setInterval(interval + 1)} data-tooltip={"Increment"}>
                       <span className="rec-n21"></span>
                       <span className="rec-n22">
                         <span className="rec-n23">
@@ -140,10 +139,9 @@ export function RecurrenceDialog({ rrule, startTs }: RecurrenceDialogProps) {
                       </span>
                       <div className="rec-n26"></div>
                     </button>
-                    <div className="rec-n27" role="tooltip">{"Increment"}</div>
                   </span>
                   <span className="rec-dec-span">
-                    <button className="rec-dec" aria-label="Decrement" type="button" onClick={() => setInterval(Math.max(1, interval - 1))}>
+                    <button className="rec-dec" aria-label="Decrement" type="button" onClick={() => setInterval(Math.max(1, interval - 1))} data-tooltip={"Decrement"}>
                       <span className="rec-n30"></span>
                       <span className="rec-n31">
                         <span className="rec-n32">
@@ -154,7 +152,6 @@ export function RecurrenceDialog({ rrule, startTs }: RecurrenceDialogProps) {
                       </span>
                       <div className="rec-n35"></div>
                     </button>
-                    <div className="rec-n36" role="tooltip">{"Decrement"}</div>
                   </span>
                 </div>
               </div>
@@ -237,7 +234,6 @@ export function RecurrenceDialog({ rrule, startTs }: RecurrenceDialogProps) {
                             </div>
                           </div>
                         </span>
-                        <div className="rec-n150" role="tooltip"></div>
                       </span>
                     </div>
                   </div>
@@ -269,12 +265,11 @@ export function RecurrenceDialog({ rrule, startTs }: RecurrenceDialogProps) {
                           </div>
                         </div>
                       </span>
-                      <div className="rec-n169" role="tooltip"></div>
                     </span>
                   </div>
                   <div className="rec-after-spin">
                     <span className="rec-after-inc-span">
-                      <button className="rec-after-inc" aria-label="Increment" type="button" onClick={() => { setEnds('after'); setCount(count + 1); }}>
+                      <button className="rec-after-inc" aria-label="Increment" type="button" onClick={() => { setEnds('after'); setCount(count + 1); }} data-tooltip={"Increment"}>
                         <span className="rec-n173"></span>
                         <span className="rec-n174">
                           <span className="rec-n175">
@@ -285,10 +280,9 @@ export function RecurrenceDialog({ rrule, startTs }: RecurrenceDialogProps) {
                         </span>
                         <div className="rec-n178"></div>
                       </button>
-                      <div className="rec-n179" role="tooltip">{"Increment"}</div>
                     </span>
                     <span className="rec-after-dec-span">
-                      <button className="rec-after-dec" aria-label="Decrement" type="button" onClick={() => { setEnds('after'); setCount(Math.max(1, count - 1)); }}>
+                      <button className="rec-after-dec" aria-label="Decrement" type="button" onClick={() => { setEnds('after'); setCount(Math.max(1, count - 1)); }} data-tooltip={"Decrement"}>
                         <span className="rec-n182"></span>
                         <span className="rec-n183">
                           <span className="rec-n184">
@@ -299,7 +293,6 @@ export function RecurrenceDialog({ rrule, startTs }: RecurrenceDialogProps) {
                         </span>
                         <div className="rec-n187"></div>
                       </button>
-                      <div className="rec-n188" role="tooltip">{"Decrement"}</div>
                     </span>
                   </div>
                 </div>

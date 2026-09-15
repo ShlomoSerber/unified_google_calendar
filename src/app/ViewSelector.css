@@ -1,6 +1,8 @@
-/* Measured rules live in src/styles/measured.css (.vsel-*). Placed under the Week button at the
-   measured page offsets (layout.vsel_*). */
+/* Measured rules live in src/styles/measured.css (.vsel-*). Placed under the view button by JS
+   (ViewSelector.tsx, layout.vsel_gap); the measured page offsets are the fallback before the
+   first layout pass. */
 .vsel-root {
+  position: fixed;
   left: var(--layout-vsel-left);
   top: var(--layout-vsel-top);
   z-index: var(--create-menu-root-z-index);
@@ -18,4 +20,12 @@
 .vsel-item[aria-disabled='true'],
 .vsel-check[aria-disabled='true'] {
   cursor: default;
+}
+
+/* Five items instead of Google's six plus the toggles: the measured heights of the menu boxes
+   would leave empty space, so they follow the content. */
+.vsel-root,
+.vsel-body,
+.vsel-menu {
+  height: auto;
 }

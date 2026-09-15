@@ -6,7 +6,7 @@ import { addDays, addMonths } from 'date-fns';
 import type { AccountInfo, CalendarInfo, EventDraft, Settings, SyncStatus } from '../types/ipc';
 import { inZone, toTs } from '../lib/dates';
 
-export type ViewKind = 'day' | 'week' | 'month' | 'agenda';
+export type ViewKind = 'day' | 'week' | 'month' | 'year' | 'agenda';
 
 export type Dialog =
   | { kind: 'none' }
@@ -19,7 +19,7 @@ export type Dialog =
   | { kind: 'welcome' }
   | { kind: 'goa' }
   | { kind: 'view-menu' }
-  | { kind: 'create-menu' };
+  | { kind: 'add-calendar' };
 
 export interface UiState {
   /** Anchor date of the visible range, UTC seconds (any instant inside the day). */
@@ -33,6 +33,10 @@ export interface UiState {
   /** A second dialog stacked over `dialog` (recurrence and scope dialogs opened from a form). */
   overlay: Dialog;
   sidebarOpen: boolean;
+  /** Direction of the last date change, for the navigation slide (docs/04 section 10). */
+  navDir: 1 | -1;
+  /** Snackbar (component 24): the text of the operation in flight or just finished, or null. */
+  notice: { text: string; busy: boolean } | null;
   /** Rule chosen in the custom recurrence dialog, picked up by the open form (undefined: none pending). */
   pendingRrule: string | null | undefined;
   settings: Settings | null;
@@ -50,6 +54,7 @@ export interface UiState {
   openOverlay: (dialog: Dialog) => void;
   closeOverlay: () => void;
   toggleSidebar: () => void;
+  setNotice: (notice: { text: string; busy: boolean } | null) => void;
   setPendingRrule: (rrule: string | null | undefined) => void;
   setSettings: (s: Settings) => void;
   setAccounts: (a: AccountInfo[]) => void;
@@ -67,6 +72,8 @@ export function step(date: number, view: ViewKind, direction: 1 | -1, tz: string
       return toTs(addDays(d, 7 * direction));
     case 'month':
       return toTs(addMonths(d, direction));
+    case 'year':
+      return toTs(addMonths(d, 12 * direction));
     case 'agenda':
       return toTs(addDays(d, 7 * direction));
   }
@@ -81,22 +88,25 @@ export const useUi = create<UiState>((set, get) => ({
   dialog: { kind: 'none' },
   overlay: { kind: 'none' },
   sidebarOpen: true,
+  navDir: 1,
+  notice: null,
   pendingRrule: undefined,
   settings: null,
   accounts: [],
   calendars: [],
   syncStatus: {},
   setView: (view) => set({ view }),
-  setDate: (date) => set({ date }),
+  setDate: (date) => set({ date, navDir: date >= get().date ? 1 : -1 }),
   setNow: (now) => set({ now }),
-  today: () => set({ date: get().now }),
-  next: () => set({ date: step(get().date, get().view, 1, get().tz) }),
-  prev: () => set({ date: step(get().date, get().view, -1, get().tz) }),
+  today: () => set({ date: get().now, navDir: get().now >= get().date ? 1 : -1 }),
+  next: () => set({ date: step(get().date, get().view, 1, get().tz), navDir: 1 }),
+  prev: () => set({ date: step(get().date, get().view, -1, get().tz), navDir: -1 }),
   openDialog: (dialog) => set({ dialog }),
   closeDialog: () => set({ dialog: { kind: 'none' }, overlay: { kind: 'none' } }),
   openOverlay: (overlay) => set({ overlay }),
   closeOverlay: () => set({ overlay: { kind: 'none' } }),
   toggleSidebar: () => set({ sidebarOpen: !get().sidebarOpen }),
+  setNotice: (notice) => set({ notice }),
   setPendingRrule: (pendingRrule) => set({ pendingRrule }),
   setSettings: (settings) => set({ settings, tz: settings.primary_tz, secondaryTz: settings.secondary_tz }),
   setAccounts: (accounts) => set({ accounts }),

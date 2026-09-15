@@ -1,0 +1,50 @@
+/* Measured rules live in src/styles/measured.css (.snackbar-*). Placement and motion here:
+   centred on the bottom edge (layout.snackbar_bottom), sliding up from below
+   (motion.snackbar_slide_*). */
+.snackbar-root {
+  top: auto;
+  left: 50%;
+  bottom: var(--layout-snackbar-bottom);
+  transform: translateX(-50%);
+  z-index: var(--create-menu-root-z-index);
+}
+
+.snackbar-enter {
+  animation: ugc-snackbar-in var(--motion-snackbar-slide-duration) var(--motion-easing-standard) both;
+}
+
+.snackbar-exit {
+  animation: ugc-snackbar-out var(--motion-snackbar-slide-duration) var(--motion-easing-standard) both;
+}
+
+@keyframes ugc-snackbar-in {
+  from {
+    transform: translate(-50%, 100%);
+  }
+  to {
+    transform: translate(-50%, 0);
+  }
+}
+
+@keyframes ugc-snackbar-out {
+  from {
+    transform: translate(-50%, 0);
+  }
+  to {
+    transform: translate(-50%, 100%);
+  }
+}
+
+/* The close button is a bare <button> around the measured icon box. */
+.snackbar-close-button {
+  display: flex;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.snackbar-close-path {
+  fill: currentColor;
+}

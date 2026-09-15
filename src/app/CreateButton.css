@@ -1,32 +1,39 @@
-/* Measured rules live in src/styles/measured.css (.create-button-*, .create-menu-*). Google
-   parks the button and its menu on the page, outside the drawer; the offsets are the dumps'
-   rootRect (layout.create_button_*, layout.create_menu_*): the button relative to .app, the
-   menu relative to the button's anchor. */
+/* Measured rules live in src/styles/measured.css (.create-button-*). Google parks the button on
+   the page, outside the drawer; the offset is the dump's rootRect (layout.create_button_*),
+   relative to .app. */
 .create-button-anchor {
   position: absolute;
   left: var(--layout-create-button-left);
   top: var(--layout-create-button-top);
 }
 
+/* "Create event" is wider than Google's "Create": the button and its label grow with the text
+   and keep the measured paddings; the dropdown arrow is gone. */
+.create-button-root,
+.create-button-box,
+.create-button-label {
+  width: auto;
+}
+
+/* The state layer covers the whole (wider) button, not Google's measured 136px. */
+.create-button-ripple {
+  width: 100%;
+}
+
 .create-button-root {
   cursor: pointer;
+  white-space: nowrap;
 }
 
-.create-menu-root {
-  left: calc(var(--layout-create-menu-left) - var(--layout-create-button-left));
-  top: calc(var(--layout-create-menu-top) - var(--layout-create-button-top) - var(--create-menu-root-margin-top));
+/* Google's shadow lives on the button's wrapper (tokens.json component.motion
+   create_button_shadow_note): rest shadow, deeper while hovered, 280 ms. */
+.create-button-shadow {
+  position: relative;
+  border-radius: var(--create-button-root-border-radius);
+  box-shadow: var(--motion-create-button-rest-shadow);
+  transition: box-shadow var(--motion-create-button-shadow-duration) var(--motion-easing-standard);
 }
 
-.create-menu-list {
-  list-style: none;
-}
-
-.create-menu-item,
-.create-menu-item-last {
-  cursor: pointer;
-}
-
-.create-menu-item[aria-disabled='true'],
-.create-menu-item-last[aria-disabled='true'] {
-  cursor: default;
+.create-button-shadow:hover {
+  box-shadow: var(--motion-create-button-hover-shadow);
 }

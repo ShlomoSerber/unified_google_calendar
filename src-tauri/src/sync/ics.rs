@@ -388,11 +388,36 @@ pub fn to_row(
                 None
             }
         });
-    // Google Meet links exported as X-GOOGLE-CONFERENCE.
+    // Google Meet links exported as X-GOOGLE-CONFERENCE; feeds written by hand (an Apps
+    // Script) may carry the link in LOCATION or DESCRIPTION instead (docs/99, 2026-09-15).
     row.hangout_link = ev
         .text("X-GOOGLE-CONFERENCE")
-        .filter(|l| l.starts_with("https://"));
+        .filter(|l| l.starts_with("https://"))
+        .or_else(|| row.location.as_deref().and_then(meet_link_in))
+        .or_else(|| row.description.as_deref().and_then(meet_link_in));
     Some(row)
+}
+
+/// First `https://meet.google.com/...` link inside free text.
+pub fn meet_link_in(text: &str) -> Option<String> {
+    let start = text.find("https://meet.google.com/")?;
+    let rest = &text[start..];
+    let end = rest
+        .find(|c: char| c.is_whitespace() || matches!(c, '<' | '>' | '"' | '\'' | ')' | ',' | ';'))
+        .unwrap_or(rest.len());
+    Some(rest[..end].trim_end_matches('.').to_string())
+}
+
+#[cfg(test)]
+mod meet_tests {
+    #[test]
+    fn meet_link_from_text() {
+        assert_eq!(
+            super::meet_link_in("Join: https://meet.google.com/abc-defg-hij, then dial in."),
+            Some("https://meet.google.com/abc-defg-hij".into())
+        );
+        assert_eq!(super::meet_link_in("Room 1"), None);
+    }
 }
 
 #[cfg(test)]

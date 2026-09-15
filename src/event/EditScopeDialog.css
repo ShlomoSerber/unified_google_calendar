@@ -1,6 +1,7 @@
 /* Measured rules live in src/styles/measured.css (.scope-*). The dialog is centred in the
    viewport (edit_scope_dialog-light.json rootRect [576,328]: (1440−288)/2, (900−245)/2). */
 .scope-scrim-page {
+  background: var(--dialog-scrim-background-color);
   position: fixed;
   inset: 0;
   z-index: var(--create-menu-root-z-index);

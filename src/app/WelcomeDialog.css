@@ -1,5 +1,6 @@
 /* Welcome and Online Accounts dialogs (F7-T6), from the measured dialog tokens (.scope-*). */
 .welcome-scrim {
+  background: var(--dialog-scrim-background-color);
   position: fixed;
   inset: 0;
   z-index: var(--create-menu-root-z-index);

@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
 import { format } from 'date-fns';
 import { ipc } from '../ipc';
+import { withNotice } from '../lib/notice';
 import { chipBackground, useTheme } from '../lib/colors';
 import { hhmm, inZone } from '../lib/dates';
 import { useUi } from '../state/ui';
@@ -31,9 +32,11 @@ export interface QuickCreateProps {
   endTs: number;
   allDay: boolean;
   anchor: DOMRect | null;
+  /** Closing: keep rendering with the exit animation (App.tsx presence). */
+  exiting?: boolean;
 }
 
-export function QuickCreate({ startTs, endTs, allDay, anchor }: QuickCreateProps) {
+export function QuickCreate({ startTs, endTs, allDay, anchor, exiting = false }: QuickCreateProps) {
   const tz = useUi((s) => s.tz);
   const calendars = useUi((s) => s.calendars);
   const accounts = useUi((s) => s.accounts);
@@ -48,7 +51,8 @@ export function QuickCreate({ startTs, endTs, allDay, anchor }: QuickCreateProps
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
-  const [pos, setPos] = useState<{ left: number; top: number } | null>(null);
+  const [pos, setPos] = useState<{ left: number; top: number; side: 'right' | 'left' } | null>(null);
+  const motion = exiting ? ' motion-popup-exit' : pos ? ` motion-popup-${pos.side}` : '';
   const close = () => useUi.getState().closeDialog();
   const accountName = (id: string) => accounts.find((a) => a.id === id)?.display_name ?? '';
 
@@ -98,8 +102,9 @@ export function QuickCreate({ startTs, endTs, allDay, anchor }: QuickCreateProps
     if (!calendar) return;
     setBusy(true);
     try {
-      await ipc.createEvent(draft());
+      const d = draft();
       close();
+      await withNotice('Saving...', 'Event saved', () => ipc.createEvent(d));
     } catch (e) {
       setError(String(e));
       setBusy(false);
@@ -114,21 +119,20 @@ export function QuickCreate({ startTs, endTs, allDay, anchor }: QuickCreateProps
   const style = { left: pos ? `${pos.left}px` : 'var(--layout-qc-left)', top: pos ? `${pos.top}px` : 'var(--layout-qc-top)' } as CSSProperties;
 
   return (
-    <div className="qc-root" role="dialog" ref={rootRef} style={style} onMouseDown={(e) => e.stopPropagation()}>
+    <div className={`qc-root${motion}`} role="dialog" ref={rootRef} style={style} onMouseDown={(e) => e.stopPropagation()}>
       <div className="qc-side-l"></div>
       <span className="qc-frame">
         <div className="qc-col">
           <div className="qc-body">
             <div className="qc-heading-sr" role="heading">{"Create"}</div>
             <span className="qc-close-wrap">
-              <button className="qc-close" aria-label="Close" type="button" onClick={close}>
+              <button className="qc-close" aria-label="Close" type="button" onClick={close} data-tooltip={"Close"}>
                 <span className="qc-close-ripple"></span>
                 <span className="qc-close-icon-box">
                   <i className="qc-close-icon">{"close"}</i>
                 </span>
                 <div className="qc-close-overlay"></div>
               </button>
-              <div className="qc-close-tooltip" role="tooltip">{"Close"}</div>
             </span>
             <div className="qc-scroll">
               <div className="qc-scroll-inner">
@@ -397,17 +401,15 @@ export function QuickCreate({ startTs, endTs, allDay, anchor }: QuickCreateProps
           </div>
           <div className="qc-head"></div>
           <span className="qc-dock-span">
-            <button className="qc-dock" aria-label="Dock to sidebar" type="button" disabled title={UNAVAILABLE}>
+            <button className="qc-dock" aria-label="Dock to sidebar" type="button" disabled title={UNAVAILABLE} data-tooltip={"Dock to sidebar"}>
               <span className="qc-dock-ripple"></span>
               <span className="qc-dock-icon-box">
                 <i className="qc-dock-icon">{"drag_handle"}</i>
               </span>
               <div className="qc-dock-overlay"></div>
             </button>
-            <div className="qc-dock-tooltip" role="tooltip">{"Dock to sidebar"}</div>
           </span>
           <span className="qc-undock-span">
-            <div className="qc-undock-tooltip" role="tooltip">{"Undock sidebar"}</div>
           </span>
         </div>
       </span>

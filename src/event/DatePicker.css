@@ -1,0 +1,21 @@
+/* The date field (looks like the editor's combo, styled in FullForm.css) and its popover: the
+   measured mini calendar box on the dialog surface, under the field. */
+.dp-root {
+  position: relative;
+}
+
+.dp-field {
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.dp-popover {
+  position: absolute;
+  left: 0;
+  top: var(--ff-recurrence-combo-height);
+  z-index: var(--create-menu-root-z-index);
+  padding: var(--create-menu-item-padding-top);
+  border-radius: var(--ff-recurrence-combo-border-radius);
+  background: var(--popup-frame-background-color);
+  box-shadow: var(--motion-create-button-hover-shadow);
+}

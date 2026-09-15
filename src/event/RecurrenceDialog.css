@@ -1,6 +1,7 @@
 /* Measured rules live in src/styles/measured.css (.rec-*). Centred like Google's dialog
    (recurrence_dialog-light.json rootRect [550,204] = (1440−340)/2, (900−492)/2). */
 .rec-scrim-page {
+  background: var(--dialog-scrim-background-color);
   position: fixed;
   inset: 0;
   z-index: var(--create-menu-root-z-index);

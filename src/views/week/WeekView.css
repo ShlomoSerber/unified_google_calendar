@@ -51,6 +51,10 @@
 
 /* Shadow under the header block and the fades at both ends (probed pseudo-elements, see
    docs/design/tokens.json component.week.body_inner_before_note). */
+.week-body-inner:not([data-scrolled='true'])::before {
+  display: none;
+}
+
 .week-body-inner::before {
   content: '';
   position: absolute;
@@ -63,8 +67,11 @@
   pointer-events: none;
 }
 
+/* Google fades the ends of the top hour line under the gutter and the scrollbar with these two
+   white gradients; the user wants the line plain (docs/99, 2026-09-15). */
 .week-gutter::before,
 .week-body-inner::after {
+  display: none;
   content: '';
   position: absolute;
   top: 0;
@@ -249,4 +256,41 @@
    say so because the dump omits values equal to a div's default. */
 .day-root {
   padding-left: 0;
+}
+
+/* Google hides these scrollers' bars with ::-webkit-scrollbar rules that WebKitGTK does not
+   honour (measurements/scrollbars.md); their overlay thumb showed as a stray grey bar under the
+   time-zone labels, painted even over open menus. They only scroll programmatically. */
+.week-header-pres,
+.week-allday-overlay-inner,
+.week-allday-row,
+.allday-root,
+.day-header-pres,
+.day-allday-overlay-inner,
+.day-allday-root {
+  overflow-x: hidden;
+}
+
+.week-gutter,
+.day-gutter {
+  overflow-y: hidden;
+}
+
+/* The measured now line has no horizontal extent in the dump (Google sets it in a rule the dump
+   did not export); it spans today's column, thinner than Google's by the user's choice
+   (tokens.json component.now_line_thin). */
+.week-now-line {
+  left: 0;
+  right: 0;
+  border-top-width: var(--now-line-thin-border-width);
+  pointer-events: none;
+}
+
+/* The hour gutter's measured height is the grid's visible height at the reference window; in a
+   shorter window it kept scrolling past the grid and the last hours never lined up (user
+   report, 2026-09-15). It stretches with the scroller instead. */
+.week-gutter,
+.day-gutter {
+  height: auto;
+  align-self: stretch;
 }

@@ -38,8 +38,8 @@ function NavButton({ dir, onClick }: NavButtonProps) {
   return (
     <div className={`sidebar-minical-${dir}-cell`}>
       <span className={`sidebar-minical-${dir}-span`}>
-        <button className={`sidebar-minical-${dir}`} aria-label={label} type="button" onClick={onClick}>
-          <span className={`sidebar-minical-${dir}-ripple`}></span>
+        <button className={`sidebar-minical-${dir}`} aria-label={label} type="button" onClick={onClick} data-tooltip={label}>
+          <span className={`sidebar-minical-${dir}-ripple ugc-state ugc-state-icon`}></span>
           <span className={`sidebar-minical-${dir}-icon-box`}>
             <span className={`sidebar-minical-${dir}-icon-span`}>
               <svg className={`sidebar-minical-${dir}-icon`} viewBox="0 0 24 24" focusable="false">
@@ -49,9 +49,6 @@ function NavButton({ dir, onClick }: NavButtonProps) {
           </span>
           <div className={`sidebar-minical-${dir}-overlay`}></div>
         </button>
-        <div className={`sidebar-minical-${dir}-tooltip`} role="tooltip">
-          {label}
-        </div>
       </span>
     </div>
   );
@@ -88,9 +85,6 @@ export function MiniCalendar() {
                 <th className="sidebar-minical-dow" key={name}>
                   <span className="sidebar-minical-dow-span">
                     <div className="sidebar-minical-dow-label">{letter}</div>
-                    <div className="sidebar-minical-dow-tooltip" role="tooltip">
-                      {name}
-                    </div>
                   </span>
                   <span className="sidebar-minical-dow-sr">{name}</span>
                 </th>
@@ -115,7 +109,7 @@ export function MiniCalendar() {
                         type="button"
                         onClick={() => setDate(ts + 12 * 3600)}
                       >
-                        <span className={`sidebar-minical-day${kind}-ripple`}></span>
+                        <span className={`sidebar-minical-day${kind}-ripple ugc-state ugc-state-primary`}></span>
                         <div className={`sidebar-minical-day${kind}-label`}>{d.getDate()}</div>
                       </button>
                     </td>

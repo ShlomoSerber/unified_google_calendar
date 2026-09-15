@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ipc } from '../ipc';
+import { withNotice } from '../lib/notice';
 import { useUi } from '../state/ui';
 import type { EditScope, EventDraft } from '../types/ipc';
 import './EditScopeDialog.css';
@@ -38,9 +39,9 @@ export function EditScopeDialog({ occurrenceId, action, draft }: EditScopeDialog
   const apply = async () => {
     setBusy(true);
     try {
-      if (action === 'delete') await ipc.deleteEvent(occurrenceId, scope);
-      else if (draft) await ipc.updateEvent(occurrenceId, draft, scope);
       useUi.getState().closeDialog(); // the popup or form underneath is done too
+      if (action === 'delete') await withNotice('Deleting...', 'Event deleted', () => ipc.deleteEvent(occurrenceId, scope));
+      else if (draft) await withNotice('Saving...', 'Event saved', () => ipc.updateEvent(occurrenceId, draft, scope));
     } catch (e) {
       setError(String(e));
       setBusy(false);

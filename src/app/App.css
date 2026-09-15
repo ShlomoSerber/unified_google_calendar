@@ -11,6 +11,46 @@
   min-height: 0;
 }
 
+/* The drawer stays mounted and slides like Google's (.QQYuzf: transform translateX(-256px) → none,
+   layout.sidebar_transition_*); the wrapper's width follows so the main area reflows with it. */
+.app-drawer {
+  display: flex;
+  flex-direction: column;
+  flex: none;
+  width: var(--layout-sidebar-width);
+  min-height: 0;
+  overflow: hidden;
+  transition:
+    width var(--layout-sidebar-transition-duration) var(--layout-sidebar-transition-timing),
+    visibility 0s linear 0s;
+}
+
+.app-drawer > .sidebar-root {
+  transition: transform var(--layout-sidebar-transition-duration) var(--layout-sidebar-transition-timing);
+}
+
+.app-drawer-closed {
+  width: 0;
+  visibility: hidden;
+  transition:
+    width var(--layout-sidebar-transition-duration) var(--layout-sidebar-transition-timing),
+    visibility 0s linear var(--layout-sidebar-transition-duration);
+}
+
+.app-drawer-closed > .sidebar-root {
+  transform: translateX(calc(-1 * var(--layout-sidebar-width)));
+}
+
+/* The Create button lives outside the drawer (CreateButton.css); it fades with it. */
+.app-create {
+  transition: opacity var(--layout-sidebar-transition-duration) var(--layout-sidebar-transition-timing);
+}
+
+.app-create-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .app-main {
   position: relative;
   flex: 1;

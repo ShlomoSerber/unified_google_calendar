@@ -1,6 +1,7 @@
 /* Settings (F7-T6): built from the measured dialog tokens (.scope-*, .rec-*, .qc-*). Widths use
    the recurrence dialog's proportions; the dialog is centred like Google's dialogs. */
 .settings-scrim {
+  background: var(--dialog-scrim-background-color);
   position: fixed;
   inset: 0;
   z-index: var(--create-menu-root-z-index);

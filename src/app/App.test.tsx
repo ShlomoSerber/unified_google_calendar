@@ -11,7 +11,8 @@ describe('App', () => {
   it('renders the top bar, the drawer and the week grid', () => {
     render(<App />);
     expect(screen.getByRole('banner')).toBeTruthy();
-    expect(screen.getByRole('heading', { level: 1, name: 'Calendar' })).toBeTruthy();
+    // The logo and the "Calendar" title were removed on the user's request (docs/99); the slot stays.
+    expect(screen.queryByRole('heading', { level: 1, name: 'Calendar' })).toBeNull();
     expect(screen.getByRole('button', { name: /^Today, / })).toBeTruthy();
     expect(screen.getByRole('grid', { name: /\d{4}$/ })).toBeTruthy(); // mini calendar
     expect(screen.getByRole('main')).toBeTruthy(); // the view's own main box

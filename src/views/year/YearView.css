@@ -1,0 +1,33 @@
+/* Measured rules live in src/styles/measured.css (.year-*). Google's page is a fixed-size
+   box for its reference window; here the root fills the main area, the grid wraps its twelve
+   month blocks (layout.year_month_cols) and the page scrolls when the window is shorter. */
+.year-root {
+  position: relative;
+  width: auto;
+  height: 100%;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+.year-page {
+  position: relative;
+  width: auto;
+  height: auto;
+}
+
+.year-grid {
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  width: auto;
+  height: auto;
+}
+
+.year-month {
+  flex: 0 0 var(--layout-year-month-cols);
+}
+
+.year-day,
+.year-day-today {
+  cursor: pointer;
+}
