@@ -1,25 +1,234 @@
 //! System tray. See docs/06-integracion-gnome.md section 2.
 //!
 //! GNOME AppIndicator: no left click, no tooltip; everything goes through the menu. The
-//! title next to the icon shows the next timed event within 12 h as `"09:30 Daily standup"`,
-//! truncated to 32 characters, refreshed after every `calendar:updated` and every minute.
+//! title next to the icon shows today's next timed event as `"09:30 Daily standup"`, truncated
+//! to 32 characters, refreshed after every `calendar:updated` and every minute. An event stays
+//! until `GRACE_SECS` after its start; when nothing is left today the title is empty until
+//! tomorrow (docs/06 section 2, user decision of 2026-09-15).
+//! The icon is today's day of month in the primary time zone (icons/day/NN.rgba and NN.png,
+//! rendered by scripts/gen-day-icons.mjs); the tray, the main window and the user's hicolor
+//! theme (for GNOME's dock) get it at start and at midnight.
 
+use std::sync::atomic::{AtomicU32, Ordering};
 use std::sync::OnceLock;
 
-use chrono::TimeZone;
+use chrono::{Datelike, TimeZone};
 use rusqlite::{params, Connection};
+use tauri::image::Image;
 use tauri::menu::{Menu, MenuItem, PredefinedMenuItem};
 use tauri::tray::TrayIconBuilder;
-use tauri::{AppHandle, Listener, Wry};
+use tauri::{AppHandle, Listener, Manager, Wry};
 
 use crate::db::queries::settings;
 use crate::error::AppError;
 
 pub const TRAY_ID: &str = "main";
 pub const TITLE_MAX_CHARS: usize = 32;
-pub const LOOKAHEAD_SECS: i64 = 12 * 3600;
+/// A started event keeps the title this long after its start.
+pub const GRACE_SECS: i64 = 120;
 
 static NEXT_ITEM: OnceLock<MenuItem<Wry>> = OnceLock::new();
+/// Day of month currently drawn on the icons; 0 until the first refresh.
+static ICON_DAY: AtomicU32 = AtomicU32::new(0);
+
+const DAY_ICON_SIZE: u32 = 64;
+/// Raw RGBA `DAY_ICON_SIZE`² pixels, index = day of month − 1 (scripts/gen-day-icons.mjs).
+static DAY_ICONS: [&[u8]; 31] = [
+    include_bytes!("../icons/day/01.rgba"),
+    include_bytes!("../icons/day/02.rgba"),
+    include_bytes!("../icons/day/03.rgba"),
+    include_bytes!("../icons/day/04.rgba"),
+    include_bytes!("../icons/day/05.rgba"),
+    include_bytes!("../icons/day/06.rgba"),
+    include_bytes!("../icons/day/07.rgba"),
+    include_bytes!("../icons/day/08.rgba"),
+    include_bytes!("../icons/day/09.rgba"),
+    include_bytes!("../icons/day/10.rgba"),
+    include_bytes!("../icons/day/11.rgba"),
+    include_bytes!("../icons/day/12.rgba"),
+    include_bytes!("../icons/day/13.rgba"),
+    include_bytes!("../icons/day/14.rgba"),
+    include_bytes!("../icons/day/15.rgba"),
+    include_bytes!("../icons/day/16.rgba"),
+    include_bytes!("../icons/day/17.rgba"),
+    include_bytes!("../icons/day/18.rgba"),
+    include_bytes!("../icons/day/19.rgba"),
+    include_bytes!("../icons/day/20.rgba"),
+    include_bytes!("../icons/day/21.rgba"),
+    include_bytes!("../icons/day/22.rgba"),
+    include_bytes!("../icons/day/23.rgba"),
+    include_bytes!("../icons/day/24.rgba"),
+    include_bytes!("../icons/day/25.rgba"),
+    include_bytes!("../icons/day/26.rgba"),
+    include_bytes!("../icons/day/27.rgba"),
+    include_bytes!("../icons/day/28.rgba"),
+    include_bytes!("../icons/day/29.rgba"),
+    include_bytes!("../icons/day/30.rgba"),
+    include_bytes!("../icons/day/31.rgba"),
+];
+
+/// The same icons as PNG at the pixel sizes of the hicolor directories the .deb installs
+/// (tauri.conf.json `bundle.icon`), copied verbatim into the user's icon theme so the .desktop
+/// icon GNOME's dock shows follows the day too. A directory's files must have its declared
+/// size: GNOME Shell scales by the declared size, not by the file's pixels.
+static DAY_ICONS_PNG_32: [&[u8]; 31] = [
+    include_bytes!("../icons/day/01-32.png"),
+    include_bytes!("../icons/day/02-32.png"),
+    include_bytes!("../icons/day/03-32.png"),
+    include_bytes!("../icons/day/04-32.png"),
+    include_bytes!("../icons/day/05-32.png"),
+    include_bytes!("../icons/day/06-32.png"),
+    include_bytes!("../icons/day/07-32.png"),
+    include_bytes!("../icons/day/08-32.png"),
+    include_bytes!("../icons/day/09-32.png"),
+    include_bytes!("../icons/day/10-32.png"),
+    include_bytes!("../icons/day/11-32.png"),
+    include_bytes!("../icons/day/12-32.png"),
+    include_bytes!("../icons/day/13-32.png"),
+    include_bytes!("../icons/day/14-32.png"),
+    include_bytes!("../icons/day/15-32.png"),
+    include_bytes!("../icons/day/16-32.png"),
+    include_bytes!("../icons/day/17-32.png"),
+    include_bytes!("../icons/day/18-32.png"),
+    include_bytes!("../icons/day/19-32.png"),
+    include_bytes!("../icons/day/20-32.png"),
+    include_bytes!("../icons/day/21-32.png"),
+    include_bytes!("../icons/day/22-32.png"),
+    include_bytes!("../icons/day/23-32.png"),
+    include_bytes!("../icons/day/24-32.png"),
+    include_bytes!("../icons/day/25-32.png"),
+    include_bytes!("../icons/day/26-32.png"),
+    include_bytes!("../icons/day/27-32.png"),
+    include_bytes!("../icons/day/28-32.png"),
+    include_bytes!("../icons/day/29-32.png"),
+    include_bytes!("../icons/day/30-32.png"),
+    include_bytes!("../icons/day/31-32.png"),
+];
+static DAY_ICONS_PNG_128: [&[u8]; 31] = [
+    include_bytes!("../icons/day/01-128.png"),
+    include_bytes!("../icons/day/02-128.png"),
+    include_bytes!("../icons/day/03-128.png"),
+    include_bytes!("../icons/day/04-128.png"),
+    include_bytes!("../icons/day/05-128.png"),
+    include_bytes!("../icons/day/06-128.png"),
+    include_bytes!("../icons/day/07-128.png"),
+    include_bytes!("../icons/day/08-128.png"),
+    include_bytes!("../icons/day/09-128.png"),
+    include_bytes!("../icons/day/10-128.png"),
+    include_bytes!("../icons/day/11-128.png"),
+    include_bytes!("../icons/day/12-128.png"),
+    include_bytes!("../icons/day/13-128.png"),
+    include_bytes!("../icons/day/14-128.png"),
+    include_bytes!("../icons/day/15-128.png"),
+    include_bytes!("../icons/day/16-128.png"),
+    include_bytes!("../icons/day/17-128.png"),
+    include_bytes!("../icons/day/18-128.png"),
+    include_bytes!("../icons/day/19-128.png"),
+    include_bytes!("../icons/day/20-128.png"),
+    include_bytes!("../icons/day/21-128.png"),
+    include_bytes!("../icons/day/22-128.png"),
+    include_bytes!("../icons/day/23-128.png"),
+    include_bytes!("../icons/day/24-128.png"),
+    include_bytes!("../icons/day/25-128.png"),
+    include_bytes!("../icons/day/26-128.png"),
+    include_bytes!("../icons/day/27-128.png"),
+    include_bytes!("../icons/day/28-128.png"),
+    include_bytes!("../icons/day/29-128.png"),
+    include_bytes!("../icons/day/30-128.png"),
+    include_bytes!("../icons/day/31-128.png"),
+];
+static DAY_ICONS_PNG_512: [&[u8]; 31] = [
+    include_bytes!("../icons/day/01-512.png"),
+    include_bytes!("../icons/day/02-512.png"),
+    include_bytes!("../icons/day/03-512.png"),
+    include_bytes!("../icons/day/04-512.png"),
+    include_bytes!("../icons/day/05-512.png"),
+    include_bytes!("../icons/day/06-512.png"),
+    include_bytes!("../icons/day/07-512.png"),
+    include_bytes!("../icons/day/08-512.png"),
+    include_bytes!("../icons/day/09-512.png"),
+    include_bytes!("../icons/day/10-512.png"),
+    include_bytes!("../icons/day/11-512.png"),
+    include_bytes!("../icons/day/12-512.png"),
+    include_bytes!("../icons/day/13-512.png"),
+    include_bytes!("../icons/day/14-512.png"),
+    include_bytes!("../icons/day/15-512.png"),
+    include_bytes!("../icons/day/16-512.png"),
+    include_bytes!("../icons/day/17-512.png"),
+    include_bytes!("../icons/day/18-512.png"),
+    include_bytes!("../icons/day/19-512.png"),
+    include_bytes!("../icons/day/20-512.png"),
+    include_bytes!("../icons/day/21-512.png"),
+    include_bytes!("../icons/day/22-512.png"),
+    include_bytes!("../icons/day/23-512.png"),
+    include_bytes!("../icons/day/24-512.png"),
+    include_bytes!("../icons/day/25-512.png"),
+    include_bytes!("../icons/day/26-512.png"),
+    include_bytes!("../icons/day/27-512.png"),
+    include_bytes!("../icons/day/28-512.png"),
+    include_bytes!("../icons/day/29-512.png"),
+    include_bytes!("../icons/day/30-512.png"),
+    include_bytes!("../icons/day/31-512.png"),
+];
+/// hicolor directory → the PNG set with its pixel size (`256x256@2` holds 512 px files).
+const HICOLOR_DIRS: [(&str, &[&[u8]; 31]); 4] = [
+    ("32x32", &DAY_ICONS_PNG_32),
+    ("128x128", &DAY_ICONS_PNG_128),
+    ("256x256@2", &DAY_ICONS_PNG_512),
+    ("512x512", &DAY_ICONS_PNG_512),
+];
+const ICON_FILE: &str = "unified-google-calendar.png";
+
+/// Writes today's PNGs into the user's hicolor theme (config::user_hicolor_dir). Errors are
+/// logged: the tray and window icons work without it.
+fn write_theme_icon(day: u32) {
+    let idx = day.clamp(1, 31) as usize - 1;
+    let root = crate::config::user_hicolor_dir();
+    for (size, icons) in HICOLOR_DIRS {
+        let dir = root.join(size).join("apps");
+        let result = std::fs::create_dir_all(&dir)
+            .and_then(|_| std::fs::write(dir.join(ICON_FILE), icons[idx]));
+        if let Err(e) = result {
+            tracing::debug!(error = %e, path = %dir.display(), "day icon not written to the icon theme");
+        }
+    }
+}
+
+/// The icon for a day of month (1–31); out-of-range days fall back to the 1st.
+pub fn day_icon(day: u32) -> Image<'static> {
+    let idx = day.clamp(1, 31) as usize - 1;
+    Image::new(DAY_ICONS[idx], DAY_ICON_SIZE, DAY_ICON_SIZE)
+}
+
+/// Today's day of month in the primary time zone (settings `primary_tz`).
+fn today_day(conn: &Connection, now: i64) -> Result<u32, AppError> {
+    let tz: String = settings::get_or(
+        conn,
+        "primary_tz",
+        crate::config::DEFAULT_PRIMARY_TZ.to_string(),
+    )?;
+    let tz: chrono_tz::Tz = tz.parse().unwrap_or(chrono_tz::UTC);
+    Ok(tz
+        .timestamp_opt(now, 0)
+        .single()
+        .map(|d| d.day())
+        .unwrap_or(1))
+}
+
+/// Draws `day` on the tray and the main window unless it is already there.
+fn apply_day_icon(app: &AppHandle, day: u32) {
+    if ICON_DAY.swap(day, Ordering::SeqCst) == day {
+        return;
+    }
+    let icon = day_icon(day);
+    if let Some(tray) = app.tray_by_id(TRAY_ID) {
+        let _ = tray.set_icon(Some(icon.clone()));
+    }
+    if let Some(w) = app.get_webview_window("main") {
+        let _ = w.set_icon(icon);
+    }
+    write_theme_icon(day);
+}
 
 /// Labels for the tray: `(title next to the icon, menu line)`.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -45,15 +254,23 @@ pub fn next_event(conn: &Connection, now: i64) -> Result<Option<NextEvent>, AppE
         crate::config::DEFAULT_PRIMARY_TZ.to_string(),
     )?;
     let tz: chrono_tz::Tz = primary_tz.parse().unwrap_or(chrono_tz::UTC);
+    // Only today's events in the primary zone: the window ends at the next local midnight.
+    let end_of_today = tz
+        .timestamp_opt(now, 0)
+        .single()
+        .and_then(|d| (d.date_naive() + chrono::Duration::days(1)).and_hms_opt(0, 0, 0))
+        .and_then(|m| tz.from_local_datetime(&m).earliest())
+        .map(|m| m.timestamp())
+        .unwrap_or(now + 86_400);
     let row = conn
         .query_row(
             "SELECT o.start_ts, e.summary FROM occurrences o \
              JOIN events e ON e.account_id=o.account_id AND e.calendar_id=o.calendar_id AND e.id=o.event_id \
              JOIN calendars c ON c.account_id=o.account_id AND c.id=o.calendar_id \
              WHERE o.all_day=0 AND o.status != 'cancelled' AND c.visible=1 AND c.deleted=0 \
-               AND o.start_ts >= ?1 AND o.start_ts <= ?2 \
+               AND o.start_ts > ?1 AND o.start_ts < ?2 \
              ORDER BY o.start_ts LIMIT 1",
-            params![now, now + LOOKAHEAD_SECS],
+            params![now - GRACE_SECS, end_of_today],
             |r| Ok((r.get::<_, i64>(0)?, r.get::<_, Option<String>>(1)?)),
         )
         .ok();
@@ -105,10 +322,17 @@ pub fn build(app: &AppHandle) -> Result<(), AppError> {
                 "quit" => app.exit(0),
                 _ => {}
             });
-    if let Some(icon) = app.default_window_icon() {
-        builder = builder.icon(icon.clone());
-    }
+    let now = crate::db::now_ts();
+    let day = crate::db::handle()
+        .and_then(|h| h.call_blocking(move |c| today_day(c, now)))
+        .unwrap_or(1);
+    builder = builder.icon(day_icon(day));
     builder.build(app).map_err(err)?;
+    ICON_DAY.store(day, Ordering::SeqCst);
+    if let Some(w) = app.get_webview_window("main") {
+        let _ = w.set_icon(day_icon(day));
+    }
+    write_theme_icon(day);
     Ok(())
 }
 
@@ -128,6 +352,10 @@ pub fn set_next_event(app: &AppHandle, label: Option<String>) {
 
 async fn refresh(app: &AppHandle) {
     let now = crate::db::now_ts();
+    match crate::db::call(move |c| today_day(c, now)).await {
+        Ok(day) => apply_day_icon(app, day),
+        Err(e) => tracing::debug!(error = %e, "day icon refresh failed"),
+    }
     match crate::db::call(move |c| next_event(c, now)).await {
         Ok(Some(n)) => {
             if let Some(tray) = app.tray_by_id(TRAY_ID) {
@@ -201,7 +429,7 @@ mod tests {
         for e in [
             mk("allday", now, "All day thing", true),
             mk("past", now - 600, "Past", false),
-            mk("far", now + 13 * 3600, "Far", false),
+            mk("tomorrow", now + 16 * 3600, "Tomorrow", false),
             mk(
                 "next",
                 now + 1800,
@@ -220,6 +448,17 @@ mod tests {
             n.menu,
             "Next: Daily standup with a very long name indeed · 09:30"
         );
+        // A started event holds the title for GRACE_SECS, then the next one takes over.
+        let started = next_event(&conn, now + 1800 + GRACE_SECS - 1)
+            .unwrap()
+            .unwrap();
+        assert!(started.title.starts_with("09:30 "));
+        let after = next_event(&conn, now + 1800 + GRACE_SECS).unwrap().unwrap();
+        assert_eq!(after.title, "10:00 Later");
+        // After today's last event nothing shows, even with an event tomorrow.
+        assert!(next_event(&conn, now + 3600 + GRACE_SECS)
+            .unwrap()
+            .is_none());
         crate::db::queries::calendars::set_visible(&conn, "local", "local-personal", false)
             .unwrap();
         assert!(next_event(&conn, now).unwrap().is_none());

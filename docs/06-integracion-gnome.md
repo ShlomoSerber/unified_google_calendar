@@ -51,7 +51,7 @@ Sync now
 Quit
 ```
 
-`set_title` se actualiza con el próximo evento no de día completo dentro de las próximas 12 horas, formato `"09:30 Daily standup"`, truncado a 32 caracteres. Sin próximo evento, título vacío. Se recalcula tras cada `calendar:updated` y cada minuto.
+`set_title` se actualiza con el próximo evento no de día completo de hoy (zona primaria), formato `"09:30 Daily standup"`, truncado a 32 caracteres. Un evento empezado sigue en el título hasta dos minutos después de su inicio; después pasa al siguiente. Sin más eventos hoy, título vacío hasta mañana (cambio del 2026-09-15, `docs/99`; antes: cualquier evento dentro de las próximas 12 horas, y desaparecía al empezar). Se recalcula tras cada `calendar:updated` y cada minuto.
 
 ## 3. Cerrar deja la app corriendo
 

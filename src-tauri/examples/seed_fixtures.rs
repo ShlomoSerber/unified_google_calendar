@@ -202,7 +202,13 @@ async fn main() {
     // One event per event colorId, two weeks after the reference week (palette measurement).
     let color_monday = monday + Duration::days(14);
     for id in 1..=11u32 {
-        let mut e = timed(color_monday, 0, (7 + id, 0), (7 + id, 45), &format!("Color {id}"));
+        let mut e = timed(
+            color_monday,
+            0,
+            (7 + id, 0),
+            (7 + id, 45),
+            &format!("Color {id}"),
+        );
         e["colorId"] = json!(id.to_string());
         events.push(e);
     }

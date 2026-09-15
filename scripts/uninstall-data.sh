@@ -8,6 +8,7 @@ DATA="$HOME/.local/share/unified-google-calendar"
 echo "This deletes:"
 echo "  $CFG  (oauth.json, verification files)"
 echo "  $DATA (data.db, tokens.bin, logs)"
+echo "  $HOME/.local/share/icons/hicolor/*/apps/unified-google-calendar.png (day-of-month icon)"
 echo "  Evolution Data Server sources named ugc-* and their events"
 read -r -p "Continue? [y/N] " a; [ "${a,,}" = "y" ] || { echo "aborted"; exit 1; }
 
@@ -28,4 +29,5 @@ for path, ifaces in objs.items():
 print(f'removed {n} EDS sources')
 PY
 rm -rf "$CFG" "$DATA"
+rm -f "$HOME"/.local/share/icons/hicolor/*/apps/unified-google-calendar.png
 echo "done"

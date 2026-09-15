@@ -133,7 +133,9 @@ fn my_response(attendees: &[AttendeeInfo], account_email: Option<&str>) -> Optio
         .find(|a| a.is_self)
         .or_else(|| {
             let email = account_email?;
-            attendees.iter().find(|a| a.email.eq_ignore_ascii_case(email))
+            attendees
+                .iter()
+                .find(|a| a.email.eq_ignore_ascii_case(email))
         })
         .map(|a| a.response_status.clone())
 }

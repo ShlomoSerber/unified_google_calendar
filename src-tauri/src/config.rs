@@ -38,6 +38,17 @@ pub fn data_dir() -> PathBuf {
         .join(DIR_NAME)
 }
 
+/// `$XDG_DATA_HOME/icons/hicolor`, default `~/.local/share/icons/hicolor`: the user's icon theme
+/// directory, searched before `/usr/share/icons` by GTK and GNOME Shell. The app drops the
+/// day-of-month icon there so the dock shows it (docs/06 section 2, tray.rs).
+pub fn user_hicolor_dir() -> PathBuf {
+    std::env::var_os("XDG_DATA_HOME")
+        .map(PathBuf::from)
+        .unwrap_or_else(|| home().join(".local").join("share"))
+        .join("icons")
+        .join("hicolor")
+}
+
 pub fn oauth_json_path() -> PathBuf {
     config_dir().join("oauth.json")
 }
