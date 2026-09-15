@@ -157,9 +157,18 @@ Formato:
 - Motivo: `docs/08` fase 7 y `docs/04` sección 4; los puntos anteriores no estaban fijados por los documentos o eran imposibles de medir.
 - Afecta: `docs/02-arquitectura.md` sección 5 (`conference_phone`, `oauth_configured`), `docs/03-modelo-de-datos.md` sección 9, `docs/04-fidelidad-visual.md` sección 4.
 
+## 2026-09-14 — Fase 8: presupuesto de RAM no alcanzado en Xvfb; variables CSS reemplazadas por valores literales
+- Quién: implementación
+- Fase/tarea: F8-T2
+- Decisión: (1) Las medidas obligatorias de `docs/02` sección 6 están aplicadas (una ventana, sin devtools en release, `[profile.release]` con `lto`, `codegen-units = 1`, `opt-level = "s"`, `panic = "abort"`, `strip`, `removeUnusedCommands`, estado en Rust, sin temporizadores en JS; las listas de mes y agenda no superan las 200 filas en la ventana de datos por defecto). (2) `src/styles/measured.css` deja de referenciar variables y lleva los valores medidos como literales generados desde `tokens.json` (con su bloque `prefers-color-scheme: dark`); `tokens.css` solo emite las variables que las hojas escritas a mano usan más las de `color`, `font`, `layout` y las paletas (271 en vez de 39 022). El WebKitWebProcess bajó de 169 a 128 MB. `scripts/check-tokens.mjs` sigue valiendo: las hojas a mano solo usan `var()` y `measured.css`/`tokens.css` son generados. (3) Resultado en Xvfb con render por software: 246.6 MB con la ventana abierta (objetivo 150) y 91.7 MB de proceso Rust oculto (objetivo 60). Unos 14 MB del proceso Rust son llvmpipe/gallium, que no cargan con GPU; el resto es el coste base de WebKitGTK 2.50 más GTK en el proceso principal. No hay más medidas previstas en `docs/02`; la versión 2 podría destruir la ventana al cerrar (liberaría los 128 MB del WebKitWebProcess) si el usuario lo pide. El usuario debe repetir `bash scripts/measure-ram.sh` en su sesión real (GPU) y anotar la cifra.
+- Motivo: medición de F8-T2.
+- Afecta: `docs/02-arquitectura.md` sección 6 (cifras), `docs/04-fidelidad-visual.md` sección 5 (`measured.css` con valores literales).
+
 ## Mediciones de RAM por fase
 
 | Fase | Fecha | Proceso Rust PSS | WebKitWebProcess PSS | Total | Nota |
 |---|---|---|---|---|---|
 | 4 | 2026-09-14 | 109.9 MB | 149.6 MB (+22.0 MB WebKitNetworkProcess) | 282.8 MB | Build de desarrollo (`target/debug`, Vite con HMR y React en modo desarrollo) en Xvfb, vista semana con 3 cuentas. No es comparable con el presupuesto de 150 MB, que se mide en release en F8-T2. |
 | 7 | 2026-09-14 | 113.9 MB | 190.8 MB (+23.6 MB WebKitNetworkProcess) | 335.3 MB | Build de desarrollo en Xvfb tras la UI completa (39 000 variables CSS medidas cargadas en el webview). Referencia interna; el presupuesto se mide en release en F8-T2. |
+| 8 | 2026-09-14 | 91.9 MB | 128.1 MB (+19.7 MB WebKitNetworkProcess) | 246.6 MB | Release (`target/release`, .deb final), ventana abierta en vista semana con 3 cuentas, en Xvfb `:150` con render por software (llvmpipe: `libLLVM` 11 MB + `libgallium` 2.8 MB dentro del proceso Rust). Antes de reemplazar las 39 000 variables CSS por valores literales en `measured.css`, el WebKitWebProcess medía 169.3 MB. |
+| 8 | 2026-09-14 | 91.7 MB | 128.4 MB (+19.7 MB WebKitNetworkProcess) | 246.7 MB | Release, ventana oculta en la bandeja (WM_DELETE_WINDOW enviado con un helper Xlib; `xdotool windowclose` destruye la ventana y cierra la app). El WebKitWebProcess no se libera al ocultar, como prevé `docs/02` sección 6. Desglose del proceso Rust: binario 14.5 MB, libwebkit2gtk 12.8 MB, libLLVM 11.1 MB, heap 10.5 MB, anónimo 20 MB, libjavascriptcore 5.6 MB, libgtk 3.1 MB. |

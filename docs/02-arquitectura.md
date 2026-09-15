@@ -232,3 +232,4 @@ Sin cola offline, sin arrastrar y soltar, sin búsqueda, sin Tasks, sin `.ics`, 
 
 - 2026-09-14 — Evento `clock:minute` (Rust → UI, cada minuto) y campo `location` en `ViewOccurrence`; `set_calendar_visible` emite `calendar:updated`: ver `docs/99-decisiones.md` (F4-T3, F4-T4).
 - 2026-09-14 — `EventDetail.conference_phone` y `Settings.oauth_configured`; segundo diálogo (`overlay`) en el estado de UI: ver `docs/99-decisiones.md` (Fase 7).
+- 2026-09-14 — Cifras de RAM de la fase 8 y `measured.css` con valores literales: ver `docs/99-decisiones.md` (Fase 8).
