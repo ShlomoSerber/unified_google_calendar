@@ -27,6 +27,15 @@ export const LAYOUT = {
   chip_radius: "6px",
   chip_padding_left: "8px",
   chip_min_height: "11px",
+  popup_width: "496px",
+  popup_left: "619px",
+  popup_top: "328.5px",
+  popup_gap: "10px",
+  popup_rise: "48px",
+  popup_gap_right: "-4px",
+  qc_width: "509.69px",
+  qc_left: "305px",
+  qc_top: "222px",
 } as const;
 
 /** Numeric part of a layout token ("60px" → 60, "1.7" → 1.7). */

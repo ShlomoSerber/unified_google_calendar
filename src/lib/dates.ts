@@ -34,12 +34,15 @@ export function weekDays(ts: number, tz: Tz): number[] {
   return Array.from({ length: 7 }, (_, i) => toTs(startOfDay(addDays(start, i))));
 }
 
-/** Six rows of seven days covering the month of `ts`, Monday first. */
-export function monthGrid(ts: number, tz: Tz): number[][] {
+/** Rows of seven days covering the month of `ts`, Monday first: as many weeks as the month
+ *  spans (four to six), like Google's month view; the mini calendar always shows six. */
+export function monthGrid(ts: number, tz: Tz, rowCount?: number): number[][] {
   const first = startOfMonth(inZone(ts, tz));
+  const last = endOfMonth(first);
   const gridStart = inZone(weekStart(toTs(first), tz), tz);
   const rows: number[][] = [];
-  for (let r = 0; r < 6; r++) {
+  const needed = rowCount ?? Math.ceil((differenceInCalendarDays(last, gridStart) + 1) / 7);
+  for (let r = 0; r < needed; r++) {
     rows.push(Array.from({ length: 7 }, (_, i) => toTs(startOfDay(addDays(gridStart, r * 7 + i)))));
   }
   return rows;

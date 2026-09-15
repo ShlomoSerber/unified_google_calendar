@@ -14,7 +14,7 @@ describe('App', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Calendar' })).toBeTruthy();
     expect(screen.getByRole('button', { name: /^Today, / })).toBeTruthy();
     expect(screen.getByRole('grid', { name: /\d{4}$/ })).toBeTruthy(); // mini calendar
-    expect(screen.getByRole('main')).toBeTruthy();
+    expect(screen.getByRole('main')).toBeTruthy(); // the view's own main box
     expect(screen.getAllByRole('columnheader').filter((e) => e.tagName === 'DIV')).toHaveLength(7); // week header (the mini calendar has 7 <th>)
   });
 });

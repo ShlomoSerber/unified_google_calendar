@@ -37,7 +37,7 @@ const EXPORTED = ['display', 'position', 'fontFamily', 'fontSize', 'fontWeight',
   'backgroundColor', 'borderTop', 'borderRight', 'borderBottom', 'borderLeft', 'borderRadius', 'paddingTop', 'paddingRight',
   'paddingBottom', 'paddingLeft', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft', 'boxShadow', 'opacity', 'minWidth',
   'minHeight', 'gap', 'flexDirection', 'alignItems', 'justifyContent', 'textTransform', 'whiteSpace', 'overflow', 'zIndex', 'cursor', 'fill',
-  'backgroundImage', 'textDecorationLine', 'textAlign', 'boxSizing', 'flex', 'verticalAlign', 'textOverflow', 'borderSpacing', 'borderCollapse', 'float'];
+  'backgroundImage', 'textDecorationLine', 'textAlign', 'boxSizing', 'flex', 'verticalAlign', 'textOverflow', 'borderSpacing', 'borderCollapse', 'float', 'order'];
 
 // Inherited properties are emitted for every node, default or not: a node that shows the page
 // default in Google may sit under a parent that does not, and the omitted value would otherwise
@@ -69,12 +69,19 @@ const DEFAULTS = {
   alignItems: 'normal', justifyContent: 'normal', textTransform: 'none', whiteSpace: 'normal', overflow: 'visible',
   zIndex: 'auto', cursor: 'auto', fill: 'rgb(0, 0, 0)',
   backgroundImage: 'none', textDecorationLine: 'none', textAlign: 'start', boxSizing: 'content-box', flex: '0 1 auto',
-  verticalAlign: 'baseline', textOverflow: 'clip', borderSpacing: '0px 0px', borderCollapse: 'separate', float: 'none',
+  verticalAlign: 'baseline', textOverflow: 'clip', borderSpacing: '0px 0px', borderCollapse: 'separate', float: 'none', order: '0',
 };
 
 const cache = new Map();
+const missing = new Set();
 function dump(name) {
   if (!cache.has(name)) {
+    if (!existsSync(`${MEAS}${name}.json`)) {
+      // A missing dark dump is reported once; the light value is used until it is captured.
+      if (!missing.has(name)) { missing.add(name); console.warn(`missing dump ${name}.json (light values used)`); }
+      cache.set(name, undefined);
+      return undefined;
+    }
     const d = JSON.parse(readFileSync(`${MEAS}${name}.json`, 'utf8'));
     for (const n of d.nodes || []) n._root = d.rootRect;
     cache.set(name, d);

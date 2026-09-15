@@ -61,5 +61,34 @@ export const APP_COMPONENTS = {
   },
 };
 
+// Phase 7 views: the same reference week; the day and month views open on 2026-09-14.
+APP_COMPONENTS.day_view = { root: '.day-main', actions: [{ type: 'view', view: 'day' }, { type: 'date', ts: WEEK_TS }, { type: 'calendars', only: ['UGC Fixtures'] }, { type: 'wait', ms: 600 }, { type: 'scroll', selector: '.week-scroller', y: 420 }, { type: 'wait', ms: 200 }], reset: [{ type: 'view', view: 'week' }] };
+APP_COMPONENTS.month_view = { root: '.month-main', actions: [{ type: 'view', view: 'month' }, { type: 'date', ts: WEEK_TS }, { type: 'calendars', only: ['UGC Fixtures'] }, { type: 'wait', ms: 800 }], reset: [{ type: 'view', view: 'week' }] };
+APP_COMPONENTS.agenda_view = { root: '.agenda-main', actions: [{ type: 'view', view: 'agenda' }, { type: 'date', ts: WEEK_TS }, { type: 'calendars', only: ['UGC Fixtures'] }, { type: 'wait', ms: 800 }], reset: [{ type: 'view', view: 'week' }] };
+
+const gridBase = [...base, { type: 'scroll', selector: '.week-scroller', y: 420 }, { type: 'wait', ms: 200 }];
+const popupOn = (title) => [...gridBase, { type: 'click', selector: `[data-title="${title}"]` }, { type: 'wait', ms: 1200 }];
+APP_COMPONENTS.event_popup = {
+  root: '.popup-root',
+  actions: popupOn('Weekend'),
+  reset: [{ type: 'key', key: 'Escape' }],
+  states: {
+    meet: { actions: popupOn('With Meet'), reset: [{ type: 'key', key: 'Escape' }] },
+    guests: { actions: popupOn('With guests'), reset: [{ type: 'key', key: 'Escape' }] },
+    recurring: { actions: popupOn('Weekly repeat'), reset: [{ type: 'key', key: 'Escape' }] },
+    left_chip: { actions: popupOn('Sixty'), reset: [{ type: 'key', key: 'Escape' }] },
+  },
+};
+
+// Quick create: a real click on Thursday 16:00 (same slot as capture.mjs QC_X/QC_Y).
+APP_COMPONENTS.quick_create = {
+  root: '.qc-root',
+  actions: [...gridBase, { type: 'click_at', x: 366.34 + 9 + 149.8 * 3 + 75, y: 196 + 16 * 60 - 420 + 10 }, { type: 'wait', ms: 800 }],
+  reset: [{ type: 'key', key: 'Escape' }],
+  states: {
+    with_title: { actions: [...gridBase, { type: 'click_at', x: 366.34 + 9 + 149.8 * 3 + 75, y: 196 + 16 * 60 - 420 + 10 }, { type: 'wait', ms: 500 }, { type: 'type', text: 'Title' }, { type: 'wait', ms: 300 }], reset: [{ type: 'key', key: 'Escape' }] },
+  },
+};
+
 /** Actions that leave the app as the user had it (every calendar visible). */
 export const RESTORE = showAll;

@@ -23,10 +23,9 @@ export function chipShape(heightPx: number): ChipShape {
 /** "10:00 to 11:00, Title, Calendar: X, No location, September 19, 2026" (Google's hidden description). */
 export function chipDescription(o: ViewOccurrence, tz: string, calendarName: string, dateLabel: string): string {
   const title = o.title ?? '(No title)';
-  const loc = o.location ?? 'No location';
+  const loc = o.location ? `Location: ${o.location}` : 'No location';
   if (o.all_day) return `All day, ${title}, Calendar: ${calendarName}, ${loc}, ${dateLabel}`;
-  const status = o.my_response === 'tentative' ? ', Tentative' : o.my_response === 'declined' ? ', Declined' : '';
-  return `${hhmm(o.start, tz)} to ${hhmm(o.end, tz)}, ${title}${status}, Calendar: ${calendarName}, ${loc}, ${dateLabel}`;
+  return `${hhmm(o.start, tz)} to ${hhmm(o.end, tz)}, ${title}, Calendar: ${calendarName}, ${loc}, ${dateLabel}`;
 }
 
 export interface EventChipProps {

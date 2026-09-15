@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const tokens = JSON.parse(readFileSync(resolve(root, 'docs/design/tokens.json'), 'utf8'));
-const isMeta = k => k === 'name' || k.startsWith('source') || k.includes('note') || k.startsWith('_');
+const isMeta = k => k === 'name' || k.startsWith('source') || /(^|_)note$/.test(k) || k.startsWith('_');
 const kebab = s => s.replace(/_/g, '-').replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
 const skipped = [];
 

@@ -218,3 +218,37 @@
   background: var(--color-surface);
   color: var(--color-on-surface);
 }
+
+/* Day view: the measured header shows today; another day takes the week header's plain colours. */
+.day-header-dow-other {
+  color: var(--week-header-dow-color);
+}
+
+.day-header-daynum-other {
+  color: var(--week-header-daynum-color);
+  background-color: transparent;
+}
+
+/* Google's main box is absolute; it fills the area left of the 16px gaps (layout.main_gap_*). */
+.day-main {
+  inset: 0 var(--layout-main-gap-right) var(--layout-main-gap-bottom) 0;
+  margin: 0;
+}
+
+.day-main-box {
+  inset: 0;
+}
+
+.day-main-sr {
+  margin: 0;
+}
+
+.week-root {
+  height: 100%;
+}
+
+/* The day view grid has no left padding (day_view-light.json node 4); its measured rule cannot
+   say so because the dump omits values equal to a div's default. */
+.day-root {
+  padding-left: 0;
+}

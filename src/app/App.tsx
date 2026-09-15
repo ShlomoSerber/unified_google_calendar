@@ -1,12 +1,16 @@
 import { useEffect } from 'react';
 import { ipc, onAccountChanged, onClockMinute, onSyncStatus } from '../ipc';
-import { weekDays } from '../lib/dates';
+import { dayStart, weekDays } from '../lib/dates';
 import { useUi } from '../state/ui';
 import { TopBar } from './TopBar';
 import { Sidebar } from './Sidebar';
 import { CreateButton } from './CreateButton';
 import { WeekView } from '../views/week/WeekView';
+import { MonthView } from '../views/month/MonthView';
+import { AgendaView } from '../views/agenda/AgendaView';
 import { AccountsPanel } from './AccountsPanel';
+import { EventPopup } from '../event/EventPopup';
+import { QuickCreate } from '../event/QuickCreate';
 import './App.css';
 
 // Shell: top bar, sidebar and the view router (docs/02 section 4 `src/app/`).
@@ -42,11 +46,16 @@ export function App() {
       <div className="app-body">
         {sidebarOpen ? <Sidebar /> : null}
         {sidebarOpen ? <CreateButton /> : null}
-        <div className="app-main" role="main">
-          {view === 'week' ? <WeekView days={days} /> : <div className="app-placeholder">{view} view arrives with phase 7</div>}
+        <div className="app-main">
+          {view === 'week' ? <WeekView days={days} /> : null}
+          {view === 'day' ? <WeekView days={[dayStart(date, tz)]} mode="day" /> : null}
+          {view === 'month' ? <MonthView /> : null}
+          {view === 'agenda' ? <AgendaView /> : null}
         </div>
       </div>
       {dialog.kind === 'settings' ? <AccountsPanel /> : null}
+      {dialog.kind === 'event' ? <EventPopup occurrenceId={dialog.occurrenceId} anchor={dialog.anchor} /> : null}
+      {dialog.kind === 'quick-create' ? <QuickCreate startTs={dialog.startTs} endTs={dialog.endTs} allDay={dialog.allDay} anchor={dialog.anchor} /> : null}
     </div>
   );
 }

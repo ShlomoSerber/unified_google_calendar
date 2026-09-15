@@ -15,6 +15,21 @@ mkdirSync(OUT, { recursive: true });
 const chipJs = (title) => `(() => { const t = ${JSON.stringify(title)}; return [...document.querySelectorAll('[role=main] [role=button]')].find(b => { const s = (b.innerText||'').replace(/\\n/g, ' '); return /^\\d\\d:\\d\\d to \\d\\d:\\d\\d, /.test(s) && s.slice(s.indexOf(', ') + 2).startsWith(t + ','); }); })()`;
 const allDayChipJs = (title) => `[...document.querySelectorAll('[role=main] [role=button]')].find(b => (b.innerText||'').startsWith(${JSON.stringify(title)}))`;
 
+// Google's initial scroll depends on the clock (tokens.json layout.week_initial_scroll_note); the
+// grid components are dumped at the 07:00 position so every run and the app compare alike.
+const GRID_SCROLL = 420;
+
+const DIALOG = `[...document.querySelectorAll('[role=dialog]')].find(d => d.getBoundingClientRect().width > 0)`;
+// Thursday column centre at 16:00 with the grid at GRID_SCROLL (hour_grid-light.json geometry).
+const QC_X = 366.34 + 9 + 149.8 * 3 + 75;
+const QC_Y = 196 + 16 * 60 - GRID_SCROLL + 10;
+async function openFullForm(cdp) {
+  await cdp.clickAt(QC_X, QC_Y);
+  await cdp.sleep(1500);
+  await cdp.clickElement(`[...document.querySelectorAll('[role=dialog] button')].find(b => /More options/.test(b.innerText||''))`);
+  await cdp.sleep(4000);
+}
+
 /** Component registry. `root` is a JS expression returning the root element. */
 export const COMPONENTS = {
   topbar: { url: WEEK, root: `document.querySelector('header[role=banner]')` },
@@ -83,15 +98,76 @@ export const COMPONENTS = {
       past: { root: chipJs('Sixty') },
     },
   },
-  day_view: { url: 'https://calendar.google.com/calendar/u/0/r/day/2026/9/14', root: `document.querySelector('[role=main]')` },
+  day_view: { url: 'https://calendar.google.com/calendar/u/0/r/day/2026/9/14', grid: true, root: `document.querySelector('[role=main]')` },
   month_view: { url: 'https://calendar.google.com/calendar/u/0/r/month/2026/9/14', root: `document.querySelector('[role=main]')` },
   agenda_view: { url: 'https://calendar.google.com/calendar/u/0/r/agenda/2026/9/14', root: `document.querySelector('[role=main]')` },
   view_selector: {
     url: WEEK,
-    prepare: async (cdp) => { await cdp.clickElement(`[...document.querySelectorAll('header [role=button]')].find(b => /^Week/.test((b.innerText||'').trim()))`); await cdp.sleep(1200); },
-    root: `[...document.querySelectorAll('[role=menu]')].find(m => m.getBoundingClientRect().width > 0)`,
+    prepare: async (cdp) => { await cdp.clickElement(`[...document.querySelectorAll('header button')].find(b => /^Week/.test((b.innerText||'').trim()) && b.getBoundingClientRect().width > 0)`); await cdp.sleep(1200); },
+    root: `[...document.querySelectorAll('[role=menu]')].find(m => m.getBoundingClientRect().width > 0).parentElement.parentElement`,
+  },
+  // Component 14: the detail popup after clicking a chip. Each state records the popup and, in
+  // its .md, the chip it anchors to (positioning rules of docs/04 section 8).
+  event_popup: {
+    url: WEEK,
+    grid: true,
+    prepare: async (cdp) => { await cdp.clickElement(chipJs('Weekend')); await cdp.sleep(1500); },
+    root: DIALOG,
+    states: {
+      meet: { prepare: async (cdp) => { await cdp.clickElement(chipJs('With Meet')); await cdp.sleep(1500); } },
+      guests: { prepare: async (cdp) => { await cdp.clickElement(chipJs('With guests')); await cdp.sleep(1500); } },
+      recurring: { prepare: async (cdp) => { await cdp.clickElement(chipJs('Weekly repeat')); await cdp.sleep(1500); } },
+      // A chip at the left of the grid: the popup fits at its right.
+      left_chip: { prepare: async (cdp) => { await cdp.clickElement(chipJs('Sixty')); await cdp.sleep(1500); } },
+    },
+  },
+  // Component 15: click on an empty slot (Thursday 16:00) of the grid scrolled to 07:00.
+  quick_create: {
+    url: WEEK,
+    grid: true,
+    prepare: async (cdp) => { await cdp.clickAt(QC_X, QC_Y); await cdp.sleep(1500); },
+    root: DIALOG,
+    states: {
+      with_title: { prepare: async (cdp) => { await cdp.clickAt(QC_X, QC_Y); await cdp.sleep(1500); await cdp.typeText('Title'); await cdp.sleep(500); } },
+    },
+  },
+  // Component 16: "More options" of the quick create opens the edit page (navigates away).
+  full_form: {
+    url: WEEK,
+    grid: true,
+    navigates: true,
+    prepare: async (cdp) => { await openFullForm(cdp); },
+    root: `document.querySelector('[role=main]')`,
+  },
+  // Component 18: "Custom..." in the repeat dropdown of the edit page.
+  recurrence_dialog: {
+    url: WEEK,
+    grid: true,
+    navigates: true,
+    prepare: async (cdp) => {
+      await openFullForm(cdp);
+      await cdp.clickElement(`[...document.querySelectorAll('[role=main] [role=combobox]')].find(c => /Does not repeat/.test(c.innerText||''))`);
+      await cdp.sleep(1000);
+      await cdp.clickElement(`[...document.querySelectorAll('[role=option], [role=menuitem]')].find(o => /Custom/.test(o.innerText||'') && o.getBoundingClientRect().width > 0)`);
+      await cdp.sleep(1500);
+    },
+    root: DIALOG,
+  },
+  // Component 19: the this/following/all dialog, reached through "Delete event" on a recurring
+  // chip; the dialog is dismissed with Escape, nothing is deleted.
+  edit_scope_dialog: {
+    url: WEEK,
+    grid: true,
+    prepare: async (cdp) => {
+      await cdp.clickElement(chipJs('Weekly repeat')); await cdp.sleep(1500);
+      await cdp.clickElement(`[...document.querySelectorAll('[role=dialog] button')].find(b => (b.getAttribute('aria-label')||'') === 'Delete event')`);
+      await cdp.sleep(1500);
+    },
+    root: `[...document.querySelectorAll('[role=dialog]')].filter(d => d.getBoundingClientRect().width > 0).pop()`,
+    cleanup: async (cdp) => { await cdp.pressKey('Escape'); await cdp.sleep(500); },
   },
 };
+
 
 // Tentative/declined chips live on the primary calendar (invitation copies). Measured with it shown.
 COMPONENTS.event_chip.states.tentative = {
@@ -112,9 +188,6 @@ async function toggleCalendar(cdp, label, on) {
   if (checked !== null && checked !== on) { await cdp.clickElement(sel); await cdp.sleep(1500); }
 }
 
-// Google's initial scroll depends on the clock (tokens.json layout.week_initial_scroll_note); the
-// grid components are dumped at the 07:00 position so every run and the app compare alike.
-const GRID_SCROLL = 420;
 async function scrollGrid(cdp) {
   await cdp.eval(`(() => { const g = document.querySelector('[role=main] [role=grid]'); const row = [...g.querySelectorAll('[role=row]')].find(r => r.getBoundingClientRect().height > 1000); row.parentElement.scrollTop = ${GRID_SCROLL}; })()`);
   await cdp.sleep(600);
@@ -162,6 +235,7 @@ export async function captureAll(names, themes = ['light', 'dark']) {
             writeFileSync(`${OUT}${file}.png`, png);
             report.push(`${file}: ${json.nodes.length} nodes, rect ${json.rootRect.map(Math.round).join(',')}`);
             if (v.cleanup) await v.cleanup(cdp);
+            if (v.navigates || comp.navigates) current = null; // the next variant must navigate afresh
           } catch (e) {
             report.push(`${name}${v.key ? '-' + v.key : ''}-${theme}: FAILED ${e.message}`);
             try { if (v.cleanup) await v.cleanup(cdp); } catch { /* best effort */ }

@@ -87,6 +87,16 @@ pub struct ViewOccurrence {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct ConferencePhone {
+    /// "(AR) +54 11 3986-3700" as Google labels it.
+    pub label: String,
+    pub uri: Option<String>,
+    pub pin: Option<String>,
+    /// "More phone numbers" page.
+    pub more_url: Option<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ViewPayload {
     pub from: i64,
     pub to: i64,
@@ -155,6 +165,8 @@ pub struct EventDetail {
     pub recurrence: Vec<String>,
     pub meet_link: Option<String>,
     pub conference_label: Option<String>,
+    /// Dial-in entry of the conference, when Google provides one.
+    pub conference_phone: Option<ConferencePhone>,
     pub html_link: Option<String>,
     pub attendees: Vec<AttendeeInfo>,
     pub organizer: Option<AttendeeInfo>,
@@ -449,6 +461,12 @@ mod tests {
                 recurrence: vec!["RRULE:FREQ=WEEKLY;BYDAY=MO".into()],
                 meet_link: Some("https://meet.google.com/abc-defg-hij".into()),
                 conference_label: Some("Google Meet".into()),
+                conference_phone: Some(ConferencePhone {
+                    label: "(AR) +54 11 3986-3700".into(),
+                    uri: Some("tel:+54-11-3986-3700".into()),
+                    pin: Some("224 472 849 1492".into()),
+                    more_url: Some("https://tel.meet/gwy-wewv-yzc?pin=2244728491492".into()),
+                }),
                 html_link: Some("https://www.google.com/calendar/event?eid=abc".into()),
                 attendees: vec![
                     attendee("someone@example.com", "accepted", true, true),

@@ -19,8 +19,4 @@
   flex-direction: column;
 }
 
-/* The grid card leaves 16px free on the right and at the bottom (layout.main_gap_*). */
-.app-main {
-  padding-right: var(--layout-main-gap-right);
-  padding-bottom: var(--layout-main-gap-bottom);
-}
+/* Each view renders Google's absolute main box inside this area (layout.main_gap_*). */

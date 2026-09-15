@@ -3,7 +3,7 @@
 // the payload of the visible range.
 import { create } from 'zustand';
 import { addDays, addMonths } from 'date-fns';
-import type { AccountInfo, CalendarInfo, Settings, SyncStatus } from '../types/ipc';
+import type { AccountInfo, CalendarInfo, EventDraft, Settings, SyncStatus } from '../types/ipc';
 import { inZone, toTs } from '../lib/dates';
 
 export type ViewKind = 'day' | 'week' | 'month' | 'agenda';
@@ -12,7 +12,7 @@ export type Dialog =
   | { kind: 'none' }
   | { kind: 'event'; occurrenceId: string; anchor: DOMRect | null }
   | { kind: 'quick-create'; startTs: number; endTs: number; allDay: boolean; anchor: DOMRect | null }
-  | { kind: 'full-form'; occurrenceId: string | null; startTs: number; endTs: number; allDay: boolean }
+  | { kind: 'full-form'; occurrenceId: string | null; startTs: number; endTs: number; allDay: boolean; draft?: EventDraft }
   | { kind: 'edit-scope'; occurrenceId: string; action: 'update' | 'delete' }
   | { kind: 'settings' }
   | { kind: 'welcome' }

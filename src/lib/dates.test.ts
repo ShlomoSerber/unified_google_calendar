@@ -41,11 +41,14 @@ describe('dates', () => {
     expect(hhmm(WED, 'America/Mexico_City')).toBe('12:30');
   });
 
-  it('month grid has six Monday-first rows', () => {
+  it('month grid has Monday-first rows covering the month', () => {
     const grid = monthGrid(WED, BA);
-    expect(grid).toHaveLength(6);
+    expect(grid).toHaveLength(5); // September 2026 spans five Monday-first weeks (like Google's month view)
     expect(grid[0]?.map((d) => isoDate(d, BA))[0]).toBe('2026-08-31');
-    expect(grid[5]?.map((d) => isoDate(d, BA))[6]).toBe('2026-10-11');
+    expect(grid[4]?.map((d) => isoDate(d, BA))[6]).toBe('2026-10-04');
+    const six = monthGrid(WED, BA, 6);
+    expect(six).toHaveLength(6);
+    expect(six[5]?.map((d) => isoDate(d, BA))[6]).toBe('2026-10-11');
   });
 
   it('iso date round trip and all-day spans', () => {

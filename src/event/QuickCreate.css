@@ -1,0 +1,78 @@
+/* Measured rules live in src/styles/measured.css (.qc-*). Positioning by JS, the dynamic
+   calendar colour and the calendar picker are added here. */
+.qc-root {
+  position: fixed;
+  z-index: var(--create-menu-root-z-index);
+}
+
+.qc-side-l,
+.qc-side-r {
+  width: 0;
+}
+
+.qc-title-field,
+.qc-title-line,
+.qc-title-input {
+  width: 100%;
+}
+
+.qc-title-input {
+  outline: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.qc-title-input::placeholder {
+  color: var(--color-on-surface-variant);
+}
+
+.qc-calendar-dot {
+  background-color: var(--data-chip-bg);
+}
+
+.qc-calendar-cell-inner {
+  position: relative;
+}
+
+.qc-calendar-menu {
+  left: 0;
+  top: var(--qc-calendar-button-height);
+}
+
+.qc-when-meta-list,
+.qc-calendar-meta-list {
+  list-style: none;
+  padding: 0;
+}
+
+.qc-when-tz::after,
+.qc-calendar-busy::after,
+.qc-calendar-visibility::after {
+  content: ' · ';
+}
+
+.qc-tab-event,
+.qc-when-button,
+.qc-guests-button,
+.qc-meet-button,
+.qc-location-button,
+.qc-description-button,
+.qc-calendar-button,
+.qc-more,
+.qc-save,
+.qc-close {
+  cursor: pointer;
+}
+
+.qc-tab-task:disabled,
+.qc-tab-ooo:disabled,
+.qc-tab-appt:disabled,
+.qc-dock:disabled,
+.qc-save:disabled {
+  cursor: default;
+}
+
+.qc-error {
+  padding: 0 var(--qc-tabs-margin-left);
+  color: var(--week-now-dot-background-color);
+}

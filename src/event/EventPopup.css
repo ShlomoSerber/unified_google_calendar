@@ -1,0 +1,95 @@
+/* Measured rules live in src/styles/measured.css (.popup-*). This file positions the popup
+   (JS computes left/top from the anchor rule) and styles the rows Google's dumps could not
+   show: the RSVP buttons, "also in" and the conflict line, using neighbouring tokens. */
+.popup-root {
+  position: fixed;
+  z-index: var(--create-menu-root-z-index);
+}
+
+.popup-side-l1,
+.popup-side-l2,
+.popup-side-r1,
+.popup-side-r2 {
+  width: 0;
+}
+
+.popup-frame,
+.popup-col,
+.popup-col2 {
+  flex: 1;
+  min-width: 0;
+}
+
+.popup-title-dot {
+  background-color: var(--data-chip-bg);
+}
+
+.popup-notes-link,
+.popup-notes-more:disabled,
+.popup-email:disabled,
+.popup-options:disabled {
+  cursor: default;
+}
+
+.popup-error {
+  padding: var(--popup-header-row-padding-left);
+  background: var(--popup-frame-background-color);
+  color: var(--color-on-surface);
+}
+
+.popup-options-cell {
+  position: relative;
+}
+
+.popup-options-menu {
+  top: var(--popup-options-cell-height);
+  right: 0;
+  left: auto;
+}
+
+/* RSVP ("Going?"): a row under the guest list, in the Create-menu item style; Google's own
+   attendee copy was not measured (the fixtures are organiser copies). */
+.popup-rsvp-row {
+  display: flex;
+  align-items: center;
+  min-height: var(--popup-location-row-min-height);
+  padding-left: var(--popup-tree-padding-left);
+  padding-right: var(--popup-treeitem-padding-right);
+  margin-left: var(--popup-tree-margin-left);
+  gap: var(--create-menu-item-gap);
+}
+
+.popup-rsvp {
+  display: flex;
+  gap: var(--create-menu-item-padding-top);
+}
+
+.popup-rsvp-button {
+  padding: 0 var(--create-menu-item-padding-top);
+  border-radius: var(--create-button-root-border-radius);
+  font-weight: var(--popup-notes-link-font-weight);
+  color: var(--popup-notes-link-color);
+}
+
+.popup-rsvp-current {
+  background-color: var(--color-primary-container);
+}
+
+.popup-guest-role {
+  margin-left: var(--create-menu-item-padding-top);
+  color: var(--color-on-surface-variant);
+}
+
+.popup-guest-status-declined {
+  color: var(--color-on-surface-variant);
+}
+
+.popup-also-in,
+.popup-conflict {
+  line-height: var(--popup-creator-line-height);
+  color: var(--color-on-surface-variant);
+}
+
+.popup-conflict {
+  color: var(--week-now-dot-background-color);
+}

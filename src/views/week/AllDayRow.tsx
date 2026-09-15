@@ -14,9 +14,11 @@ export interface AllDayRowProps {
   days: number[];
   occurrences: ViewOccurrence[];
   calendarName: (o: ViewOccurrence) => string;
+  mode?: 'week' | 'day';
 }
 
-export function AllDayRow({ days, occurrences, calendarName }: AllDayRowProps) {
+export function AllDayRow({ days, occurrences, calendarName, mode = 'week' }: AllDayRowProps) {
+  const c = (name: string) => (mode === 'day' ? `allday-${name} day-allday-${name}` : `allday-${name}`);
   const tz = useUi((s) => s.tz);
   const theme = useTheme();
   const rows = layoutAllDay(occurrences, days);
@@ -27,15 +29,15 @@ export function AllDayRow({ days, occurrences, calendarName }: AllDayRowProps) {
     useUi.getState().openDialog({ kind: 'event', occurrenceId: o.id, anchor: e.currentTarget.getBoundingClientRect() });
   };
   return (
-    <div className="allday-root" role="row" style={rootStyle}>
-      <div className="allday-pad"></div>
-      <div className="allday-pres" role="presentation">
-        <ul className="allday-ul">
+    <div className={c('root')} role="row" style={rootStyle}>
+      <div className={c('pad')}></div>
+      <div className={c('pres')} role="presentation">
+        <ul className={c('ul')}>
           {days.map((ts) => (
-            <li className="allday-li" key={ts}></li>
+            <li className={c('li')} key={ts}></li>
           ))}
         </ul>
-        <div className="allday-cells" role="presentation">
+        <div className={c('cells')} role="presentation">
           {days.map((ts, col) => {
             const mine = rows.filter((r) => r.startCol === col);
             const dateLabel = format(inZone(ts, tz), 'EEEE, MMMM d');
@@ -49,9 +51,9 @@ export function AllDayRow({ days, occurrences, calendarName }: AllDayRowProps) {
               );
             }
             return (
-              <div className="allday-cell" role="gridcell" key={ts}>
-                <h2 className="allday-cell-sr">{sr}</h2>
-                <div className="allday-cell-chips" role="presentation">
+              <div className={c('cell')} role="gridcell" key={ts}>
+                <h2 className={c('cell-sr')}>{sr}</h2>
+                <div className={c('cell-chips')} role="presentation">
                   {mine.map((r) => {
                     const o = r.occurrence;
                     const title = o.title ?? '(No title)';
@@ -63,12 +65,12 @@ export function AllDayRow({ days, occurrences, calendarName }: AllDayRowProps) {
                       width: `${(r.span / days.length) * 100}%`,
                     } as CSSProperties;
                     return (
-                      <div className="allday-chip-wrap" key={o.id} style={style}>
-                        <div className="allday-chip" role="button" tabIndex={0} data-title={title} onClick={open(o)}>
-                          <span className="allday-chip-text-box">
-                            <span className="allday-chip-text">{title}</span>
+                      <div className={c('chip-wrap')} key={o.id} style={style}>
+                        <div className={c('chip')} role="button" tabIndex={0} data-title={title} onClick={open(o)}>
+                          <span className={c('chip-text-box')}>
+                            <span className={c('chip-text')}>{title}</span>
                           </span>
-                          <span className="allday-chip-sr">{chipDescription(o, tz, calendarName(o), format(inZone(ts, tz), 'MMMM d, yyyy'))}</span>
+                          <span className={c('chip-sr')}>{chipDescription(o, tz, calendarName(o), format(inZone(ts, tz), 'MMMM d, yyyy'))}</span>
                         </div>
                       </div>
                     );

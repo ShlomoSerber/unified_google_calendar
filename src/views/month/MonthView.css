@@ -1,0 +1,54 @@
+/* Measured rules live in src/styles/measured.css (.month-*). Only sizing of fluid nodes and the
+   dynamic calendar colour are added here. */
+.month-root {
+  height: 100%;
+}
+
+.month-row-bg,
+.month-row-nums {
+  inset: 0;
+}
+
+.month-cells {
+  height: 100%;
+}
+
+.month-cell-sr,
+.month-num,
+.month-num-today,
+.month-num-first,
+.month-num-other {
+  margin-top: var(--month-num-margin-top);
+  margin-bottom: var(--month-num-margin-bottom);
+}
+
+.month-num-today {
+  margin-top: var(--month-num-today-margin-top);
+}
+
+.month-cell-sr {
+  margin: 0;
+}
+
+.month-num,
+.month-num-today,
+.month-num-first,
+.month-num-other,
+.month-chip,
+.month-timed,
+.month-more {
+  cursor: pointer;
+}
+
+.month-chip {
+  background-color: var(--data-chip-bg);
+}
+
+.month-timed-dot {
+  border-color: var(--data-calendar-color);
+}
+
+.month-timed-dot {
+  width: 0;
+  height: 0;
+}

@@ -29,6 +29,12 @@
   ],
   "meet_link": "https://meet.google.com/abc-defg-hij",
   "conference_label": "Google Meet",
+  "conference_phone": {
+    "label": "(AR) +54 11 3986-3700",
+    "uri": "tel:+54-11-3986-3700",
+    "pin": "224 472 849 1492",
+    "more_url": "https://tel.meet/gwy-wewv-yzc?pin=2244728491492"
+  },
   "html_link": "https://www.google.com/calendar/event?eid=abc",
   "attendees": [
     {

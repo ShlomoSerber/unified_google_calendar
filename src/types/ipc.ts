@@ -105,6 +105,15 @@ export interface ConflictInfo {
   account_name: string;
 }
 
+export interface ConferencePhone {
+  /** "(AR) +54 11 3986-3700" as Google labels it. */
+  label: string;
+  uri: string | null;
+  pin: string | null;
+  /** "More phone numbers" page. */
+  more_url: string | null;
+}
+
 export interface EventDetail {
   occurrence_id: string;
   event_id: string;
@@ -134,6 +143,8 @@ export interface EventDetail {
   recurrence: string[];
   meet_link: string | null;
   conference_label: string | null;
+  /** Dial-in entry of the conference, when Google provides one. */
+  conference_phone: ConferencePhone | null;
   html_link: string | null;
   attendees: AttendeeInfo[];
   organizer: AttendeeInfo | null;

@@ -64,7 +64,10 @@
     "component.chip.stacked_after.top": "-1px",
     "component.chip.stacked_after.border_radius": "7px",
     "component.chip.stacked_after_note": "getComputedStyle(chip, \"::after\") on calendar.google.com (2026-09-14): chips in column 1+ of an overlap cluster carry a 1px outline in the surface colour (absolute, −1px/−1px, chip size + 2px, radius 7px); column 0 chips have none. The chip z-index is 5 + column (Triple A 5, B 6, C 7).",
-    "layout.allday_row_min_height_note": "not measured: the reference week has all-day events in every dump (allday_row.md)"
+    "layout.allday_row_min_height_note": "not measured: the reference week has all-day events in every dump (allday_row.md)",
+    "layout.popup_gap": "10px",
+    "layout.popup_gap_right": "-4px",
+    "layout.popup_anchor_note": "Probed on calendar.google.com (2026-09-14, 1440×900) by clicking ten chips and seven empty slots. Both the event popup and the quick-create dialog anchor to the day COLUMN of the chip/slot: at the right when it fits, left edge = column right − 4px (Sixty: column right 525.1 → popup 521); otherwise at the left, right edge = column left − 10px (Weekend: 1124.3 → 1115; quick create in Thursday: 824.7 → 305; in Tuesday: 525.1 → 6). Vertically the event popup is centred in the viewport whatever the chip (243px → 328.5; 449 → 225.5; 405 → 247.5; 325 → 287.5). The quick-create dialog is centred too (193.5 for 513px) unless the clicked slot starts below the centred dialog: then its bottom edge sits 1px above the slot top (slot at 736 → 222; at 796 → 283)."
   },
   "font": {
     "topbar_title": {
@@ -433,6 +436,36 @@
       "event_chip-fifteen",
       0,
       "minHeight"
+    ],
+    "popup_width": [
+      "event_popup",
+      0,
+      "rect.w"
+    ],
+    "popup_left": [
+      "event_popup",
+      0,
+      "root.x"
+    ],
+    "popup_top": [
+      "event_popup",
+      0,
+      "root.y"
+    ],
+    "qc_width": [
+      "quick_create",
+      0,
+      "rect.w"
+    ],
+    "qc_left": [
+      "quick_create",
+      0,
+      "root.x"
+    ],
+    "qc_top": [
+      "quick_create",
+      0,
+      "root.y"
     ]
   },
   "component": {
@@ -1140,6 +1173,1050 @@
         "mid_title_box",
         "mid_title_span",
         "mid_title"
+      ]
+    },
+    "day": {
+      "source": "day_view",
+      "only_named": true,
+      "size": [
+        "*"
+      ],
+      "names": {
+        "0": "main",
+        "1": "main_sr",
+        "2": "main_box",
+        "3": "main_n3",
+        "4": "root",
+        "5": "top",
+        "6": "gutter_head",
+        "7": "gutter_head_inner",
+        "13": "top_right",
+        "14": "allday_overlay",
+        "15": "allday_overlay_inner",
+        "16": "allday_overlay_pad",
+        "17": "allday_overlay_cols",
+        "18": "allday_overlay_col",
+        "19": "header_row",
+        "20": "header_pres",
+        "21": "header_pad",
+        "22": "header_col",
+        "23": "header_col_line",
+        "24": "header_label_box",
+        "25": "header_h2",
+        "26": "header_dow",
+        "27": "header_daynum",
+        "28": "header_spacer",
+        "29": "header_spacer_inner",
+        "30": "allday_root",
+        "31": "allday_pad",
+        "32": "allday_pres",
+        "33": "allday_ul",
+        "34": "allday_li",
+        "35": "allday_cells",
+        "36": "allday_cell",
+        "37": "allday_cell_sr",
+        "38": "allday_cell_chips",
+        "39": "allday_chip_wrap",
+        "40": "allday_chip",
+        "41": "allday_chip_text_box",
+        "42": "allday_chip_text",
+        "43": "allday_chip_sr",
+        "44": "body",
+        "45": "body_inner",
+        "46": "gutter",
+        "143": "scroller",
+        "144": "row",
+        "170": "row_pad",
+        "171": "daycol"
+      },
+      "fluid": [
+        "main",
+        "main_box",
+        "main_n3",
+        "root",
+        "top",
+        "top_right",
+        "header_row",
+        "header_pres",
+        "header_col",
+        "header_h2",
+        "header_spacer",
+        "header_spacer_inner",
+        "allday_overlay",
+        "allday_overlay_inner",
+        "allday_overlay_cols",
+        "allday_overlay_col",
+        "allday_root",
+        "allday_pres",
+        "allday_ul",
+        "allday_li",
+        "allday_cells",
+        "allday_cell",
+        "allday_cell_chips",
+        "allday_chip_wrap",
+        "allday_chip",
+        "allday_chip_text_box",
+        "allday_chip_text",
+        "body",
+        "body_inner",
+        "scroller",
+        "row",
+        "daycol"
+      ]
+    },
+    "month": {
+      "source": "month_view",
+      "only_named": true,
+      "size": [
+        "*"
+      ],
+      "names": {
+        "0": "main",
+        "1": "main_sr",
+        "2": "main_box",
+        "3": "main_n3",
+        "4": "root",
+        "5": "header_row",
+        "6": "header_pres",
+        "7": "header_col",
+        "8": "header_col_sr",
+        "9": "header_col_label",
+        "28": "body",
+        "29": "row",
+        "30": "row_bg",
+        "31": "row_bg_cell",
+        "38": "row_nums",
+        "39": "num_cell",
+        "40": "num_other",
+        "42": "num_first",
+        "120": "num_today",
+        "122": "num",
+        "53": "cells_box",
+        "54": "cells",
+        "55": "cell",
+        "56": "cell_sr",
+        "137": "cell_chips",
+        "138": "chip_wrap",
+        "139": "chip",
+        "140": "chip_text_box",
+        "141": "chip_text",
+        "142": "chip_sr",
+        "143": "timed_wrap",
+        "144": "timed",
+        "145": "timed_dot_box",
+        "146": "timed_dot",
+        "147": "timed_text",
+        "148": "timed_time",
+        "149": "timed_title",
+        "150": "timed_sr",
+        "167": "more_wrap",
+        "168": "more"
+      },
+      "fluid": [
+        "main",
+        "main_box",
+        "main_n3",
+        "root",
+        "header_row",
+        "header_pres",
+        "header_col",
+        "body",
+        "row",
+        "row_bg",
+        "row_bg_cell",
+        "row_nums",
+        "num_cell",
+        "cells_box",
+        "cells",
+        "cell",
+        "cell_chips",
+        "header_col_label",
+        "num_first",
+        "num_other",
+        "num",
+        "num_today",
+        "timed_text",
+        "timed_time",
+        "timed_title",
+        "chip_text_box",
+        "chip_text"
+      ],
+      "fluid_h": [],
+      "fluid_w": [
+        "chip_wrap",
+        "chip",
+        "timed_wrap",
+        "timed",
+        "more_wrap",
+        "more"
+      ]
+    },
+    "agenda": {
+      "source": "agenda_view",
+      "only_named": true,
+      "size": [
+        "*"
+      ],
+      "names": {
+        "0": "main",
+        "1": "main_sr",
+        "2": "main_box",
+        "3": "root",
+        "4": "group",
+        "5": "row_first",
+        "6": "date_cell",
+        "7": "date_h2",
+        "8": "date_today",
+        "9": "date_today_ripple",
+        "10": "daynum_today",
+        "11": "date_label_box",
+        "12": "date_label",
+        "13": "pres",
+        "14": "time_cell",
+        "15": "title_cell",
+        "16": "title",
+        "17": "dot_cell",
+        "18": "dot_box",
+        "19": "dot",
+        "20": "dot_sr",
+        "21": "row",
+        "22": "date_sr",
+        "71": "separator",
+        "225": "date",
+        "226": "date_ripple",
+        "227": "daynum",
+        "228": "date_label_box_other",
+        "229": "date_label_other",
+        "23": "pres_next",
+        "169": "location"
+      },
+      "fluid": [
+        "main",
+        "main_box",
+        "root",
+        "group",
+        "row_first",
+        "row",
+        "pres",
+        "title_cell",
+        "title",
+        "date_label",
+        "separator",
+        "date_label_other",
+        "pres_next",
+        "location"
+      ],
+      "fluid_w": [
+        "date_label_box",
+        "date_label_box_other"
+      ]
+    },
+    "popup": {
+      "source": "event_popup",
+      "only_named": true,
+      "size": [
+        "*"
+      ],
+      "names": {
+        "0": "root",
+        "1": "side_l1",
+        "2": "side_l2",
+        "3": "frame",
+        "4": "col",
+        "5": "col2",
+        "6": "header",
+        "7": "header_inner",
+        "8": "header_row",
+        "9": "close_cell",
+        "10": "close_span",
+        "11": "close",
+        "12": "close_ripple",
+        "13": "close_icon_box",
+        "14": "close_icon_span",
+        "15": "close_icon",
+        "16": "close_path",
+        "17": "close_overlay",
+        "18": "close_tooltip",
+        "19": "actions",
+        "20": "edit_cell",
+        "21": "edit_span",
+        "22": "edit",
+        "23": "edit_ripple",
+        "24": "edit_icon_box",
+        "25": "edit_icon_span",
+        "26": "edit_icon",
+        "27": "edit_path",
+        "28": "edit_overlay",
+        "29": "edit_tooltip",
+        "30": "delete_cell",
+        "31": "delete_span",
+        "32": "delete",
+        "33": "delete_ripple",
+        "34": "delete_icon_box",
+        "35": "delete_icon",
+        "36": "delete_path",
+        "37": "delete_path2",
+        "38": "delete_overlay",
+        "39": "delete_tooltip",
+        "40": "email_cell",
+        "41": "email_span",
+        "42": "email",
+        "43": "email_ripple",
+        "44": "email_icon_box",
+        "45": "email_icon",
+        "46": "email_path",
+        "47": "email_overlay",
+        "48": "email_tooltip",
+        "49": "options_cell",
+        "50": "options_n50",
+        "51": "options_n51",
+        "52": "options_n52",
+        "53": "options_span",
+        "54": "options",
+        "55": "options_ripple",
+        "56": "options_icon_box",
+        "57": "options_icon_span",
+        "58": "options_icon",
+        "59": "options_path",
+        "60": "options_overlay",
+        "61": "options_tooltip",
+        "62": "options_foot",
+        "63": "header_bottom",
+        "64": "body",
+        "65": "title_row",
+        "66": "title_icon_cell",
+        "67": "title_dot",
+        "68": "title_box",
+        "69": "title_inner",
+        "70": "title_line",
+        "71": "title",
+        "72": "date_line",
+        "73": "date_sep",
+        "74": "date_time",
+        "75": "title_end",
+        "76": "notes_row",
+        "77": "notes_icon_cell",
+        "78": "notes_icon",
+        "79": "notes_box",
+        "80": "notes_inner",
+        "81": "notes_link_line",
+        "82": "notes_link",
+        "83": "notes_hint",
+        "84": "notes_more_cell",
+        "85": "notes_more_box",
+        "86": "notes_more_n86",
+        "87": "notes_more_n87",
+        "88": "notes_more_n88",
+        "89": "notes_more_span",
+        "90": "notes_more",
+        "91": "notes_more_ripple",
+        "92": "notes_more_icon_box",
+        "93": "notes_more_icon",
+        "94": "notes_more_path",
+        "95": "notes_more_overlay",
+        "96": "notes_more_tooltip",
+        "97": "notes_more_foot",
+        "98": "notes_more_foot2",
+        "99": "calendar_row",
+        "100": "calendar_icon_cell",
+        "101": "calendar_icon",
+        "102": "calendar_box",
+        "103": "calendar_inner",
+        "104": "calendar_name_line",
+        "105": "calendar_sr",
+        "106": "calendar_name_box",
+        "107": "calendar_name",
+        "108": "creator_line",
+        "109": "creator_sr",
+        "110": "creator_button",
+        "111": "creator",
+        "112": "foot1",
+        "113": "foot2",
+        "114": "side_r1",
+        "115": "side_r2"
+      },
+      "extra": {
+        "meet_row": [
+          "event_popup-meet",
+          77
+        ],
+        "meet_icon_cell": [
+          "event_popup-meet",
+          78
+        ],
+        "meet_icon": [
+          "event_popup-meet",
+          79
+        ],
+        "meet_box": [
+          "event_popup-meet",
+          80
+        ],
+        "meet_inner": [
+          "event_popup-meet",
+          81
+        ],
+        "meet_link_line": [
+          "event_popup-meet",
+          82
+        ],
+        "meet_link_span": [
+          "event_popup-meet",
+          83
+        ],
+        "meet_link": [
+          "event_popup-meet",
+          84
+        ],
+        "meet_code": [
+          "event_popup-meet",
+          85
+        ],
+        "meet_copy_cell": [
+          "event_popup-meet",
+          87
+        ],
+        "meet_copy_box": [
+          "event_popup-meet",
+          88
+        ],
+        "meet_copy_span": [
+          "event_popup-meet",
+          89
+        ],
+        "meet_copy": [
+          "event_popup-meet",
+          90
+        ],
+        "meet_copy_ripple": [
+          "event_popup-meet",
+          91
+        ],
+        "meet_copy_icon_box": [
+          "event_popup-meet",
+          92
+        ],
+        "meet_copy_icon": [
+          "event_popup-meet",
+          93
+        ],
+        "meet_copy_overlay": [
+          "event_popup-meet",
+          94
+        ],
+        "meet_copy_tooltip": [
+          "event_popup-meet",
+          95
+        ],
+        "meet_block": [
+          "event_popup-meet",
+          76
+        ],
+        "meet_alert": [
+          "event_popup-meet",
+          96
+        ],
+        "location_row": [
+          "event_popup-meet",
+          138
+        ],
+        "location_icon_cell": [
+          "event_popup-meet",
+          139
+        ],
+        "location_icon_span": [
+          "event_popup-meet",
+          140
+        ],
+        "location_icon": [
+          "event_popup-meet",
+          141
+        ],
+        "location_box": [
+          "event_popup-meet",
+          144
+        ],
+        "location_sr": [
+          "event_popup-meet",
+          146
+        ],
+        "location_inner": [
+          "event_popup-meet",
+          147
+        ],
+        "location_text": [
+          "event_popup-meet",
+          148
+        ],
+        "location_n149": [
+          "event_popup-meet",
+          149
+        ],
+        "description_row": [
+          "event_popup-meet",
+          150
+        ],
+        "description_icon_cell": [
+          "event_popup-meet",
+          151
+        ],
+        "description_icon": [
+          "event_popup-meet",
+          152
+        ],
+        "description_box": [
+          "event_popup-meet",
+          153
+        ],
+        "description_sr": [
+          "event_popup-meet",
+          154
+        ],
+        "description_text": [
+          "event_popup-meet",
+          155
+        ],
+        "recurrence_line": [
+          "event_popup-recurring",
+          75
+        ],
+        "guests_block": [
+          "event_popup-guests",
+          90
+        ],
+        "guests_row": [
+          "event_popup-guests",
+          91
+        ],
+        "guests_icon_cell": [
+          "event_popup-guests",
+          92
+        ],
+        "guests_icon_span": [
+          "event_popup-guests",
+          93
+        ],
+        "guests_icon": [
+          "event_popup-guests",
+          94
+        ],
+        "guests_box": [
+          "event_popup-guests",
+          96
+        ],
+        "guests_inner": [
+          "event_popup-guests",
+          97
+        ],
+        "guests_count": [
+          "event_popup-guests",
+          98
+        ],
+        "guests_yes": [
+          "event_popup-guests",
+          99
+        ],
+        "guests_awaiting": [
+          "event_popup-guests",
+          100
+        ],
+        "guests_actions": [
+          "event_popup-guests",
+          101
+        ],
+        "guests_actions_inner": [
+          "event_popup-guests",
+          102
+        ],
+        "guests_copy_span": [
+          "event_popup-guests",
+          103
+        ],
+        "guests_copy": [
+          "event_popup-guests",
+          104
+        ],
+        "guests_copy_ripple": [
+          "event_popup-guests",
+          105
+        ],
+        "guests_copy_icon_box": [
+          "event_popup-guests",
+          106
+        ],
+        "guests_copy_icon": [
+          "event_popup-guests",
+          107
+        ],
+        "guests_copy_overlay": [
+          "event_popup-guests",
+          108
+        ],
+        "guests_chat_span": [
+          "event_popup-guests",
+          110
+        ],
+        "guests_chat": [
+          "event_popup-guests",
+          111
+        ],
+        "guests_email_cell": [
+          "event_popup-guests",
+          119
+        ],
+        "guests_email": [
+          "event_popup-guests",
+          121
+        ],
+        "tree": [
+          "event_popup-guests",
+          129
+        ],
+        "treeitem": [
+          "event_popup-guests",
+          130
+        ],
+        "guest_icon_cell": [
+          "event_popup-guests",
+          131
+        ],
+        "avatar": [
+          "event_popup-guests",
+          132
+        ],
+        "avatar_bg": [
+          "event_popup-guests",
+          133
+        ],
+        "avatar_svg": [
+          "event_popup-guests",
+          134
+        ],
+        "avatar_overlay": [
+          "event_popup-guests",
+          139
+        ],
+        "guest_status_wrap": [
+          "event_popup-guests",
+          140
+        ],
+        "guest_status": [
+          "event_popup-guests",
+          141
+        ],
+        "guest_status_svg": [
+          "event_popup-guests",
+          142
+        ],
+        "guest_box": [
+          "event_popup-guests",
+          145
+        ],
+        "guest_inner": [
+          "event_popup-guests",
+          146
+        ],
+        "guest_n147": [
+          "event_popup-guests",
+          147
+        ],
+        "guest_line": [
+          "event_popup-guests",
+          148
+        ],
+        "guest_name": [
+          "event_popup-guests",
+          149
+        ],
+        "guest_end": [
+          "event_popup-guests",
+          154
+        ],
+        "phone_row": [
+          "event_popup-meet",
+          97
+        ],
+        "phone_icon_cell": [
+          "event_popup-meet",
+          98
+        ],
+        "phone_icon_span": [
+          "event_popup-meet",
+          99
+        ],
+        "phone_icon": [
+          "event_popup-meet",
+          100
+        ],
+        "phone_box": [
+          "event_popup-meet",
+          102
+        ],
+        "phone_inner": [
+          "event_popup-meet",
+          103
+        ],
+        "phone_link_line": [
+          "event_popup-meet",
+          104
+        ],
+        "phone_link_span": [
+          "event_popup-meet",
+          105
+        ],
+        "phone_link": [
+          "event_popup-meet",
+          106
+        ],
+        "phone_number": [
+          "event_popup-meet",
+          107
+        ],
+        "phone_end": [
+          "event_popup-meet",
+          109
+        ],
+        "more_row": [
+          "event_popup-meet",
+          110
+        ],
+        "more_icon_cell": [
+          "event_popup-meet",
+          111
+        ],
+        "more_icon": [
+          "event_popup-meet",
+          112
+        ],
+        "more_box": [
+          "event_popup-meet",
+          113
+        ],
+        "more_link": [
+          "event_popup-meet",
+          114
+        ],
+        "guests_chat_ripple": [
+          "event_popup-guests",
+          112
+        ],
+        "guests_chat_icon_box": [
+          "event_popup-guests",
+          113
+        ],
+        "guests_chat_icon_span": [
+          "event_popup-guests",
+          114
+        ],
+        "guests_chat_icon": [
+          "event_popup-guests",
+          115
+        ],
+        "guests_chat_overlay": [
+          "event_popup-guests",
+          117
+        ],
+        "guests_email_span": [
+          "event_popup-guests",
+          120
+        ],
+        "guests_email_ripple": [
+          "event_popup-guests",
+          122
+        ],
+        "guests_email_icon_box": [
+          "event_popup-guests",
+          123
+        ],
+        "guests_email_icon_span": [
+          "event_popup-guests",
+          124
+        ],
+        "guests_email_icon": [
+          "event_popup-guests",
+          125
+        ],
+        "guests_email_overlay": [
+          "event_popup-guests",
+          127
+        ]
+      },
+      "fluid_h": [
+        "root",
+        "frame",
+        "col",
+        "col2",
+        "body",
+        "side_l1",
+        "side_l2",
+        "side_r1",
+        "side_r2",
+        "title_row",
+        "title_box",
+        "title_inner",
+        "meet_block",
+        "guests_block",
+        "location_box",
+        "description_box"
+      ],
+      "fluid_w": [
+        "title",
+        "date_time",
+        "date_sep",
+        "meet_link",
+        "meet_code",
+        "location_text",
+        "description_text",
+        "recurrence_line",
+        "calendar_name",
+        "creator",
+        "guests_count",
+        "guests_yes",
+        "guests_awaiting",
+        "guest_name",
+        "notes_link",
+        "notes_hint",
+        "guests_inner",
+        "calendar_box",
+        "calendar_inner",
+        "calendar_name_line",
+        "calendar_name_box",
+        "creator_line",
+        "creator_button",
+        "phone_inner",
+        "phone_link_line",
+        "phone_number",
+        "more_link",
+        "phone_link",
+        "actions"
+      ]
+    },
+    "qc": {
+      "source": "quick_create",
+      "size": [
+        "*"
+      ],
+      "names": {
+        "0": "root",
+        "1": "side_l",
+        "2": "frame",
+        "3": "col",
+        "4": "body",
+        "5": "heading_sr",
+        "6": "close_wrap",
+        "7": "close",
+        "8": "close_ripple",
+        "9": "close_icon_box",
+        "10": "close_icon",
+        "11": "close_overlay",
+        "12": "close_tooltip",
+        "13": "scroll",
+        "14": "scroll_inner",
+        "15": "n15",
+        "16": "n16",
+        "17": "title_row",
+        "18": "title_box",
+        "19": "title_field",
+        "20": "title_line",
+        "21": "title_span",
+        "22": "title_input",
+        "23": "title_underline",
+        "24": "panel",
+        "25": "tabs",
+        "26": "tab_event",
+        "27": "tab_event_ripple",
+        "28": "tab_event_label",
+        "29": "tab_task",
+        "30": "tab_task_ripple",
+        "31": "tab_task_label",
+        "32": "tab_ooo",
+        "33": "tab_ooo_ripple",
+        "34": "tab_ooo_label",
+        "35": "tab_appt",
+        "36": "tab_appt_ripple",
+        "37": "tab_appt_label",
+        "38": "tab_appt_text",
+        "39": "tab_appt_new",
+        "40": "tabpanel",
+        "41": "tabpanel_span",
+        "42": "form",
+        "43": "when_block",
+        "44": "when_box",
+        "45": "when_n45",
+        "46": "when_n46",
+        "47": "when_row",
+        "48": "when_icon_cell",
+        "49": "when_icon",
+        "50": "when_cell",
+        "51": "when_cell_inner",
+        "52": "when_button",
+        "53": "when_ripple",
+        "54": "when_content",
+        "55": "when_line",
+        "56": "when_date_group",
+        "57": "when_date",
+        "58": "when_date_text",
+        "59": "when_times",
+        "60": "when_start",
+        "61": "when_start_text",
+        "62": "when_to",
+        "63": "when_end",
+        "64": "when_end_text",
+        "65": "when_meta",
+        "66": "when_meta_inner",
+        "67": "when_meta_list",
+        "68": "when_tz",
+        "69": "when_repeat",
+        "70": "spacer",
+        "71": "guests_block",
+        "72": "guests_box",
+        "73": "guests_row",
+        "74": "guests_icon_cell",
+        "75": "guests_icon_span",
+        "76": "guests_icon",
+        "77": "guests_icon_path",
+        "78": "guests_cell",
+        "79": "guests_cell_inner",
+        "80": "guests_button",
+        "81": "guests_ripple",
+        "82": "guests_label",
+        "83": "meet_block",
+        "84": "meet_row",
+        "85": "meet_icon_cell",
+        "86": "meet_icon_box",
+        "87": "meet_icon",
+        "88": "meet_cell",
+        "89": "meet_n89",
+        "90": "meet_n90",
+        "91": "meet_n91",
+        "92": "meet_n92",
+        "93": "meet_n93",
+        "94": "meet_button",
+        "95": "meet_ripple",
+        "96": "meet_label",
+        "97": "meet_foot",
+        "98": "location_block",
+        "99": "location_box",
+        "100": "location_row",
+        "101": "location_icon_cell",
+        "102": "location_icon_span",
+        "103": "location_icon",
+        "104": "location_icon_path",
+        "105": "location_icon_path2",
+        "106": "location_cell",
+        "107": "location_cell_inner",
+        "108": "location_button",
+        "109": "location_ripple",
+        "110": "location_label",
+        "111": "location_word",
+        "112": "description_block",
+        "113": "description_box",
+        "114": "description_row",
+        "115": "description_icon_cell",
+        "116": "description_icon",
+        "117": "description_cell",
+        "118": "description_cell_inner",
+        "119": "description_button",
+        "120": "description_ripple",
+        "121": "description_label",
+        "122": "description_text",
+        "123": "description_word",
+        "124": "description_word2",
+        "125": "calendar_block",
+        "126": "calendar_box",
+        "127": "calendar_row",
+        "128": "calendar_icon_cell",
+        "129": "calendar_icon",
+        "130": "calendar_cell",
+        "131": "calendar_cell_inner",
+        "132": "calendar_button",
+        "133": "calendar_ripple",
+        "134": "calendar_content",
+        "135": "calendar_line",
+        "136": "calendar_name_row",
+        "137": "calendar_name_box",
+        "138": "calendar_name",
+        "139": "calendar_dot",
+        "140": "calendar_meta",
+        "141": "calendar_meta_list",
+        "142": "calendar_busy",
+        "143": "calendar_visibility",
+        "144": "calendar_notify",
+        "145": "panel_foot",
+        "146": "panel_foot_bar",
+        "147": "panel_foot_inner",
+        "148": "footer",
+        "149": "footer_inner",
+        "150": "more_wrap",
+        "151": "more",
+        "152": "more_ripple",
+        "153": "more_hit",
+        "154": "more_label",
+        "155": "save_n155",
+        "156": "save_n156",
+        "157": "save_wrap",
+        "158": "save",
+        "159": "save_ripple",
+        "160": "save_ripple_inner",
+        "161": "save_n161",
+        "162": "save_hit",
+        "163": "save_label",
+        "164": "head",
+        "165": "dock_span",
+        "166": "dock",
+        "167": "dock_ripple",
+        "168": "dock_icon_box",
+        "169": "dock_icon",
+        "170": "dock_overlay",
+        "171": "dock_tooltip",
+        "172": "undock_span",
+        "173": "undock_tooltip",
+        "174": "side_r"
+      },
+      "fluid_w": [
+        "title_input",
+        "title_span",
+        "title_line",
+        "title_field",
+        "when_date",
+        "when_date_text",
+        "when_start",
+        "when_start_text",
+        "when_end",
+        "when_end_text",
+        "when_date_group",
+        "when_times",
+        "when_line",
+        "calendar_name_box",
+        "calendar_name",
+        "calendar_name_row",
+        "tab_event",
+        "tab_task",
+        "tab_ooo",
+        "tab_appt",
+        "tab_event_label",
+        "tab_task_label",
+        "tab_ooo_label",
+        "tab_appt_label",
+        "tab_appt_text",
+        "tab_event_ripple",
+        "tab_task_ripple",
+        "tab_ooo_ripple",
+        "tab_appt_ripple",
+        "more",
+        "more_ripple",
+        "more_hit",
+        "more_label",
+        "save",
+        "save_ripple",
+        "save_ripple_inner",
+        "save_n161",
+        "save_hit",
+        "save_label",
+        "save_wrap",
+        "more_wrap",
+        "description_label",
+        "when_meta_inner"
       ]
     }
   }

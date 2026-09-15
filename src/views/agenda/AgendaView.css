@@ -1,0 +1,31 @@
+/* Measured rules live in src/styles/measured.css (.agenda-*). Sizing of the fluid boxes and the
+   calendar colour of the dot are added here. */
+.agenda-main {
+  inset: 0 var(--layout-main-gap-right) 0 0;
+}
+
+.agenda-main-box {
+  inset: 0;
+}
+
+.agenda-main-sr,
+.agenda-date-h2 {
+  margin: 0;
+}
+
+.agenda-date,
+.agenda-date-today,
+.agenda-title {
+  cursor: pointer;
+}
+
+/* The calendar dot comes last in the DOM and first on screen (probe pending: see agenda_view.md). */
+.agenda-dot-cell {
+  order: -1;
+}
+
+.agenda-dot {
+  border-color: var(--data-calendar-color);
+  width: 0;
+  height: 0;
+}

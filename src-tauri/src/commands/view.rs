@@ -8,8 +8,8 @@ use rusqlite::{params, Connection};
 use serde_json::Value;
 
 use crate::commands::types::{
-    AlsoIn, AttendeeInfo, CalendarVisibility, ConflictInfo, EventDetail, Reminder, ViewOccurrence,
-    ViewPayload,
+    AlsoIn, AttendeeInfo, CalendarVisibility, ConferencePhone, ConflictInfo, EventDetail, Reminder,
+    ViewOccurrence, ViewPayload,
 };
 use crate::db::queries::{accounts, calendars, events as q};
 use crate::error::AppError;
@@ -150,6 +150,52 @@ pub fn meet_link(hangout_link: Option<&str>, conference: Option<&str>) -> Option
         .find(|e| e.get("entryPointType").and_then(Value::as_str) == Some("video"))
         .and_then(|e| e.get("uri").and_then(Value::as_str))
         .map(str::to_string)
+}
+
+/// Dial-in entry of `conferenceData` (the popup's "Join by phone" row, docs/99 F7-T3).
+fn conference_phone(conference: Option<&str>) -> Option<ConferencePhone> {
+    let conf: Value = serde_json::from_str(conference?).ok()?;
+    let entries = conf.get("entryPoints")?.as_array()?;
+    let phone = entries
+        .iter()
+        .find(|e| e.get("entryPointType").and_then(Value::as_str) == Some("phone"))?;
+    let more = entries
+        .iter()
+        .find(|e| e.get("entryPointType").and_then(Value::as_str) == Some("more"))
+        .and_then(|e| e.get("uri").and_then(Value::as_str))
+        .map(str::to_string);
+    let number = phone
+        .get("label")
+        .and_then(Value::as_str)
+        .or_else(|| phone.get("uri").and_then(Value::as_str))?;
+    // Google's popup shows "(AR) +54 11 3986-3700 PIN: 224 472 849 1492#".
+    let label = match phone.get("regionCode").and_then(Value::as_str) {
+        Some(r) => format!("({r}) {number}"),
+        None => number.to_string(),
+    };
+    Some(ConferencePhone {
+        label,
+        uri: phone.get("uri").and_then(Value::as_str).map(str::to_string),
+        pin: phone.get("pin").and_then(Value::as_str).map(group_pin),
+        more_url: more,
+    })
+}
+
+/// "2244728491492" → "224 472 849 1492" (groups of three, the rest at the end), as Google prints it.
+fn group_pin(pin: &str) -> String {
+    let digits: Vec<char> = pin.chars().filter(|c| c.is_ascii_digit()).collect();
+    if digits.len() <= 4 {
+        return pin.to_string();
+    }
+    let mut out = String::new();
+    let full = (digits.len() - 1) / 3;
+    for (i, c) in digits.iter().enumerate() {
+        if i > 0 && i % 3 == 0 && i / 3 <= full && digits.len() - i > 3 {
+            out.push(' ');
+        }
+        out.push(*c);
+    }
+    out
 }
 
 fn conference_label(conference: Option<&str>) -> Option<String> {
@@ -466,6 +512,7 @@ pub fn get_event(conn: &Connection, occurrence_id: &str) -> Result<EventDetail, 
         recurrence,
         meet_link: meet_link(row.hangout_link.as_deref(), row.conference.as_deref()),
         conference_label: conference_label(row.conference.as_deref()),
+        conference_phone: conference_phone(row.conference.as_deref()),
         html_link: row.html_link.clone(),
         attendees,
         organizer,

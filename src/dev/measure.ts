@@ -9,7 +9,10 @@ import { ipc } from '../ipc';
 import { useUi, type ViewKind } from '../state/ui';
 
 interface Action {
-  type: 'click' | 'hover' | 'wait' | 'view' | 'date' | 'scroll' | 'unhover' | 'calendars';
+  type: 'click' | 'hover' | 'wait' | 'view' | 'date' | 'scroll' | 'unhover' | 'calendars' | 'key' | 'click_at' | 'type';
+  key?: string;
+  x?: number;
+  text?: string;
   selector?: string;
   ms?: number;
   view?: ViewKind;
@@ -64,6 +67,24 @@ async function run(req: MeasureRequest): Promise<void> {
         break;
       case 'scroll':
         if (el && a.y !== undefined) el.scrollTop = a.y;
+        break;
+      case 'click_at': {
+        // A synthetic click at viewport coordinates (the quick-create slot).
+        const target = document.elementFromPoint(a.x ?? 0, a.y ?? 0);
+        if (target) target.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, clientX: a.x ?? 0, clientY: a.y ?? 0 }));
+        break;
+      }
+      case 'type': {
+        const input = document.activeElement;
+        if (input instanceof HTMLInputElement) {
+          const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set;
+          setter?.call(input, a.text ?? '');
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+        break;
+      }
+      case 'key':
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: a.key ?? 'Escape', bubbles: true }));
         break;
       case 'calendars': {
         // Local visibility only (docs/03): the reference shows the fixtures calendar alone.

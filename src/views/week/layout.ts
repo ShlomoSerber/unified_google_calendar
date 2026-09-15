@@ -94,7 +94,7 @@ export function layoutAllDay(items: ViewOccurrence[], dayStarts: number[]): AllD
   const first = dayStarts[0] ?? 0;
   const last = (dayStarts[dayStarts.length - 1] ?? 0) + 86_400;
   const spans = items
-    .filter((o) => o.all_day || o.end - o.start >= 86_400)
+    .filter((o) => (o.all_day || o.end - o.start >= 86_400) && o.start < last && o.end > first)
     .map((o) => {
       const s = Math.max(o.start, first);
       const e = Math.min(o.end, last);

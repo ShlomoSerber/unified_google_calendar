@@ -6,6 +6,7 @@ import { useViewData } from '../../state/useViewData';
 import { LAYOUT, layoutNumber } from '../../styles/layout';
 import type { ViewOccurrence } from '../../types/ipc';
 import { AllDayRow } from './AllDayRow';
+import { DayHeader } from './DayHeader';
 import { EventChip } from './EventChip';
 import { layoutDay } from './layout';
 import { WeekHeader } from './WeekHeader';
@@ -33,9 +34,13 @@ export function chipColumn(column: number, columns: number): { left: number; wid
 
 export interface WeekViewProps {
   days: number[];
+  /** `day`: one column with the day-view header (docs/design/measurements/day_view-light.json). */
+  mode?: 'week' | 'day';
 }
 
-export function WeekView({ days }: WeekViewProps) {
+export function WeekView({ days, mode = 'week' }: WeekViewProps) {
+  // Day view shares the grid DOM; its measured differences carry the day-* classes on top.
+  const c = (name: string) => (mode === 'day' ? `week-${name} day-${name}` : `week-${name}`);
   const tz = useUi((s) => s.tz);
   const secondaryTz = useUi((s) => s.secondaryTz);
   const calendars = useUi((s) => s.calendars);
@@ -91,10 +96,14 @@ export function WeekView({ days }: WeekViewProps) {
   );
 
   return (
-    <div className="week-root" role="grid">
-      <div className="week-top">
-        <div className="week-gutter-head">
-          <div className="week-gutter-head-inner">
+    <div className="day-main" role="main">
+      <h1 className="day-main-sr">{mode === 'day' ? format(inZone(from, tz), 'EEEE, MMMM d, yyyy') : `Week of ${format(inZone(from, tz), 'MMMM d, yyyy')}`}</h1>
+      <div className="day-main-box">
+        <div className="day-main-n3"></div>
+    <div className={c('root')} role="grid">
+      <div className={c('top')}>
+        <div className={c('gutter-head')}>
+          <div className={c('gutter-head-inner')}>
             <div className="week-tz-table">
               {secondaryTz ? (
                 <div className="week-tz-cell">
@@ -107,36 +116,36 @@ export function WeekView({ days }: WeekViewProps) {
             </div>
           </div>
         </div>
-        <div className="week-top-right" role="presentation">
-          <div className="week-allday-overlay">
-            <div className="week-allday-overlay-inner">
-              <div className="week-allday-overlay-pad"></div>
-              <div className="week-allday-overlay-cols">
+        <div className={c('top-right')} role="presentation">
+          <div className={c('allday-overlay')}>
+            <div className={c('allday-overlay-inner')}>
+              <div className={c('allday-overlay-pad')}></div>
+              <div className={c('allday-overlay-cols')}>
                 {days.map((ts) => (
-                  <div className="week-allday-overlay-col" key={ts}></div>
+                  <div className={c('allday-overlay-col')} key={ts}></div>
                 ))}
               </div>
             </div>
           </div>
-          <WeekHeader days={days} now={now} />
+          {mode === 'day' ? <DayHeader day={days[0] ?? from} now={now} /> : <WeekHeader days={days} now={now} />}
           <div className="week-header-bottom"></div>
-          <AllDayRow days={days} occurrences={allDay} calendarName={calendarName} />
+          <AllDayRow days={days} occurrences={allDay} calendarName={calendarName} mode={mode} />
         </div>
       </div>
-      <div className="week-body">
-        <div className="week-body-inner">
-          <div className="week-gutter" ref={gutter}>
+      <div className={c('body')}>
+        <div className={c('body-inner')}>
+          <div className={c('gutter')} ref={gutter}>
             {secondaryHours ? gutterCol(secondaryHours, 'week-gutter-col') : null}
             {gutterCol(primaryHours, 'week-gutter-col-primary')}
           </div>
-          <div className="week-scroller" ref={scroller} onScroll={syncGutter}>
-            <div className="week-row" role="row">
+          <div className={c('scroller')} ref={scroller} onScroll={syncGutter}>
+            <div className={c('row')} role="row">
               <div className="week-lines">
                 {HOURS.map((h) => (
                   <div className="week-line" key={h}></div>
                 ))}
               </div>
-              <div className="week-row-pad"></div>
+              <div className={c('row-pad')}></div>
               {days.map((ts) => {
                 const start = dayStart(ts, tz);
                 const items = timed.filter((o) => o.start < start + 86_400 && o.end > start);
@@ -146,8 +155,19 @@ export function WeekView({ days }: WeekViewProps) {
                 const n = items.length;
                 const sr = n === 0 ? `No events, ${dateLabel}` : `${n} event${n === 1 ? '' : 's'}, ${dateLabel}`;
                 const nowTop = { top: `calc(var(--layout-hour-row-height) * ${minutesOfDay(now, tz) / 60})` } as CSSProperties;
+                const quickCreate = (e: React.MouseEvent<HTMLDivElement>) => {
+                  if (e.target instanceof Element && e.target.closest('[role="button"]')) return;
+                  const col = e.currentTarget.getBoundingClientRect();
+                  const rowHeight = layoutNumber(LAYOUT.hour_row_height);
+                  const minutes = ((e.clientY - col.top) / rowHeight) * 60;
+                  const snapped = Math.floor(minutes / 30) * 30; // Google snaps the new slot to the half hour
+                  const slotTop = col.top + (snapped / 60) * rowHeight;
+                  const anchor = new DOMRect(col.left, slotTop, col.width, rowHeight);
+                  const startTs = start + snapped * 60;
+                  useUi.getState().openDialog({ kind: 'quick-create', startTs, endTs: startTs + 3600, allDay: false, anchor });
+                };
                 return (
-                  <div className="week-daycol" role="gridcell" key={ts} data-day={ts}>
+                  <div className={c('daycol')} role="gridcell" key={ts} data-day={ts} onClick={quickCreate}>
                     <h2 className="week-daycol-sr">{sr}</h2>
                     {today ? <div className="week-now-line" style={nowTop}></div> : null}
                     {today ? <div className="week-now-dot" style={nowTop}></div> : null}
@@ -178,6 +198,8 @@ export function WeekView({ days }: WeekViewProps) {
         </div>
       </div>
       {error ? <div className="week-error" role="alert">{`The calendar could not be loaded: ${error}`}</div> : null}
+    </div>
+      </div>
     </div>
   );
 }

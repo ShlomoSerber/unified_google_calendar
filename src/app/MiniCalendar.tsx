@@ -67,7 +67,7 @@ export function MiniCalendar() {
   const monthTs = shown.anchor === date ? shown.month : date;
   const monthLabel = format(inZone(monthTs, tz), 'MMMM yyyy');
   const month = inZone(monthTs, tz).getMonth();
-  const rows = monthGrid(monthTs, tz);
+  const rows = monthGrid(monthTs, tz, 6);
   const shift = (n: number) => setShown({ anchor: date, month: toTs(addMonths(inZone(monthTs, tz), n)) });
 
   return (

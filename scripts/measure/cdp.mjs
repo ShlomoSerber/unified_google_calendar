@@ -66,6 +66,8 @@ export class Cdp {
     const cdp = new Cdp(ws);
     await cdp.send('Page.enable');
     await cdp.send('Runtime.enable');
+    // A "leave page?" prompt (the event edit page) would block every later navigation.
+    cdp.on('Page.javascriptDialogOpening', () => { cdp.send('Page.handleJavaScriptDialog', { accept: true }).catch(() => {}); });
     return cdp;
   }
 
