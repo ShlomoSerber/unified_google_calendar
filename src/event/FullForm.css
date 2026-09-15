@@ -43,11 +43,6 @@
   margin: 0;
 }
 
-.ff-allday-check-on {
-  background-color: var(--color-primary);
-  border-color: var(--color-primary);
-}
-
 .ff-close,
 .ff-save,
 .ff-meet-button,
@@ -75,6 +70,12 @@
 .ff-link[aria-disabled='true'],
 .ff-clear[aria-disabled='true'] {
   cursor: default;
+}
+
+.ff-n218 {
+  font-family: var(--font-family-icons);
+  font-size: var(--ff-n216-font-size);
+  line-height: var(--ff-n216-line-height);
 }
 
 .ff-description-box {

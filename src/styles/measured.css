@@ -19610,7 +19610,6 @@
   text-overflow: var(--qc-meet-label-text-overflow);
   top: var(--qc-meet-label-top);
   left: var(--qc-meet-label-left);
-  width: var(--qc-meet-label-width);
   height: var(--qc-meet-label-height);
 }
 .qc-meet-foot {
@@ -21398,6 +21397,14 @@
   text-align: var(--qc-side-r-text-align);
   width: var(--qc-side-r-width);
   height: var(--qc-side-r-height);
+}
+.qc-title-underline-before {
+  border-bottom: var(--qc-title-underline-before-border-bottom);
+  top: var(--qc-title-underline-before-top);
+}
+.qc-title-underline-after {
+  border-bottom: var(--qc-title-underline-after-border-bottom);
+  top: var(--qc-title-underline-after-top);
 }
 .ff-main {
   position: var(--ff-main-position);
@@ -31286,6 +31293,7 @@
   height: var(--scope-radio-dot-height);
   left: var(--scope-radio-dot-left);
   top: var(--scope-radio-dot-top);
+  transform: var(--scope-radio-dot-transform);
 }
 .scope-radio-ripple {
   position: var(--scope-radio-ripple-position);
@@ -32735,7 +32743,6 @@
   flex: var(--rec-freq-wrap-flex);
   top: var(--rec-freq-wrap-top);
   left: var(--rec-freq-wrap-left);
-  width: var(--rec-freq-wrap-width);
   height: var(--rec-freq-wrap-height);
 }
 .rec-freq-box {
@@ -32760,7 +32767,6 @@
   text-align: var(--rec-freq-box-text-align);
   top: var(--rec-freq-box-top);
   left: var(--rec-freq-box-left);
-  width: var(--rec-freq-box-width);
   height: var(--rec-freq-box-height);
 }
 .rec-freq-combo {
@@ -32791,7 +32797,6 @@
   flex: var(--rec-freq-combo-flex);
   top: var(--rec-freq-combo-top);
   left: var(--rec-freq-combo-left);
-  width: var(--rec-freq-combo-width);
   height: var(--rec-freq-combo-height);
 }
 .rec-freq-text-wrap {
@@ -32814,7 +32819,6 @@
   fill: var(--rec-freq-text-wrap-fill);
   text-align: var(--rec-freq-text-wrap-text-align);
   flex: var(--rec-freq-text-wrap-flex);
-  width: var(--rec-freq-text-wrap-width);
   height: var(--rec-freq-text-wrap-height);
 }
 .rec-freq-text {
@@ -34917,6 +34921,7 @@
   height: var(--rec-never-dot-height);
   left: var(--rec-never-dot-left);
   top: var(--rec-never-dot-top);
+  transform: var(--rec-never-dot-transform);
 }
 .rec-never-ripple {
   position: var(--rec-never-ripple-position);

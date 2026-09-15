@@ -19683,7 +19683,6 @@
   --qc-meet-label-text-overflow: ellipsis;
   --qc-meet-label-top: 0px;
   --qc-meet-label-left: 0px;
-  --qc-meet-label-width: 235.969px;
   --qc-meet-label-height: 18px;
   --qc-meet-label-rect-w: 235.97px;
   --qc-meet-label-rect-h: 18px;
@@ -21473,6 +21472,10 @@
   --qc-side-r-height: 513px;
   --qc-side-r-rect-w: 0px;
   --qc-side-r-rect-h: 513px;
+  --qc-title-underline-before-border-bottom: 1px solid rgb(196, 199, 197);
+  --qc-title-underline-before-top: -1px;
+  --qc-title-underline-after-border-bottom: 3px solid rgb(11, 87, 208);
+  --qc-title-underline-after-top: -3px;
   --ff-main-position: absolute;
   --ff-main-font-family: "Google Sans Text", "Google Sans", Helvetica, Arial, sans-serif;
   --ff-main-font-size: 14px;
@@ -31359,8 +31362,9 @@
   --scope-radio-dot-height: 20px;
   --scope-radio-dot-rect-w: 10px;
   --scope-radio-dot-rect-h: 10px;
-  --scope-radio-dot-left: 5px;
-  --scope-radio-dot-top: 5px;
+  --scope-radio-dot-left: 0px;
+  --scope-radio-dot-top: 0px;
+  --scope-radio-dot-transform: scale(0.5);
   --scope-radio-ripple-position: absolute;
   --scope-radio-ripple-font-family: "Google Sans Flex", "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif;
   --scope-radio-ripple-font-size: 14px;
@@ -32808,7 +32812,6 @@
   --rec-freq-wrap-flex: 0 0 auto;
   --rec-freq-wrap-top: 0px;
   --rec-freq-wrap-left: 0px;
-  --rec-freq-wrap-width: 96.75px;
   --rec-freq-wrap-height: 40px;
   --rec-freq-wrap-rect-w: 96.75px;
   --rec-freq-wrap-rect-h: 40px;
@@ -32833,7 +32836,6 @@
   --rec-freq-box-text-align: start;
   --rec-freq-box-top: 0px;
   --rec-freq-box-left: 0px;
-  --rec-freq-box-width: 96.75px;
   --rec-freq-box-height: 40px;
   --rec-freq-box-rect-w: 96.75px;
   --rec-freq-box-rect-h: 40px;
@@ -32864,7 +32866,6 @@
   --rec-freq-combo-flex: 1 1 0%;
   --rec-freq-combo-top: 0px;
   --rec-freq-combo-left: 0px;
-  --rec-freq-combo-width: 96.75px;
   --rec-freq-combo-height: 40px;
   --rec-freq-combo-rect-w: 96.75px;
   --rec-freq-combo-rect-h: 40px;
@@ -32887,7 +32888,6 @@
   --rec-freq-text-wrap-fill: rgb(0, 0, 0);
   --rec-freq-text-wrap-text-align: start;
   --rec-freq-text-wrap-flex: 1 1 0%;
-  --rec-freq-text-wrap-width: 32.75px;
   --rec-freq-text-wrap-height: 40px;
   --rec-freq-text-wrap-rect-w: 32.75px;
   --rec-freq-text-wrap-rect-h: 40px;
@@ -34990,8 +34990,9 @@
   --rec-never-dot-height: 20px;
   --rec-never-dot-rect-w: 10px;
   --rec-never-dot-rect-h: 10px;
-  --rec-never-dot-left: 5px;
-  --rec-never-dot-top: 5px;
+  --rec-never-dot-left: 0px;
+  --rec-never-dot-top: 0px;
+  --rec-never-dot-transform: scale(0.5);
   --rec-never-ripple-position: absolute;
   --rec-never-ripple-font-family: "Google Sans Flex", "Google Sans Text", "Google Sans", Roboto, Arial, sans-serif;
   --rec-never-ripple-font-size: 14px;

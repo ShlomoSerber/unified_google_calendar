@@ -12,10 +12,10 @@ Fecha: 2026-09-14. Referencia: calendar.google.com, semana del 2026-09-14, cuent
 
 | Estado | Tema | Nodos comparados | Diferencias de layout | odiff |
 |---|---|---|---|---|
-| quick_create | light | 37 | 10 | 2.62% |
-| quick_create | dark | 37 | 10 | 2.60% |
-| quick_create-with_title | light | 37 | 10 | 2.65% |
-| quick_create-with_title | dark | 37 | 10 | 2.63% |
+| quick_create | light | 37 | 10 | 2.46% |
+| quick_create | dark | 37 | 10 | 2.77% |
+| quick_create-with_title | light | 37 | 10 | 2.49% |
+| quick_create-with_title | dark | 37 | 10 | 2.80% |
 
 ## Diferencias aceptadas
 

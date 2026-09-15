@@ -12,10 +12,10 @@ Fecha: 2026-09-14. Referencia: calendar.google.com, semana del 2026-09-14, cuent
 
 | Estado | Tema | Nodos comparados | Diferencias de layout | odiff |
 |---|---|---|---|---|
-| full_form | light | 66 | 12 | 1.19% |
-| full_form | dark | 66 | 12 | 1.33% |
+| full_form | light | 59 | 19 | 1.06% |
+| full_form | dark | 59 | 19 | 1.34% |
 
 ## Diferencias aceptadas
 
 - Página de edición completa: título, fechas y horas, todo el día, recurrencia (menú y "Custom..." → componente 18), Meet, ubicación, notificaciones, calendario, color del evento, mostrar como, visibilidad, descripción, invitados y permisos. "Find a time", Drive, el formato del texto, las notas de reunión y los permisos de invitados quedan inertes (fuera de alcance).
-- Diferencias restantes: anchos de texto (métrica de fuente); 2 px en "Add notification"; el calendario propuesto (ver quick_create).
+- Diferencias restantes: anchos de texto (métrica de fuente); 2 px en "Add notification"; el calendario propuesto (ver quick_create); los siete botones de formato llevan el nombre de la ligadura del ícono como texto (Google usa un carácter de uso privado), por eso `diff-layout` no los casa.

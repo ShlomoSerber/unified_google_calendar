@@ -12,14 +12,14 @@ Fecha: 2026-09-14. Referencia: calendar.google.com, semana del 2026-09-14, cuent
 
 | Estado | Tema | Nodos comparados | Diferencias de layout | odiff |
 |---|---|---|---|---|
-| event_popup | light | 17 | 6 | 3.18% |
-| event_popup | dark | 17 | 6 | 3.18% |
+| event_popup | light | 17 | 6 | 3.19% |
+| event_popup | dark | 17 | 6 | 3.20% |
 | event_popup-guests | light | 28 | 10 | 3.58% |
 | event_popup-guests | dark | 28 | 10 | 3.59% |
-| event_popup-meet | light | 30 | 12 | 3.48% |
-| event_popup-meet | dark | 30 | 12 | 3.49% |
-| event_popup-recurring | light | 18 | 6 | 3.25% |
-| event_popup-recurring | dark | 18 | 6 | 3.16% |
+| event_popup-meet | light | 30 | 12 | 3.46% |
+| event_popup-meet | dark | 30 | 12 | 3.46% |
+| event_popup-recurring | light | 18 | 6 | 3.26% |
+| event_popup-recurring | dark | 18 | 6 | 3.17% |
 
 ## Diferencias aceptadas
 

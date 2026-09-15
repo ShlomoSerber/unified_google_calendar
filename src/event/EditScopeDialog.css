@@ -13,6 +13,11 @@
   margin: 0;
 }
 
+/* WebKitGTK sets the title a few pixels wider than Chrome; keep it on one line like Google. */
+.scope-title {
+  white-space: nowrap;
+}
+
 .scope-radio-input,
 .scope-radio2-input {
   margin: 0;

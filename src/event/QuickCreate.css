@@ -26,6 +26,42 @@
   color: var(--color-on-surface-variant);
 }
 
+.qc-meet-icon {
+  font-family: var(--font-family-icons);
+  font-size: var(--qc-when-icon-font-size);
+  line-height: var(--qc-when-icon-line-height);
+}
+
+/* Title underline: grey line plus the primary line while focused (probed ::before/::after). */
+.qc-title-underline::before,
+.qc-title-underline::after,
+.ff-n24::before,
+.ff-n24::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+}
+
+.qc-title-underline::before,
+.ff-n24::before {
+  top: var(--qc-title-underline-before-top);
+  border-bottom: var(--qc-title-underline-before-border-bottom);
+}
+
+.qc-title-underline::after,
+.ff-n24::after {
+  top: var(--qc-title-underline-after-top);
+  border-bottom: var(--qc-title-underline-after-border-bottom);
+  opacity: 0;
+}
+
+.qc-title-line:focus-within .qc-title-underline::after,
+.ff-n21:focus-within .ff-n24::after {
+  opacity: 1;
+}
+
 .qc-calendar-dot {
   background-color: var(--data-chip-bg);
 }

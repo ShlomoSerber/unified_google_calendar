@@ -391,9 +391,9 @@ export function FullForm({ occurrenceId, startTs: initialStart, endTs: initialEn
                       <div className="ff-n96">
                         <div className="ff-n97">
                           <input className="ff-n98" aria-label="All day" type="checkbox" checked={allDay} onChange={(e) => setAllDay(e.target.checked)} />
-                          <div className={allDay ? 'ff-allday-check ff-allday-check-on' : 'ff-allday-check'}>
-                            <svg className="ff-n100">
-                              <path className="ff-n101" />
+                          <div className={allDay ? 'ff-allday-check ff-n171' : 'ff-allday-check'}>
+                            <svg className="ff-n100" viewBox="0 0 24 24" focusable="false">
+                              <path className={allDay ? 'ff-n101 ff-tick-on' : 'ff-n101'} d="M1.73,12.91 8.1,19.28 22.79,4.59" fill="none" />
                             </svg>
                             <div className="ff-n102"></div>
                           </div>
@@ -410,9 +410,9 @@ export function FullForm({ occurrenceId, startTs: initialStart, endTs: initialEn
                               <span className="ff-recurrence-text" aria-label={recurrenceLabel}>{recurrenceLabel}</span>
                             </span>
                             <span className="ff-n111">
-                              <svg className="ff-n112" role="presentation">
-                                <polygon className="ff-n113"></polygon>
-                                <polygon className="ff-n114"></polygon>
+                              <svg className="ff-n112" role="presentation" viewBox="0 0 10 5">
+                                <polygon className="ff-n113" points="0,0 5,5 10,0"></polygon>
+                                <polygon className="ff-n114" points="0,0 5,5 10,0"></polygon>
                               </svg>
                             </span>
                             <span className="ff-n115"></span>
@@ -509,8 +509,8 @@ export function FullForm({ occurrenceId, startTs: initialStart, endTs: initialEn
                                   <div className="ff-n158">
                                     <input className="ff-n159" aria-label="Let guests modify the event" type="checkbox" disabled />
                                     <div className="ff-n160">
-                                      <svg className="ff-n161">
-                                        <path className="ff-n162" />
+                                      <svg className="ff-n161" viewBox="0 0 24 24" focusable="false">
+                                        <path className="ff-n162" d="M1.73,12.91 8.1,19.28 22.79,4.59" fill="none" />
                                       </svg>
                                       <div className="ff-n163"></div>
                                     </div>
@@ -526,8 +526,8 @@ export function FullForm({ occurrenceId, startTs: initialStart, endTs: initialEn
                                   <div className="ff-n169">
                                     <input className="ff-n170" aria-label="Let guests invite others to the event" type="checkbox" defaultChecked disabled />
                                     <div className="ff-n171">
-                                      <svg className="ff-n172">
-                                        <path className="ff-n173" />
+                                      <svg className="ff-n172" viewBox="0 0 24 24" focusable="false">
+                                        <path className="ff-n173 ff-tick-on" d="M1.73,12.91 8.1,19.28 22.79,4.59" fill="none" />
                                       </svg>
                                       <div className="ff-n174"></div>
                                     </div>
@@ -543,8 +543,8 @@ export function FullForm({ occurrenceId, startTs: initialStart, endTs: initialEn
                                   <div className="ff-n180">
                                     <input className="ff-n181" aria-label="Let guests see the event guest list." type="checkbox" defaultChecked disabled />
                                     <div className="ff-n182">
-                                      <svg className="ff-n183">
-                                        <path className="ff-n184" />
+                                      <svg className="ff-n183" viewBox="0 0 24 24" focusable="false">
+                                        <path className="ff-n184 ff-tick-on" d="M1.73,12.91 8.1,19.28 22.79,4.59" fill="none" />
                                       </svg>
                                       <div className="ff-n185"></div>
                                     </div>
@@ -628,8 +628,8 @@ export function FullForm({ occurrenceId, startTs: initialStart, endTs: initialEn
                         <div className="ff-location-row">
                           <div className="ff-n230">
                             <i className="ff-n231">
-                              <svg className="ff-n232">
-                                <path className="ff-n233" />
+                              <svg className="ff-n232" viewBox="0 0 24 24" focusable="false">
+                                <path className="ff-n233" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
                                 <circle className="ff-n234" />
                               </svg>
                             </i>
@@ -654,8 +654,8 @@ export function FullForm({ occurrenceId, startTs: initialStart, endTs: initialEn
                         <div className="ff-notif-row">
                           <div className="ff-n245">
                             <i className="ff-n246">
-                              <svg className="ff-n247">
-                                <path className="ff-n248" />
+                              <svg className="ff-n247" viewBox="0 0 24 24" focusable="false">
+                                <path className="ff-n248" d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" />
                               </svg>
                             </i>
                           </div>
@@ -707,8 +707,8 @@ export function FullForm({ occurrenceId, startTs: initialStart, endTs: initialEn
                                       <span className="ff-calendar-text">{calendar?.summary ?? 'No calendar'}</span>
                                     </span>
                                     <span className="ff-n272">
-                                      <svg className="ff-n273" role="presentation">
-                                        <polygon className="ff-n274"></polygon>
+                                      <svg className="ff-n273" role="presentation" viewBox="0 0 10 5">
+                                        <polygon className="ff-n274" points="0,0 5,5 10,0"></polygon>
                                         <polygon className="ff-n275"></polygon>
                                       </svg>
                                     </span>
@@ -742,9 +742,9 @@ export function FullForm({ occurrenceId, startTs: initialStart, endTs: initialEn
                                         </div>
                                       </span>
                                       <span className="ff-n287">
-                                        <svg className="ff-n288">
-                                          <path className="ff-n289" />
-                                          <path className="ff-n290" />
+                                        <svg className="ff-n288" viewBox="0 0 24 24" focusable="false">
+                                          <path className="ff-n289" d="M7 10l5 5 5-5z" />
+                                          <path className="ff-n290" d="" />
                                         </svg>
                                       </span>
                                     </button>
@@ -759,8 +759,8 @@ export function FullForm({ occurrenceId, startTs: initialStart, endTs: initialEn
                         <div className="ff-showas-row">
                           <div className="ff-n294">
                             <i className="ff-n295">
-                              <svg className="ff-n296">
-                                <path className="ff-n297" />
+                              <svg className="ff-n296" viewBox="0 0 24 24" focusable="false">
+                                <path className="ff-n297" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
                               </svg>
                             </i>
                           </div>
@@ -816,8 +816,8 @@ export function FullForm({ occurrenceId, startTs: initialStart, endTs: initialEn
                                     <div className="ff-n326">
                                       <span className="ff-n327"></span>
                                       <span className="ff-n328">
-                                        <svg className="ff-n329">
-                                          <path className="ff-n330" />
+                                        <svg className="ff-n329" viewBox="0 0 24 24" focusable="false">
+                                          <path className="ff-n330" d="M7 10l5 5 5-5z" />
                                         </svg>
                                       </span>
                                       <a className="ff-n331" aria-label="This event follows the sharing settings of this calendar. Anyone who can see details of other events can also see this event's details, including the description and names of attachments. Learn more about event privacy"></a>
@@ -859,21 +859,21 @@ export function FullForm({ occurrenceId, startTs: initialStart, endTs: initialEn
                                         <div className="ff-bold" role="button" aria-label="Bold" aria-disabled="true" title={UNAVAILABLE}>
                                           <span className="ff-n355">
                                             <span className="ff-n356">
-                                              <span className="ff-n357">{""}</span>
+                                              <span className="ff-n357 ff-toolbar-glyph">format_bold</span>
                                             </span>
                                           </span>
                                         </div>
                                         <div className="ff-italic" role="button" aria-label="Italic" aria-disabled="true" title={UNAVAILABLE}>
                                           <span className="ff-n359">
                                             <span className="ff-n360">
-                                              <span className="ff-n361">{""}</span>
+                                              <span className="ff-n361 ff-toolbar-glyph">format_italic</span>
                                             </span>
                                           </span>
                                         </div>
                                         <div className="ff-underline" role="button" aria-label="Underline" aria-disabled="true" title={UNAVAILABLE}>
                                           <span className="ff-n363">
                                             <span className="ff-n364">
-                                              <span className="ff-n365">{""}</span>
+                                              <span className="ff-n365 ff-toolbar-glyph">format_underlined</span>
                                             </span>
                                           </span>
                                         </div>
@@ -881,14 +881,14 @@ export function FullForm({ occurrenceId, startTs: initialStart, endTs: initialEn
                                         <div className="ff-numbered" role="button" aria-label="Numbered list" aria-disabled="true" title={UNAVAILABLE}>
                                           <span className="ff-n368">
                                             <span className="ff-n369">
-                                              <span className="ff-n370">{""}</span>
+                                              <span className="ff-n370 ff-toolbar-glyph">format_list_numbered</span>
                                             </span>
                                           </span>
                                         </div>
                                         <div className="ff-bulleted" role="button" aria-label="Bulleted list" aria-disabled="true" title={UNAVAILABLE}>
                                           <span className="ff-n372">
                                             <span className="ff-n373">
-                                              <span className="ff-n374">{""}</span>
+                                              <span className="ff-n374 ff-toolbar-glyph">format_list_bulleted</span>
                                             </span>
                                           </span>
                                         </div>
@@ -896,14 +896,14 @@ export function FullForm({ occurrenceId, startTs: initialStart, endTs: initialEn
                                         <div className="ff-link" role="button" aria-label="Insert link" aria-disabled="true" title={UNAVAILABLE}>
                                           <span className="ff-n377">
                                             <span className="ff-n378">
-                                              <span className="ff-n379">{""}</span>
+                                              <span className="ff-n379 ff-toolbar-glyph">insert_link</span>
                                             </span>
                                           </span>
                                         </div>
                                         <div className="ff-clear" role="button" aria-label="Remove formatting" aria-disabled="true" title={UNAVAILABLE}>
                                           <span className="ff-n381">
                                             <span className="ff-n382">
-                                              <span className="ff-n383">{""}</span>
+                                              <span className="ff-n383 ff-toolbar-glyph">format_clear</span>
                                             </span>
                                           </span>
                                         </div>
@@ -915,9 +915,9 @@ export function FullForm({ occurrenceId, startTs: initialStart, endTs: initialEn
                                             <button className="ff-notes-button" type="button" disabled title={UNAVAILABLE}>
                                               <span className="ff-n389"></span>
                                               <div className="ff-n390">
-                                                <svg className="ff-n391">
-                                                  <path className="ff-n392" />
-                                                  <path className="ff-n393" />
+                                                <svg className="ff-n391" viewBox="0 0 24 24" focusable="false">
+                                                  <path className="ff-n392" d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
+                                                  <path className="ff-n393" d="" />
                                                 </svg>
                                                 <span className="ff-notes-label">{"Create meeting notes"}</span>
                                               </div>

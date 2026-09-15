@@ -20,6 +20,13 @@
   min-width: 0;
 }
 
+/* Google shows the Meet logo as an <img>; the app draws the videocam glyph of the icon font. */
+.popup-meet-icon {
+  font-family: var(--font-family-icons);
+  font-size: var(--popup-notes-icon-font-size);
+  line-height: var(--popup-notes-icon-line-height);
+}
+
 .popup-title-dot {
   background-color: var(--data-chip-bg);
 }

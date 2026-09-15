@@ -271,9 +271,9 @@ export function QuickCreate({ startTs, endTs, allDay, anchor }: QuickCreateProps
                             <div className="qc-location-row">
                               <div className="qc-location-icon-cell">
                                 <span className="qc-location-icon-span">
-                                  <svg className="qc-location-icon">
-                                    <path className="qc-location-icon-path" />
-                                    <circle className="qc-location-icon-path2" />
+                                  <svg className="qc-location-icon" viewBox="0 0 24 24" focusable="false">
+                                    <path className="qc-location-icon-path" d={ICON.place} />
+                                    <circle className="qc-location-icon-path2" cx="12" cy="9" r="2.5" />
                                   </svg>
                                 </span>
                               </div>

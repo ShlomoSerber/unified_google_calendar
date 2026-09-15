@@ -84,7 +84,19 @@
       "dark": "rgb(71, 71, 71)"
     },
     "component.scrollbar.drawer_thumb.border_radius": "8px",
-    "component.scrollbar_note": "Component 20, probed with getComputedStyle(el, \"::-webkit-scrollbar\" / \"::-webkit-scrollbar-thumb\") on calendar.google.com (2026-09-14, light and dark emulated): the hour grid scroller has a 16px scrollbar whose thumb is the grey disc inset by a 4px border in the surface colour (8px visible, radius 8); the drawer has an 8px scrollbar with the same grey thumb. Both are overlay scrollbars in the reference (clientWidth = offsetWidth, none visible in the screenshots); WebKitGTK draws GTK overlay scrollbars and ignores ::-webkit-scrollbar rules, so the tokens are applied where the engine honours them and the bar appears on scroll like Google\\u2019s."
+    "component.scrollbar_note": "Component 20, probed with getComputedStyle(el, \"::-webkit-scrollbar\" / \"::-webkit-scrollbar-thumb\") on calendar.google.com (2026-09-14, light and dark emulated): the hour grid scroller has a 16px scrollbar whose thumb is the grey disc inset by a 4px border in the surface colour (8px visible, radius 8); the drawer has an 8px scrollbar with the same grey thumb. Both are overlay scrollbars in the reference (clientWidth = offsetWidth, none visible in the screenshots); WebKitGTK draws GTK overlay scrollbars and ignores ::-webkit-scrollbar rules, so the tokens are applied where the engine honours them and the bar appears on scroll like Google\\u2019s.",
+    "component.scope.radio_dot.transform": "scale(0.5)",
+    "component.scope.radio_dot_note": "edit_scope_dialog-light.json node 13: a 20px box drawn as a 10×10 rect → Google scales the inner dot of the selected radio by 0.5 (transform is not in the dump).",
+    "component.rec.never_dot.transform": "scale(0.5)",
+    "component.scope.radio_dot.left": "0px",
+    "component.scope.radio_dot.top": "0px",
+    "component.rec.never_dot.left": "0px",
+    "component.rec.never_dot.top": "0px",
+    "component.qc.title_underline_before.border_bottom": "1px solid rgb(196, 199, 197)",
+    "component.qc.title_underline_before.top": "-1px",
+    "component.qc.title_underline_after.border_bottom": "3px solid rgb(11, 87, 208)",
+    "component.qc.title_underline_after.top": "-3px",
+    "component.qc.title_underline_note": "getComputedStyle(underline, \"::before\" / \"::after\") on calendar.google.com (2026-09-14, light): the title field underline is a 1px grey line (::before) plus the 3px primary line (::after) shown while the field is focused; both absolute, left 0, full width, height 0. The full form title (ff-n24) uses the same pattern."
   },
   "font": {
     "topbar_title": {
@@ -2258,7 +2270,8 @@
         "save_wrap",
         "more_wrap",
         "description_label",
-        "when_meta_inner"
+        "when_meta_inner",
+        "meet_label"
       ]
     },
     "ff": {
@@ -2407,7 +2420,8 @@
         "tab_find",
         "tab_find_label",
         "notes_label",
-        "notes_button"
+        "notes_button",
+        "meet_label"
       ]
     },
     "scope": {
@@ -2605,7 +2619,11 @@
         "never_label",
         "ends_label",
         "on_label",
-        "day_on_letter"
+        "day_on_letter",
+        "freq_text_wrap",
+        "freq_combo",
+        "freq_wrap",
+        "freq_box"
       ]
     },
     "vsel": {

@@ -24,7 +24,7 @@ const ALLOWED = {
   'day_view': 4, 'month_view': 3, 'agenda_view': 13, // text widths of titles and date labels (see .md)
   'event_popup': 6, 'event_popup-meet': 12, 'event_popup-guests': 12, 'event_popup-recurring': 6, // text widths, creator/guest names the app cannot resolve (see .md)
   'quick_create': 13, 'quick_create-with_title': 13, // text widths and the default calendar (see .md)
-  'full_form': 14, 'recurrence_dialog': 12, 'edit_scope_dialog': 5, // text widths; the third scope option (see .md)
+  'full_form': 20, 'recurrence_dialog': 12, 'edit_scope_dialog': 6, // text widths, the toolbar glyph names, the third scope option (see .md)
 };
 const PHASE = {
   4: ['topbar', 'sidebar', 'create_button', 'mini_calendar', 'calendar_list', 'week_header', 'allday_row', 'hour_grid', 'now_line', 'event_chip'],

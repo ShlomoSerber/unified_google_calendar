@@ -12,8 +12,8 @@ Fecha: 2026-09-14. Referencia: calendar.google.com, semana del 2026-09-14, cuent
 
 | Estado | Tema | Nodos comparados | Diferencias de layout | odiff |
 |---|---|---|---|---|
-| hour_grid | light | 62 | 10 | 2.12% |
-| hour_grid | dark | 62 | 10 | 2.18% |
+| hour_grid | light | 62 | 10 | 2.22% |
+| hour_grid | dark | 62 | 10 | 2.24% |
 
 ## Diferencias aceptadas
 

@@ -133,8 +133,8 @@ export function RecurrenceDialog({ rrule, startTs }: RecurrenceDialogProps) {
                       <span className="rec-n21"></span>
                       <span className="rec-n22">
                         <span className="rec-n23">
-                          <svg className="rec-n24">
-                            <path className="rec-n25" />
+                          <svg className="rec-n24" viewBox="0 0 24 24" focusable="false">
+                            <path className="rec-n25" d="M7 14l5-5 5 5z" />
                           </svg>
                         </span>
                       </span>
@@ -147,8 +147,8 @@ export function RecurrenceDialog({ rrule, startTs }: RecurrenceDialogProps) {
                       <span className="rec-n30"></span>
                       <span className="rec-n31">
                         <span className="rec-n32">
-                          <svg className="rec-n33">
-                            <path className="rec-n34" />
+                          <svg className="rec-n33" viewBox="0 0 24 24" focusable="false">
+                            <path className="rec-n34" d="M7 10l5 5 5-5z" />
                           </svg>
                         </span>
                       </span>
@@ -165,9 +165,9 @@ export function RecurrenceDialog({ rrule, startTs }: RecurrenceDialogProps) {
                       <span className="rec-freq-text">{interval === 1 ? FREQ_LABEL[freq].singular : FREQ_LABEL[freq].plural}</span>
                     </span>
                     <span className="rec-freq-arrow">
-                      <svg className="rec-n43" role="presentation" viewBox="0 0 24 24">
-                        <polygon className="rec-n44" points="7,10 12,15 17,10"></polygon>
-                        <polygon className="rec-n45" points="7,10 12,15 17,10"></polygon>
+                      <svg className="rec-n43" role="presentation" viewBox="0 0 10 5">
+                        <polygon className="rec-n44" points="0,0 5,5 10,0"></polygon>
+                        <polygon className="rec-n45" points="0,0 5,5 10,0"></polygon>
                       </svg>
                     </span>
                     <span className="rec-freq-n46"></span>
@@ -278,8 +278,8 @@ export function RecurrenceDialog({ rrule, startTs }: RecurrenceDialogProps) {
                         <span className="rec-n173"></span>
                         <span className="rec-n174">
                           <span className="rec-n175">
-                            <svg className="rec-n176">
-                              <path className="rec-n177" />
+                            <svg className="rec-n176" viewBox="0 0 24 24" focusable="false">
+                              <path className="rec-n177" d="M7 14l5-5 5 5z" />
                             </svg>
                           </span>
                         </span>
@@ -292,8 +292,8 @@ export function RecurrenceDialog({ rrule, startTs }: RecurrenceDialogProps) {
                         <span className="rec-n182"></span>
                         <span className="rec-n183">
                           <span className="rec-n184">
-                            <svg className="rec-n185">
-                              <path className="rec-n186" />
+                            <svg className="rec-n185" viewBox="0 0 24 24" focusable="false">
+                              <path className="rec-n186" d="M7 10l5 5 5-5z" />
                             </svg>
                           </span>
                         </span>

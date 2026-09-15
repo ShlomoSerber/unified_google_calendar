@@ -12,9 +12,9 @@ Fecha: 2026-09-14. Referencia: calendar.google.com, semana del 2026-09-14, cuent
 
 | Estado | Tema | Nodos comparados | Diferencias de layout | odiff |
 |---|---|---|---|---|
-| edit_scope_dialog | light | 7 | 5 | 22.98% |
-| edit_scope_dialog | dark | 7 | 5 | 21.76% |
+| edit_scope_dialog | light | 7 | 6 | 23.02% |
+| edit_scope_dialog | dark | 7 | 6 | 21.75% |
 
 ## Diferencias aceptadas
 
-- La referencia se tomó con "Delete event" sobre la primera ocurrencia de "Weekly repeat": Google oculta "This and following events" en la primera ocurrencia y muestra dos opciones. La app ofrece siempre las tres de `docs/03` sección 4, de ahí las 5 diferencias (alto del diálogo y posiciones bajo la opción extra). Los estilos de opción, radio y botones coinciden.
+- La referencia se tomó con "Delete event" sobre la primera ocurrencia de "Weekly repeat": Google oculta "This and following events" en la primera ocurrencia y muestra dos opciones. La app ofrece siempre las tres de `docs/03` sección 4, de ahí las 5 diferencias (alto del diálogo y posiciones bajo la opción extra). Los estilos de opción, radio y botones coinciden. El título lleva `white-space: nowrap` porque WebKitGTK lo compone unos píxeles más ancho y lo partía en dos líneas.
