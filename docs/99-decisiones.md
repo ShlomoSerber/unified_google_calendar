@@ -162,3 +162,4 @@ Formato:
 | Fase | Fecha | Proceso Rust PSS | WebKitWebProcess PSS | Total | Nota |
 |---|---|---|---|---|---|
 | 4 | 2026-09-14 | 109.9 MB | 149.6 MB (+22.0 MB WebKitNetworkProcess) | 282.8 MB | Build de desarrollo (`target/debug`, Vite con HMR y React en modo desarrollo) en Xvfb, vista semana con 3 cuentas. No es comparable con el presupuesto de 150 MB, que se mide en release en F8-T2. |
+| 7 | 2026-09-14 | 113.9 MB | 190.8 MB (+23.6 MB WebKitNetworkProcess) | 335.3 MB | Build de desarrollo en Xvfb tras la UI completa (39 000 variables CSS medidas cargadas en el webview). Referencia interna; el presupuesto se mide en release en F8-T2. |
