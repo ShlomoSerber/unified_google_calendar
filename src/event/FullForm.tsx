@@ -169,6 +169,13 @@ export function FullForm({ occurrenceId, startTs: initialStart, endTs: initialEn
   const recurrenceOptions = recurrenceOptionsFor(startTs, tz);
   const currentRule = recurrence[0] ?? null;
   const knownRule = recurrenceOptions.some((o) => !o.custom && o.rrule === currentRule);
+  const repeatValue = knownRule ? (currentRule ?? NONE) : 'current';
+  // A custom rule adds its option in the same render that selects it; md-select only resolves a
+  // value against options already in the DOM, so the value is set again once they are.
+  const repeatSelect = useRef<MdOutlinedSelect>(null);
+  useEffect(() => {
+    if (repeatSelect.current && repeatSelect.current.value !== repeatValue) repeatSelect.current.value = repeatValue;
+  }, [repeatValue]);
   const onRecurrence = (value: string) => {
     if (value === 'custom') {
       useUi.getState().openOverlay({ kind: 'recurrence', rrule: currentRule, startTs });
@@ -261,7 +268,7 @@ export function FullForm({ occurrenceId, startTs: initialStart, endTs: initialEn
             <md-switch selected={allDay} aria-label="All day" onchange={(e) => setAllDay((e.target as MdSwitch).selected)}></md-switch>
             All day
           </label>
-          <md-outlined-select label="Repeat" value={knownRule ? (currentRule ?? NONE) : 'current'} onchange={(e) => onRecurrence(selectValue(e))}>
+          <md-outlined-select label="Repeat" ref={repeatSelect} value={repeatValue} onchange={(e) => onRecurrence(selectValue(e))}>
             {!knownRule && currentRule ? (
               <md-select-option value="current">
                 <div slot="headline">{detail?.recurrence_text ?? 'Custom'}</div>

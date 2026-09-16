@@ -179,6 +179,8 @@
     "popup_radius": "28px",
     "popup_radius_note": "= --md-sys-shape-corner-extra-large (mockup)",
     "popup_gap": "8px",
+    "number_field_width": "96px",
+    "number_field_width_note": "Outlined text fields of type number in the recurrence dialog (interval, occurrences): room for a two-digit value, its label and the spinner.",
     "dialog_width": "560px",
     "form_width": "640px",
     "snackbar_min_width": "344px",

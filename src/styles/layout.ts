@@ -38,6 +38,7 @@ export const LAYOUT = {
   popup_width: "400px",
   popup_radius: "28px",
   popup_gap: "8px",
+  number_field_width: "96px",
   dialog_width: "560px",
   form_width: "640px",
   snackbar_min_width: "344px",
