@@ -1,28 +1,29 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import type { MdDialog } from '@material/web/dialog/dialog.js';
+import type { MdOutlinedTextField } from '@material/web/textfield/outlined-text-field.js';
 import { ipc } from '../ipc';
 import { useUi } from '../state/ui';
 import './AddCalendarDialog.css';
 
-// The "+" of "Other calendars" (docs/99, 2026-09-15): a dialog of its own for a read-only iCal
-// calendar by secret address, or a Google account, instead of sending the user to Settings.
-// Built from the measured dialog tokens (scope-*, rec-*, settings-*), like the Welcome dialog.
+// The "+" of "Other calendars" (docs/99, 2026-09-15): a read-only iCal calendar by secret
+// address, or another Google account, without going through Settings.
+
+const OAUTH_HINT = 'Create ~/.config/unified-google-calendar/oauth.json first (docs/09 section A)';
+const fieldValue = (e: Event) => (e.target as MdOutlinedTextField).value;
 
 export function AddCalendarDialog() {
   const settings = useUi((s) => s.settings);
+  const dialog = useRef<MdDialog>(null);
   const [name, setName] = useState('');
   const [url, setUrl] = useState('');
   const [email, setEmail] = useState('');
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
-  const close = () => useUi.getState().closeDialog();
+  const close = () => dialog.current?.close();
   const oauth = settings?.oauth_configured ?? false;
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') close();
-    };
-    document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
+    dialog.current?.show();
   }, []);
 
   const run = async (label: string, fn: () => Promise<string>, done: boolean) => {
@@ -58,49 +59,29 @@ export function AddCalendarDialog() {
     );
 
   return (
-    <div className="addcal-scrim" onMouseDown={close}>
-      <div className="addcal-root scope-root" role="dialog" aria-modal="true" aria-label="Add calendar" onMouseDown={(e) => e.stopPropagation()}>
-        <h2 className="scope-title-row">
-          <span className="scope-title">Add calendar</span>
-        </h2>
-        <div className="addcal-body">
-          <p className="addcal-text">Subscribe to a calendar by its secret iCal address. It is read-only and refreshes with every sync.</p>
-          <input className="settings-input addcal-input" placeholder="Name (e.g. RappiCard)" value={name} onChange={(e) => setName(e.target.value)} autoFocus />
-          <input className="settings-input addcal-input" placeholder="Secret iCal address (https://…/basic.ics)" value={url} onChange={(e) => setUrl(e.target.value)} />
-          <input className="settings-input addcal-input" placeholder="Your e-mail in that calendar (optional)" value={email} onChange={(e) => setEmail(e.target.value)} />
-          <p className="addcal-text addcal-or">Or add another Google account with all its calendars.</p>
-          {message ? <p className="addcal-message">{message}</p> : null}
-        </div>
-        <div className="scope-footer">
-          <div className="scope-cancel-wrap">
-            <button className="scope-cancel" type="button" onClick={close}>
-              <span className="scope-cancel-ripple ugc-state"></span>
-              <span className="scope-cancel-hit"></span>
-              <span className="scope-cancel-label">{'Cancel'}</span>
-            </button>
-          </div>
-          <div className="scope-ok-wrap">
-            <button className="scope-ok" type="button" disabled={busy || !name.trim() || !url.trim()} onClick={() => void addIcal()}>
-              <span className="scope-ok-ripple">
-                <span className="scope-ok-ripple-inner"></span>
-              </span>
-              <span className="scope-ok-n34"></span>
-              <span className="scope-ok-hit"></span>
-              <span className="scope-ok-label">{'Add'}</span>
-            </button>
-          </div>
-          <div className="scope-ok-wrap addcal-google-wrap">
-            <button className="scope-ok" type="button" disabled={busy || !oauth} title={oauth ? undefined : 'Create ~/.config/unified-google-calendar/oauth.json first (docs/09 section A)'} onClick={() => void addGoogle()}>
-              <span className="scope-ok-ripple">
-                <span className="scope-ok-ripple-inner"></span>
-              </span>
-              <span className="scope-ok-n34"></span>
-              <span className="scope-ok-hit"></span>
-              <span className="scope-ok-label">{'Add Google account'}</span>
-            </button>
-          </div>
-        </div>
+    <md-dialog className="add-calendar" ref={dialog} aria-label="Add calendar" onclosed={() => useUi.getState().closeDialog()}>
+      <div slot="headline">Add calendar</div>
+      <div slot="content" className="add-calendar-content">
+        <p className="add-calendar-text md-typescale-body-medium">Subscribe to a calendar by its secret iCal address. It is read-only and refreshes with every sync.</p>
+        <md-outlined-text-field label="Name" placeholder="RappiCard" value={name} autofocus oninput={(e) => setName(fieldValue(e))}></md-outlined-text-field>
+        <md-outlined-text-field label="Secret iCal address" placeholder="https://…/basic.ics" value={url} oninput={(e) => setUrl(fieldValue(e))}></md-outlined-text-field>
+        <md-outlined-text-field label="Your e-mail in that calendar (optional)" value={email} oninput={(e) => setEmail(fieldValue(e))}></md-outlined-text-field>
+        <p className="add-calendar-text md-typescale-body-medium">Or add another Google account with all its calendars.</p>
+        {message ? (
+          <p className="add-calendar-message md-typescale-body-small" role="status">
+            {message}
+          </p>
+        ) : null}
       </div>
-    </div>
+      <div slot="actions">
+        <md-text-button onclick={close}>Cancel</md-text-button>
+        <md-text-button disabled={busy || !oauth} title={oauth ? undefined : OAUTH_HINT} onclick={() => void addGoogle()}>
+          Add Google account
+        </md-text-button>
+        <md-filled-button disabled={busy || !name.trim() || !url.trim()} onclick={() => void addIcal()}>
+          Add
+        </md-filled-button>
+      </div>
+    </md-dialog>
   );
 }

@@ -32,20 +32,10 @@ function rangeStart(view: ViewKind, date: number, days: number[], tz: string): s
   return String(dayStart(date, tz));
 }
 
-// The event popup stays mounted, exiting, for its close duration (docs/11 section 10). The
-// md-dialog kinds animate themselves and leave the store from their `closed` event; until M4
-// of the transition the unmigrated dialogs still fade through the page layer.
+// The event popup stays mounted, exiting, for its close duration (docs/11 section 10); the
+// md-dialog kinds animate themselves and leave the store from their `closed` event.
 const dialogOpen = (d: Dialog) => d.kind !== 'none';
-function dialogExitMs(d: Dialog): number {
-  switch (d.kind) {
-    case 'event':
-      return ms(MOTION.popup_close_duration);
-    case 'add-calendar':
-      return ms(MOTION.view_fade_duration);
-    default:
-      return 0;
-  }
-}
+const dialogExitMs = (d: Dialog): number => (d.kind === 'event' ? ms(MOTION.popup_close_duration) : 0);
 
 // Shell: top bar, sidebar and the view router (docs/02 section 4 `src/app/`).
 export function App() {
@@ -58,7 +48,6 @@ export function App() {
   const overlay = useUi((s) => s.overlay);
   const days = weekDays(date, tz);
   const { shown: dlg, exiting } = usePresence(dialog, dialogOpen, dialogExitMs);
-  const pageClass = exiting ? 'motion-layer motion-page-exit' : 'motion-layer motion-page';
 
   useEffect(() => {
     const { setAccounts, setCalendars, setNow, setSettings, setSyncStatus } = useUi.getState();
@@ -101,7 +90,7 @@ export function App() {
       {dlg.kind === 'settings' ? <SettingsDialog /> : null}
       {dlg.kind === 'welcome' ? <WelcomeDialog /> : null}
       {dlg.kind === 'goa' ? <GoaDialog /> : null}
-      {dlg.kind === 'add-calendar' ? <div className={pageClass}><AddCalendarDialog /></div> : null}
+      {dlg.kind === 'add-calendar' ? <AddCalendarDialog /> : null}
       {dlg.kind === 'event' ? <EventPopup occurrenceId={dlg.occurrenceId} anchor={dlg.anchor} exiting={exiting} /> : null}
       {dlg.kind === 'full-form' ? <FullForm occurrenceId={dlg.occurrenceId} startTs={dlg.startTs} endTs={dlg.endTs} allDay={dlg.allDay} draft={dlg.draft} /> : null}
       {overlay.kind === 'edit-scope' ? <EditScopeDialog occurrenceId={overlay.occurrenceId} action={overlay.action} draft={overlay.draft} /> : null}

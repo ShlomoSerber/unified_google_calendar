@@ -1,47 +1,20 @@
-/* Measured dialog rules live in src/styles/measured.css (.scope-*, .rec-*) and the inputs in
-   SettingsDialog.css (.settings-input, .settings-button). Same shell as the Welcome dialog. */
-.addcal-scrim {
-  background: var(--dialog-scrim-background-color);
-  position: fixed;
-  inset: 0;
-  z-index: var(--create-menu-root-z-index);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Add calendar dialog (docs/11 section 7): 560 px, three fields in a column. */
+.add-calendar {
+  min-width: var(--ugc-layout-dialog-width);
+  max-width: var(--ugc-layout-dialog-width);
 }
 
-.addcal-root {
-  width: calc(var(--rec-root-width) + var(--scope-root-width));
-  height: auto;
-}
-
-.addcal-body {
+.add-calendar-content {
   display: flex;
   flex-direction: column;
-  gap: var(--create-menu-item-padding-top);
-  padding: 0 var(--scope-title-row-padding-left);
+  gap: var(--ugc-space-4);
 }
 
-.addcal-text,
-.addcal-message {
+.add-calendar-text {
   margin: 0;
-  line-height: var(--rec-on-label-line-height);
 }
 
-.addcal-or {
-  margin-top: var(--create-menu-item-padding-top);
-}
-
-.addcal-message {
-  color: var(--color-on-surface-variant);
-}
-
-.addcal-google-wrap {
-  margin-left: var(--create-menu-item-padding-top);
-}
-
-/* Three footer buttons: the measured footer was sized for two; it grows with the dialog. */
-.addcal-root .scope-footer {
-  width: auto;
-  white-space: nowrap;
+.add-calendar-message {
+  margin: 0;
+  color: var(--md-sys-color-primary);
 }

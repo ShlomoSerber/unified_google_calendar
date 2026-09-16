@@ -91,24 +91,3 @@
     transform: translateY(0);
   }
 }
-
-/* ---- Until M4 of the transition: the layer App.tsx wraps the unmigrated dialogs in ---- */
-
-.motion-layer {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 2;
-}
-
-.motion-layer > * {
-  pointer-events: auto;
-}
-
-.motion-page {
-  animation: ugc-fade-in var(--ugc-motion-view-fade-duration) var(--md-sys-motion-easing-standard) both;
-}
-
-.motion-page-exit {
-  animation: ugc-fade-out var(--ugc-motion-view-fade-duration) var(--md-sys-motion-easing-standard) both;
-}
