@@ -248,6 +248,13 @@ Formato:
 - Motivo: cada punto salió al mirar la app en Xvfb; ninguno cambia lo que hace un control ni contradice la sección 7 de `11`.
 - Afecta: `docs/design/m3/icons.txt`, `docs/design/m3/theme.json`, `src/event/FullForm.tsx`, `src/views/week/WeekView.tsx`, `src/event/EventPopup.tsx`, `src/app/SettingsDialog.tsx`, `docs/10-mantenimiento.md`.
 
+## 2026-09-16 — El espejo de EDS respeta la visibilidad de los calendarios
+- Quién: usuario (reporte) e implementación
+- Fase/tarea: mantenimiento, commit `fix: eds mirror drops sources of hidden calendars`, versión 0.2.1
+- Decisión: `mirror_calendars` trata un calendario con `visible=0` igual que uno con `deleted=1`: no escribe eventos y, si la fuente `ugc-*` existe, la quita con `Source.Removable.Remove()`. Al volver a marcar el calendario la fuente se crea de nuevo en la siguiente pasada. Se descartó dejar la fuente con `Selected=false`: GNOME Calendar permite volver a marcarla desde su lista y el panel volvería a mostrar eventos que la app oculta. `docs/06` sección 4.5 lo registra.
+- Motivo: el usuario tenía "Holidays in Argentina" tres veces en el panel de GNOME (una por cuenta más la versión en español). Había desmarcado la copia de romvo en la app, pero el espejo solo saltaba calendarios borrados, así que la fuente de EDS seguía viva con sus 18 eventos.
+- Afecta: `src-tauri/src/eds/mirror.rs`, `docs/06-integracion-gnome.md`, `docs/10-mantenimiento.md`.
+
 ## Mediciones de RAM por fase
 
 | Fase | Fecha | Proceso Rust PSS | WebKitWebProcess PSS | Total | Nota |

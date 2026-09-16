@@ -157,6 +157,7 @@ Día completo: `DTSTART;VALUE=DATE:20260915` y `DTEND;VALUE=DATE:20260916`. Se e
 - Tras cada `calendar:updated`, con debounce de 5 segundos, solo para los calendarios tocados.
 - Una vez por día para mover la ventana de 30/180 días.
 - Al quitar una cuenta: `Remove()` de sus fuentes. Los eventos se van con la fuente.
+- Solo los calendarios visibles en la app tienen fuente. Al ocultar un calendario (interruptor del cajón o de Settings) el espejo hace `Remove()` de su fuente en la siguiente pasada; al volver a mostrarlo la crea de nuevo. El panel muestra exactamente lo que la app muestra.
 - Si `evolution-source-registry` no está corriendo o el bus no responde, el espejo se salta y registra en el log. Nunca bloquea la app.
 
 ### 4.6 Evitar duplicados con Online Accounts

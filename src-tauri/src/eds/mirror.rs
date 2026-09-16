@@ -4,6 +4,8 @@
 //! One local EDS source per calendar (`ugc-<sha1(account|calendar)>`, `ugc-local` for the
 //! personal calendar), `[Alarms] IncludeMe=false`, VEVENTs in UTC without VALARM, one per
 //! occurrence, window today-30 .. today+180 days. Diff by comparing the generated text.
+//! Only visible calendars get a source: hiding one in the app removes its source, so the
+//! panel follows the app's calendar list (docs/06 section 4.5).
 
 use std::collections::{HashMap, HashSet};
 
@@ -238,6 +240,22 @@ pub fn items_for(
     Ok(rows)
 }
 
+/// Whether a calendar row gets an EDS source: it must exist and be visible in the app.
+pub fn is_mirrored(row: &calendars::CalendarRow) -> bool {
+    !row.deleted && row.visible
+}
+
+/// Remove the EDS source of a calendar if it exists. Its events go with it.
+async fn remove_source_if_present(eds: &Eds, uid: &str) -> Result<(), AppError> {
+    if let Some(info) = eds.sources().await?.get(uid) {
+        if info.removable {
+            tracing::info!(%uid, "removing eds source of a hidden or deleted calendar");
+            eds.remove_source(&info.path).await?;
+        }
+    }
+    Ok(())
+}
+
 /// Ensure the EDS source of a calendar exists with the right name and color.
 async fn ensure_source(eds: &Eds, uid: &str, display: &str, color: &str) -> Result<(), AppError> {
     let sources = eds.sources().await?;
@@ -292,7 +310,7 @@ pub async fn mirror_calendars(
                 let Some(row) = calendars::get_calendar(c, &acc, &cal)? else {
                     return Ok(None);
                 };
-                if row.deleted {
+                if !is_mirrored(&row) {
                     return Ok(None);
                 }
                 let account = crate::db::queries::accounts::get_account(c, &acc)?;
@@ -300,10 +318,12 @@ pub async fn mirror_calendars(
                 Ok(Some((row, account.and_then(|a| a.email), items)))
             })
             .await?;
+        let uid = source_uid(account_id, calendar_id);
         let Some((row, email, items)) = data else {
+            // Hidden or deleted in the app: the panel must not show it either.
+            remove_source_if_present(eds, &uid).await?;
             continue;
         };
-        let uid = source_uid(account_id, calendar_id);
         let is_local_personal = account_id == LOCAL_ACCOUNT_ID && calendar_id == LOCAL_CALENDAR_ID;
         let display = display_name(&row.summary, email.as_deref(), is_local_personal);
         ensure_source(eds, &uid, &display, &row.color_bg).await?;
@@ -388,6 +408,25 @@ mod tests {
             "Personal (Unified Google Calendar)"
         );
         assert_eq!(display_name("Work", Some("a@b.c"), false), "Work · a@b.c");
+    }
+
+    #[test]
+    fn only_visible_calendars_are_mirrored() {
+        let row = calendars::CalendarRow {
+            visible: true,
+            ..Default::default()
+        };
+        assert!(is_mirrored(&row));
+        let hidden = calendars::CalendarRow {
+            visible: false,
+            ..row.clone()
+        };
+        assert!(!is_mirrored(&hidden));
+        let deleted = calendars::CalendarRow {
+            deleted: true,
+            ..row
+        };
+        assert!(!is_mirrored(&deleted));
     }
 
     #[test]
