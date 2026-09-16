@@ -60,7 +60,7 @@ export function QuickCreate({ startTs, endTs, allDay, anchor, exiting = false }:
     const el = rootRef.current;
     if (!el || !anchor) return;
     const r = el.getBoundingClientRect();
-    setPos(popupPosition(columnRect(anchor), { width: window.innerWidth, height: window.innerHeight }, { width: layoutNumber(LAYOUT.qc_width), height: r.height }, anchor.top));
+    setPos(popupPosition(columnRect(anchor), { width: window.innerWidth, height: window.innerHeight }, { width: layoutNumber(LAYOUT.qc_width), height: r.height }));
   }, [anchor]);
 
   useEffect(() => {

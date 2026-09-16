@@ -1,82 +1,119 @@
-/* Measured rules live in src/styles/measured.css (.popup-*). This file positions the popup
-   (JS computes left/top from the anchor rule) and styles the rows Google's dumps could not
-   show: the RSVP buttons, "also in" and the conflict line, using neighbouring tokens. */
-.popup-root {
+/* Event popup (docs/11 section 7): 400 px card on surface-container-high, extra-large corner,
+   level-3 elevation; a two-column body of 20 px icons and text. */
+.event-popup {
   position: fixed;
-  z-index: var(--create-menu-root-z-index);
+  z-index: 2;
+  box-sizing: border-box;
+  width: var(--ugc-layout-popup-width);
+  max-height: calc(100% - var(--ugc-space-4) * 2);
+  overflow: hidden auto;
+  border-radius: var(--ugc-layout-popup-radius);
+  background: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface);
+  box-shadow: var(--md-sys-elevation-level3);
 }
 
-.popup-side-l1,
-.popup-side-l2,
-.popup-side-r1,
-.popup-side-r2 {
-  width: 0;
+.event-popup-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0;
+  padding: var(--ugc-space-2) var(--ugc-space-2) 0 0;
 }
 
-.popup-frame,
-.popup-col,
-.popup-col2 {
-  flex: 1;
-  min-width: 0;
-}
-
-.popup-meet-icon {
-  font-family: var(--font-family-icons);
-  font-size: var(--popup-notes-icon-font-size);
-  line-height: var(--popup-notes-icon-line-height);
-}
-
-.popup-title-dot {
-  background-color: var(--data-chip-bg);
-}
-
-.popup-options:disabled {
-  cursor: default;
-}
-
-.popup-error {
-  padding: var(--popup-header-row-padding-left);
-  background: var(--popup-frame-background-color);
-  color: var(--color-on-surface);
-}
-
-.popup-options-cell {
+.event-popup-more {
   position: relative;
 }
 
-.popup-options-menu {
-  top: var(--popup-options-cell-height);
-  right: 0;
-  left: auto;
+.event-popup-body {
+  display: grid;
+  grid-template-columns: var(--ugc-layout-icon-size) minmax(0, 1fr);
+  column-gap: var(--ugc-space-4);
+  row-gap: var(--ugc-space-4);
+  align-items: start;
+  padding: 0 var(--ugc-space-6) var(--ugc-space-6) var(--ugc-space-6);
+  --md-icon-size: var(--ugc-layout-icon-size-small);
+}
+
+.event-popup-body > md-icon {
+  justify-self: center;
+  margin-top: var(--ugc-space-1);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.event-popup-dot {
+  justify-self: center;
+  width: var(--ugc-layout-icon-size-small);
+  height: var(--ugc-layout-icon-size-small);
+  margin-top: var(--ugc-space-2);
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--data-chip-color);
+}
+
+.event-popup-title {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.event-popup-heading,
+.event-popup-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ugc-space-1);
+  min-width: 0;
+}
+
+.event-popup-inline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ugc-space-2);
+}
+
+.event-popup-muted {
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.event-popup-conflict {
+  color: var(--md-sys-color-error);
+}
+
+.event-popup-phone {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--ugc-space-1);
+}
+
+.event-popup-guests {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ugc-space-2);
+  margin: var(--ugc-space-2) 0 0;
+  padding: 0;
   list-style: none;
 }
 
-.popup-options-menu .create-menu-item {
+.event-popup-guest {
+  display: flex;
+  align-items: center;
+  gap: var(--ugc-space-3);
+}
+
+.event-popup-location {
+  position: relative;
+  padding: var(--ugc-space-1) var(--ugc-space-2);
+  margin-left: calc(-1 * var(--ugc-space-2));
+  border-radius: var(--md-sys-shape-corner-small);
   cursor: pointer;
+  --md-focus-ring-shape: var(--md-sys-shape-corner-small);
 }
 
-
-.popup-guest-role {
-  margin-left: var(--create-menu-item-padding-top);
-  color: var(--color-on-surface-variant);
+.event-popup-description {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
-.popup-guest-status-declined {
-  color: var(--color-on-surface-variant);
-}
-
-.popup-also-in,
-.popup-conflict {
-  line-height: var(--popup-creator-line-height);
-  color: var(--color-on-surface-variant);
-}
-
-.popup-conflict {
-  color: var(--week-now-dot-background-color);
-}
-
-/* The guest list grows with the guests (the dump had three); Google's fixed height overlapped
-   the rows below it with long lists (user report, 2026-09-15). */
-.popup-tree {
-  height: auto;
+.event-popup-error {
+  padding: var(--ugc-space-6);
+  color: var(--md-sys-color-error);
 }
