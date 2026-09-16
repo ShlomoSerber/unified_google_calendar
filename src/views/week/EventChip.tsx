@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react';
 import { hhmm } from '../../lib/dates';
 import { chipBackground, useTheme } from '../../lib/colors';
 import { useUi } from '../../state/ui';
-import { EVENT_COLOR_NAMES } from '../../styles/palette';
+import { EVENT_COLOR_NAMES } from '../../styles/legacy-palette';
 import type { ViewOccurrence } from '../../types/ipc';
 
 // Component 10 of docs/04 section 4. Google renders three shapes by chip height

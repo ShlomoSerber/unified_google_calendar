@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 import { dayStart, inZone, weekDays } from '../lib/dates';
 import { installRipples, ms, usePresence } from '../lib/motion';
 import { useUi, type Dialog, type ViewKind } from '../state/ui';
-import { MOTION } from '../styles/motion';
+import { MOTION } from '../styles/legacy-motion';
 import '../styles/motion.css';
 import { TopBar } from './TopBar';
 import { Sidebar } from './Sidebar';

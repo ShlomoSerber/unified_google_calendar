@@ -1,5 +1,6 @@
-/* Base reset plus the page defaults measured on calendar.google.com (docs/design/measurements/
-   gm3-light.json roles.body). Structural values only; every visual value is a token. */
+/* Base reset and the page defaults of the Material 3 system (docs/11 section 7: the window is a
+   surface-container with on-surface body-medium text). Structural values only; every visual
+   value is a token. */
 html,
 body,
 #root {
@@ -9,10 +10,13 @@ body,
 }
 
 body {
-  font-family: var(--font-family-body);
-  font-size: var(--font-body-size);
-  color: var(--color-body-text);
-  background: var(--color-surface);
+  font-family: var(--md-sys-typescale-body-medium-font);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  line-height: var(--md-sys-typescale-body-medium-line-height);
+  font-weight: var(--md-sys-typescale-body-medium-weight);
+  letter-spacing: var(--md-sys-typescale-body-medium-tracking);
+  color: var(--md-sys-color-on-surface);
+  background: var(--md-sys-color-surface-container);
   font-synthesis: none;
   -webkit-text-size-adjust: 100%;
   overflow: hidden;

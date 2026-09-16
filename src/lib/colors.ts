@@ -1,7 +1,7 @@
 // Calendar and event colours as Google paints them (docs/04 section 7): the backend stores the
 // hex the API reports; the UI shows the measured light/dark tone from docs/design/tokens.json.
 import { useSyncExternalStore } from 'react';
-import { COLOR_MAP } from '../styles/palette';
+import { COLOR_MAP } from '../styles/legacy-palette';
 
 export type Theme = 'light' | 'dark';
 

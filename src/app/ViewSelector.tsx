@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { useUi, type ViewKind } from '../state/ui';
-import { LAYOUT, layoutNumber } from '../styles/layout';
+import { LAYOUT, layoutNumber } from '../styles/legacy-layout';
 import './ViewSelector.css';
 
 // Component 17 of docs/04 section 4 (docs/design/measurements/view_selector-light.json): the

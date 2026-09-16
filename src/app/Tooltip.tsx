@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { installTooltips, ms, usePresence, type TooltipState } from '../lib/motion';
-import { MOTION } from '../styles/motion';
+import { MOTION } from '../styles/legacy-motion';
 
 // Component 21 (docs/design/measurements/tooltip-light.json): the tooltip Google shows under a
 // button 540 ms after the pointer arrives, centred on it. The DOM mirrors the dump (root, box,

@@ -1,7 +1,7 @@
 import { dismissNotice } from '../lib/notice';
 import { ms, usePresence } from '../lib/motion';
 import { useUi } from '../state/ui';
-import { MOTION } from '../styles/motion';
+import { MOTION } from '../styles/legacy-motion';
 import './Snackbar.css';
 
 // Component 24 (docs/design/measurements/snackbar-save-light.json): the bar Google slides up

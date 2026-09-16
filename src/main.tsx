@@ -1,8 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-// Global styles first so component stylesheets can refine the measured rules.
-import './styles/tokens.css';
+// Global styles first so component stylesheets can refine them. legacy.css and measured.css
+// keep the unmigrated components alive until M5 of the Material 3 transition (docs/12).
+import './styles/legacy.css';
 import './styles/measured.css';
+import './styles/tokens.css';
+import './styles/typescale.css';
 import './styles/fonts.css';
 import './styles/base.css';
 import { App } from './app/App';

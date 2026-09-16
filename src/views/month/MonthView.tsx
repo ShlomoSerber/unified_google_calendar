@@ -4,7 +4,7 @@ import { chipBackground, useTheme } from '../../lib/colors';
 import { fromIsoDate, hhmm, inZone, isSameDay, isoDate, monthGrid } from '../../lib/dates';
 import { useUi } from '../../state/ui';
 import { useViewData } from '../../state/useViewData';
-import { LAYOUT, layoutNumber } from '../../styles/layout';
+import { LAYOUT, layoutNumber } from '../../styles/legacy-layout';
 import type { ViewOccurrence } from '../../types/ipc';
 import { chipDescription } from '../week/EventChip';
 import { layoutAllDay } from '../week/layout';

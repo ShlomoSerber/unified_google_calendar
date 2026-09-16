@@ -2,8 +2,8 @@
 // keep an element mounted while its exit animation plays, and the Material ripple Google's
 // buttons run on press. Timings come from the tokens; nothing here is typed by hand.
 import { useEffect, useState } from 'react';
-import { LAYOUT, layoutNumber } from '../styles/layout';
-import { MOTION } from '../styles/motion';
+import { LAYOUT, layoutNumber } from '../styles/legacy-layout';
+import { MOTION } from '../styles/legacy-motion';
 
 /** "150ms" → 150. */
 export const ms = (v: string): number => parseFloat(v);

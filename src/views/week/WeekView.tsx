@@ -3,7 +3,7 @@ import { format } from 'date-fns';
 import { dayStart, fromIsoDate, hhmm, inZone, isSameDay, isoDate, minutesOfDay } from '../../lib/dates';
 import { useUi } from '../../state/ui';
 import { useViewData } from '../../state/useViewData';
-import { LAYOUT, layoutNumber } from '../../styles/layout';
+import { LAYOUT, layoutNumber } from '../../styles/legacy-layout';
 import type { ViewOccurrence } from '../../types/ipc';
 import { AllDayRow } from './AllDayRow';
 import { DayHeader } from './DayHeader';

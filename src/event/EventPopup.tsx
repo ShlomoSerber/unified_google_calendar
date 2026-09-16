@@ -5,7 +5,7 @@ import { withNotice } from '../lib/notice';
 import { chipBackground, useTheme } from '../lib/colors';
 import { hhmm, inZone } from '../lib/dates';
 import { useUi } from '../state/ui';
-import { LAYOUT, layoutNumber } from '../styles/layout';
+import { LAYOUT, layoutNumber } from '../styles/legacy-layout';
 import type { AttendeeInfo, EventDetail } from '../types/ipc';
 import './EventPopup.css';
 
