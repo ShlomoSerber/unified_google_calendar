@@ -1,23 +1,31 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import type { MdDialog } from '@material/web/dialog/dialog.js';
 import { ipc } from '../ipc';
 import { useUi } from '../state/ui';
 import './WelcomeDialog.css';
 
 // First run (docs/07 section 5): without oauth.json the steps of docs/09 section A; then the
-// first Google account. Built from the measured dialog tokens (F7-T6).
+// first Google account. The dialog cannot be dismissed with Escape or the scrim.
 
 const OAUTH_PATH = '~/.config/unified-google-calendar/oauth.json';
 
 export function WelcomeDialog() {
   const settings = useUi((s) => s.settings);
+  const dialog = useRef<MdDialog>(null);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const configured = settings?.oauth_configured ?? false;
+  useEffect(() => {
+    dialog.current?.show();
+  }, []);
   const recheck = () => {
-    ipc.getSettings().then((s) => {
-      useUi.getState().setSettings(s);
-      if (!s.oauth_configured) setMessage(`${OAUTH_PATH} is still missing or malformed.`);
-    }).catch((e: unknown) => setMessage(String(e)));
+    ipc
+      .getSettings()
+      .then((s) => {
+        useUi.getState().setSettings(s);
+        if (!s.oauth_configured) setMessage(`${OAUTH_PATH} is still missing or malformed.`);
+      })
+      .catch((e: unknown) => setMessage(String(e)));
   };
   const addAccount = async () => {
     setBusy(true);
@@ -35,51 +43,37 @@ export function WelcomeDialog() {
     }
   };
   return (
-    <div className="welcome-scrim">
-      <div className="welcome-root scope-root" role="dialog" aria-modal="true" aria-label="Welcome">
-        <h2 className="scope-title-row">
-          <span className="scope-title">{configured ? 'Add your first Google account' : 'Welcome to Unified Google Calendar'}</span>
-        </h2>
-        <div className="welcome-body">
-          {configured ? (
-            <p className="welcome-text">Sign in with the Google account you want to see first. More accounts and iCal calendars can be added later in Settings.</p>
-          ) : (
-            <>
-              <p className="welcome-text">{`This app needs your own Google Cloud OAuth client. Follow docs/09-setup-usuario.md section A, then save the client id and secret as ${OAUTH_PATH}:`}</p>
-              <pre className="welcome-code">{'{ "client_id": "…apps.googleusercontent.com", "client_secret": "…" }'}</pre>
-              <ol className="welcome-steps">
-                <li>Create a project in Google Cloud and enable the Google Calendar API.</li>
-                <li>Configure the OAuth consent screen (external, published) with the calendar scopes.</li>
-                <li>Create an OAuth client of type Desktop app and copy its id and secret into the file.</li>
-              </ol>
-            </>
-          )}
-          {message ? <p className="welcome-message">{message}</p> : null}
-        </div>
-        <div className="scope-footer">
-          <div className="scope-ok-wrap">
-            {configured ? (
-              <button className="scope-ok" type="button" disabled={busy} onClick={() => void addAccount()}>
-                <span className="scope-ok-ripple">
-                  <span className="scope-ok-ripple-inner"></span>
-                </span>
-                <span className="scope-ok-n34"></span>
-                <span className="scope-ok-hit"></span>
-                <span className="scope-ok-label">Add Google account</span>
-              </button>
-            ) : (
-              <button className="scope-ok" type="button" onClick={recheck}>
-                <span className="scope-ok-ripple">
-                  <span className="scope-ok-ripple-inner"></span>
-                </span>
-                <span className="scope-ok-n34"></span>
-                <span className="scope-ok-hit"></span>
-                <span className="scope-ok-label">I created the file, continue</span>
-              </button>
-            )}
-          </div>
-        </div>
+    <md-dialog className="welcome" ref={dialog} aria-label="Welcome" oncancel={(e) => e.preventDefault()}>
+      <div slot="headline">{configured ? 'Add your first Google account' : 'Welcome to Unified Google Calendar'}</div>
+      <div slot="content" className="welcome-content md-typescale-body-medium">
+        {configured ? (
+          <p className="welcome-text">Sign in with the Google account you want to see first. More accounts and iCal calendars can be added later in Settings.</p>
+        ) : (
+          <>
+            <p className="welcome-text">{`This app needs your own Google Cloud OAuth client. Follow docs/09-setup-usuario.md section A, then save the client id and secret as ${OAUTH_PATH}:`}</p>
+            <pre className="welcome-code md-typescale-body-small">{'{ "client_id": "…apps.googleusercontent.com", "client_secret": "…" }'}</pre>
+            <ol className="welcome-steps">
+              <li>Create a project in Google Cloud and enable the Google Calendar API.</li>
+              <li>Configure the OAuth consent screen (external, published) with the calendar scopes.</li>
+              <li>Create an OAuth client of type Desktop app and copy its id and secret into the file.</li>
+            </ol>
+          </>
+        )}
+        {message ? (
+          <p className="welcome-message md-typescale-body-small" role="status">
+            {message}
+          </p>
+        ) : null}
       </div>
-    </div>
+      <div slot="actions">
+        {configured ? (
+          <md-filled-button disabled={busy} onclick={() => void addAccount()}>
+            Add Google account
+          </md-filled-button>
+        ) : (
+          <md-filled-button onclick={recheck}>I created the file, continue</md-filled-button>
+        )}
+      </div>
+    </md-dialog>
   );
 }

@@ -40,8 +40,6 @@ function dialogExitMs(d: Dialog): number {
   switch (d.kind) {
     case 'event':
       return ms(MOTION.popup_close_duration);
-    case 'welcome':
-    case 'goa':
     case 'add-calendar':
       return ms(MOTION.view_fade_duration);
     default:
@@ -101,8 +99,8 @@ export function App() {
         </div>
       </div>
       {dlg.kind === 'settings' ? <SettingsDialog /> : null}
-      {dlg.kind === 'welcome' ? <div className={pageClass}><WelcomeDialog /></div> : null}
-      {dlg.kind === 'goa' ? <div className={pageClass}><GoaDialog /></div> : null}
+      {dlg.kind === 'welcome' ? <WelcomeDialog /> : null}
+      {dlg.kind === 'goa' ? <GoaDialog /> : null}
       {dlg.kind === 'add-calendar' ? <div className={pageClass}><AddCalendarDialog /></div> : null}
       {dlg.kind === 'event' ? <EventPopup occurrenceId={dlg.occurrenceId} anchor={dlg.anchor} exiting={exiting} /> : null}
       {dlg.kind === 'full-form' ? <FullForm occurrenceId={dlg.occurrenceId} startTs={dlg.startTs} endTs={dlg.endTs} allDay={dlg.allDay} draft={dlg.draft} /> : null}
