@@ -1,17 +1,16 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from 'react';
 import { addMonths, format } from 'date-fns';
-import { dayAria } from '../components/MonthGrid';
-import { inZone, isSameDay, monthGrid, toTs } from '../lib/dates';
+import { MonthGrid } from '../components/MonthGrid';
+import { dayStart, inZone, toTs } from '../lib/dates';
 import { useUi } from '../state/ui';
+import { Tooltip } from '../app/Tooltip';
+import { LAYOUT, layoutNumber } from '../styles/layout';
 import './DatePicker.css';
 
-// A date field of the event form (docs/99, 2026-09-15): the date as text and, on click, a month
-// grid built from the measured mini calendar (component 4, `sidebar-minical-*`), with its own
-// month navigation. `value` and the result are UTC seconds of an instant inside the day.
+// A date field of the event form (docs/11 section 7): a read-only outlined text field with a
+// calendar icon that opens a popover with a month header and a MonthGrid. `value` and the
+// result are UTC seconds of an instant inside the day; picking keeps the time of day.
 
-const DOW: [string, string][] = [['M', 'Monday'], ['T', 'Tuesday'], ['W', 'Wednesday'], ['T', 'Thursday'], ['F', 'Friday'], ['S', 'Saturday'], ['S', 'Sunday']];
-const CHEVRON_LEFT = 'M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12l4.58-4.59z';
-const CHEVRON_RIGHT = 'M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z';
 const DATE_FORMAT = 'EEE, MMM d, yyyy';
 
 export interface DatePickerProps {
@@ -25,9 +24,14 @@ export function DatePicker({ value, tz, label, onChange }: DatePickerProps) {
   const now = useUi((s) => s.now);
   const [open, setOpen] = useState(false);
   const [monthTs, setMonthTs] = useState(value);
+  const [at, setAt] = useState<{ left: number; top: number } | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   const toggle = () => {
-    if (!open) setMonthTs(value);
+    if (!open) {
+      setMonthTs(value);
+      const r = rootRef.current?.getBoundingClientRect();
+      if (r) setAt({ left: r.left, top: r.bottom + layoutNumber(LAYOUT.popup_gap) });
+    }
     setOpen(!open);
   };
   useEffect(() => {
@@ -38,9 +42,15 @@ export function DatePicker({ value, tz, label, onChange }: DatePickerProps) {
     document.addEventListener('mousedown', onDown);
     return () => document.removeEventListener('mousedown', onDown);
   }, [open]);
-  const month = inZone(monthTs, tz).getMonth();
+  // Escape closes the popover only, not the dialog around it.
+  const onKeyDown = (e: KeyboardEvent) => {
+    if (open && e.key === 'Escape') {
+      e.preventDefault();
+      e.stopPropagation();
+      setOpen(false);
+    }
+  };
   const monthLabel = format(inZone(monthTs, tz), 'MMMM yyyy');
-  const rows = monthGrid(monthTs, tz, 6);
   const shift = (n: number) => setMonthTs(toTs(addMonths(inZone(monthTs, tz), n)));
   const pick = (ts: number) => {
     const d = inZone(value, tz);
@@ -49,74 +59,41 @@ export function DatePicker({ value, tz, label, onChange }: DatePickerProps) {
     onChange(toTs(d));
     setOpen(false);
   };
+  const selected = { from: dayStart(value, tz), to: dayStart(value, tz) + 86_400 };
+  const popoverStyle: CSSProperties = at ? { left: at.left, top: at.top } : {};
   return (
-    <div className="dp-root" ref={rootRef}>
-      <button className="dp-field" type="button" aria-label={label} aria-haspopup="dialog" aria-expanded={open} onClick={toggle}>
-        {format(inZone(value, tz), DATE_FORMAT)}
-      </button>
+    <div className="date-picker" ref={rootRef} onKeyDown={onKeyDown}>
+      <md-outlined-text-field label={label} value={format(inZone(value, tz), DATE_FORMAT)} readOnly onclick={toggle}>
+        <md-icon-button
+          slot="trailing-icon"
+          aria-label={`Pick ${label}`}
+          aria-haspopup="dialog"
+          aria-expanded={open}
+          onclick={(e) => {
+            // The field's own click would toggle it back.
+            e.stopPropagation();
+            toggle();
+          }}
+        >
+          <md-icon>calendar_today</md-icon>
+        </md-icon-button>
+      </md-outlined-text-field>
       {open ? (
-        <div className="dp-popover motion-menu" role="dialog" aria-label={`Pick ${label}`}>
-          <div className="sidebar-minical dp-minical">
-            <div className="sidebar-minical-box">
-              <div className="sidebar-minical-head">
-                <span className="sidebar-minical-month">{monthLabel}</span>
-                <div className="sidebar-minical-nav">
-                  {(['prev', 'next'] as const).map((dir) => (
-                    <div className={`sidebar-minical-${dir}-cell`} key={dir}>
-                      <span className={`sidebar-minical-${dir}-span`}>
-                        <button className={`sidebar-minical-${dir}`} aria-label={dir === 'prev' ? 'Previous month' : 'Next month'} type="button" onClick={() => shift(dir === 'prev' ? -1 : 1)}>
-                          <span className={`sidebar-minical-${dir}-ripple ugc-state ugc-state-icon`}></span>
-                          <span className={`sidebar-minical-${dir}-icon-box`}>
-                            <span className={`sidebar-minical-${dir}-icon-span`}>
-                              <svg className={`sidebar-minical-${dir}-icon`} viewBox="0 0 24 24" focusable="false">
-                                <path className={`sidebar-minical-${dir}-path`} d={dir === 'prev' ? CHEVRON_LEFT : CHEVRON_RIGHT} />
-                              </svg>
-                            </span>
-                          </span>
-                          <div className={`sidebar-minical-${dir}-overlay`}></div>
-                        </button>
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <table className="sidebar-minical-grid" role="grid" aria-label={monthLabel}>
-                <thead className="sidebar-minical-thead">
-                  <tr className="sidebar-minical-head-row">
-                    {DOW.map(([letter, name], i) => (
-                      <th className="sidebar-minical-dow" key={i} aria-label={name}>
-                        <span className="sidebar-minical-dow-span">
-                          <div className="sidebar-minical-dow-label">{letter}</div>
-                        </span>
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="sidebar-minical-tbody">
-                  {rows.map((row) => (
-                    <tr className="sidebar-minical-row" key={row[0]}>
-                      {row.map((ts) => {
-                        const d = inZone(ts, tz);
-                        const other = d.getMonth() !== month;
-                        const today = isSameDay(ts, now, tz);
-                        const selected = !today && isSameDay(ts, value, tz);
-                        const kind = today ? '-today' : selected ? '-selected' : other ? '-other' : '';
-                        const cellKind = today ? '-today' : other ? '-other' : '';
-                        return (
-                          <td className={`sidebar-minical-cell${cellKind}`} key={ts}>
-                            <button className={`sidebar-minical-day${kind}`} aria-label={dayAria(ts, monthTs, now, tz)} type="button" onClick={() => pick(ts)}>
-                              <span className={`sidebar-minical-day${kind}-ripple ugc-state ugc-state-primary`}></span>
-                              <div className={`sidebar-minical-day${kind}-label`}>{d.getDate()}</div>
-                            </button>
-                          </td>
-                        );
-                      })}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+        <div className="date-picker-popover" role="dialog" aria-label={`Pick ${label}`} style={popoverStyle}>
+          <div className="date-picker-head">
+            <span className="date-picker-month md-typescale-title-small">{monthLabel}</span>
+            <Tooltip text="Previous month">
+              <md-icon-button aria-label="Previous month" onclick={() => shift(-1)}>
+                <md-icon>chevron_left</md-icon>
+              </md-icon-button>
+            </Tooltip>
+            <Tooltip text="Next month">
+              <md-icon-button aria-label="Next month" onclick={() => shift(1)}>
+                <md-icon>chevron_right</md-icon>
+              </md-icon-button>
+            </Tooltip>
           </div>
+          <MonthGrid monthTs={monthTs} tz={tz} todayTs={now} selected={selected} size="normal" onPick={pick} />
         </div>
       ) : null}
     </div>

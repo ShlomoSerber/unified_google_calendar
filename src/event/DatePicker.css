@@ -1,21 +1,33 @@
-/* The date field (looks like the editor's combo, styled in FullForm.css) and its popover: the
-   measured mini calendar box on the dialog surface, under the field. */
-.dp-root {
-  position: relative;
+/* Date field with its month popover (docs/11 section 7): surface-container-high, large corner,
+   level-3 elevation, positioned by JS under the field. */
+.date-picker {
+  display: flex;
+  min-width: 0;
 }
 
-.dp-field {
+.date-picker > md-outlined-text-field {
+  flex: 1;
+  min-width: 0;
   cursor: pointer;
-  white-space: nowrap;
 }
 
-.dp-popover {
-  position: absolute;
-  left: 0;
-  top: var(--ff-recurrence-combo-height);
-  z-index: var(--create-menu-root-z-index);
-  padding: var(--create-menu-item-padding-top);
-  border-radius: var(--ff-recurrence-combo-border-radius);
-  background: var(--popup-frame-background-color);
-  box-shadow: var(--motion-create-button-hover-shadow);
+.date-picker-popover {
+  position: fixed;
+  z-index: 3;
+  padding: var(--ugc-space-2) var(--ugc-space-3) var(--ugc-space-3);
+  border-radius: var(--md-sys-shape-corner-large);
+  background: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface);
+  box-shadow: var(--md-sys-elevation-level3);
+}
+
+.date-picker-head {
+  display: flex;
+  align-items: center;
+  height: var(--ugc-layout-mini-cal-header-height);
+  padding-left: var(--ugc-space-2);
+}
+
+.date-picker-month {
+  flex: 1;
 }

@@ -30,7 +30,7 @@ import type { MdSwitch } from '@material/web/switch/switch.js';
 import type { MdOutlinedTextField } from '@material/web/textfield/outlined-text-field.js';
 
 type M3<T extends HTMLElement, E extends string = never> = React.DetailedHTMLProps<React.HTMLAttributes<T>, T> &
-  Partial<Omit<T, keyof HTMLElement | 'children'>> & { slot?: string } & { [K in E as `on${K}`]?: (e: Event) => void };
+  Partial<Omit<T, keyof HTMLElement | 'children'>> & { slot?: string; autofocus?: boolean } & { [K in E | 'click' as `on${K}`]?: (e: Event) => void };
 
 type Clickable = 'click';
 type Field = 'change' | 'input';

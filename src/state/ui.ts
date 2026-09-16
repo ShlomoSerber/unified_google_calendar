@@ -11,7 +11,6 @@ export type ViewKind = 'day' | 'week' | 'month' | 'year' | 'agenda';
 export type Dialog =
   | { kind: 'none' }
   | { kind: 'event'; occurrenceId: string; anchor: DOMRect | null }
-  | { kind: 'quick-create'; startTs: number; endTs: number; allDay: boolean; anchor: DOMRect | null }
   | { kind: 'full-form'; occurrenceId: string | null; startTs: number; endTs: number; allDay: boolean; draft?: EventDraft }
   | { kind: 'edit-scope'; occurrenceId: string; action: 'update' | 'delete'; draft?: EventDraft }
   | { kind: 'recurrence'; rrule: string | null; startTs: number }

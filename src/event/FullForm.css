@@ -1,324 +1,63 @@
-/* The event form as a modal (docs/99, 2026-09-15). Shell and buttons reuse the measured dialog
-   rules (.scope-root, scope-*), inputs the editor's measured tokens (--ff-*), spacing the
-   measured dialog paddings. Nothing here is a literal. */
-.ef-scrim {
-  background: var(--dialog-scrim-background-color);
-  position: fixed;
-  inset: 0;
-  z-index: var(--create-menu-root-z-index);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Event form dialog (docs/11 section 7): 640 px wide, fields in a column with 16 px gaps. */
+.full-form {
+  min-width: var(--ugc-layout-form-width);
+  max-width: var(--ugc-layout-form-width);
+  max-height: calc(100% - var(--ugc-space-12));
 }
 
-.ef-root {
-  width: calc(var(--rec-root-width) * 2);
-  max-height: calc(100% - var(--layout-topbar-height));
-  height: auto;
+.full-form-content {
   display: flex;
   flex-direction: column;
+  gap: var(--ugc-space-4);
 }
 
-/* Header: title input, Save and Close on one line, vertically centred on the input. */
-.ef-head {
+.full-form-row {
   display: flex;
   align-items: center;
-  gap: var(--create-menu-item-padding-left);
-  padding: var(--create-menu-item-padding-left) var(--scope-title-row-padding-left) 0;
+  gap: var(--ugc-space-3);
 }
 
-.ef-title {
+.full-form-row > * {
   flex: 1;
   min-width: 0;
-  height: var(--ff-title-input-height);
-  padding: 0;
-  border: 0;
-  border-bottom: var(--ff-allday-check-border-top);
-  border-bottom-color: var(--color-outline);
-  border-radius: 0;
-  background: none;
-  outline: 0;
-  font-family: var(--ff-title-input-font-family);
-  font-size: var(--ff-title-input-font-size);
-  font-weight: var(--ff-title-input-font-weight);
-  line-height: var(--ff-title-input-line-height);
-  color: var(--ff-title-input-color);
 }
 
-.ef-title:focus {
-  border-bottom-color: var(--color-primary);
+.full-form-row > md-icon-button {
+  flex: none;
 }
 
-.ef-save {
-  position: relative;
-  overflow: hidden;
-  display: inline-flex;
+
+.full-form-switch {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  height: var(--ff-save-height);
-  min-width: var(--ff-save-min-width);
-  padding: 0 var(--ff-save-padding-left);
-  border: 0;
-  border-radius: var(--ff-save-border-radius);
-  background: var(--ff-save-background-color);
+  gap: var(--ugc-space-3);
+  flex: none;
   cursor: pointer;
 }
 
-.ef-save:disabled {
-  opacity: var(--motion-state-hover-opacity);
-  cursor: default;
-}
-
-.ef-save-ripple {
-  position: absolute;
-  inset: 0;
-  --data-state-color: var(--ff-save-label-color);
-}
-
-.ef-save-label {
-  position: relative;
-  font-family: var(--ff-save-label-font-family);
-  font-size: var(--ff-save-label-font-size);
-  font-weight: var(--ff-save-label-font-weight);
-  color: var(--ff-save-label-color);
-  white-space: nowrap;
-}
-
-/* Icon buttons (close, remove): the measured 40px round icon button of the editor. */
-.ef-close {
-  position: relative;
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--ff-close-width);
-  height: var(--ff-close-height);
-  padding: 0;
-  border: 0;
-  border-radius: var(--ff-close-border-radius);
-  background: none;
-  color: var(--ff-meet-label-color);
-  cursor: pointer;
-  overflow: hidden;
-}
-
-.ef-close-ripple {
-  position: absolute;
-  inset: 0;
-}
-
-.ef-close-icon {
-  width: var(--ff-close-icon-width);
-  height: var(--ff-close-icon-height);
-  fill: currentColor;
-}
-
-/* Body: one row per section, icon column plus content. */
-.ef-body {
+.full-form-meet {
   display: flex;
-  flex-direction: column;
-  gap: var(--create-menu-item-padding-top);
-  padding: var(--create-menu-item-padding-left) var(--scope-title-row-padding-left);
-  overflow-y: auto;
-}
-
-.ef-row {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--create-menu-item-padding-left);
-}
-
-.ef-icon {
-  flex: none;
-  width: var(--ff-close-width);
-  height: var(--ff-recurrence-combo-height);
-  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  font-family: var(--font-family-icons);
-  font-size: var(--popup-notes-icon-font-size);
-  line-height: var(--popup-notes-icon-line-height);
-  font-style: normal;
-  color: var(--ff-meet-label-color);
+  gap: var(--ugc-space-3);
+  --md-icon-size: var(--ugc-layout-icon-size-small);
 }
 
-.ef-cell {
+.full-form-meet > md-icon {
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.full-form-meet-text {
   flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--create-menu-item-padding-top);
 }
 
-.ef-when,
-.ef-when-options,
-.ef-inline {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: var(--create-menu-item-padding-top);
+.full-form-dot {
+  display: inline-block;
+  width: var(--ugc-layout-icon-size-small);
+  height: var(--ugc-layout-icon-size-small);
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--data-chip-color);
 }
 
-.ef-when-to {
-  font-family: var(--ff-start-date-font-family);
-  font-size: var(--ff-start-date-font-size);
-  color: var(--ff-start-date-color);
-}
-
-/* Text fields, selects and the date field share the editor's combo box look. */
-.ef-input,
-.ef-select,
-.dp-field {
-  height: var(--ff-recurrence-combo-height);
-  padding: 0 var(--ff-recurrence-combo-padding-left);
-  border: 0;
-  border-radius: var(--ff-recurrence-combo-border-radius);
-  background: var(--color-surface);
-  color: var(--ff-recurrence-combo-color);
-  font-family: var(--ff-start-date-font-family);
-  font-size: var(--ff-start-date-font-size);
-  outline: 0;
-  min-width: 0;
-}
-
-.ef-input {
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.ef-input:focus,
-.ef-select:focus,
-.dp-field:focus-visible {
-  outline: var(--ff-allday-check-border-top);
-  outline-color: var(--color-primary);
-}
-
-.ef-description {
-  height: auto;
-  padding-top: var(--create-menu-item-padding-top);
-  padding-bottom: var(--create-menu-item-padding-top);
-  line-height: var(--ff-location-input-line-height);
-  resize: vertical;
-}
-
-.ef-minutes {
-  width: var(--ff-notif-add-height);
-  flex: none;
-  text-align: center;
-  padding: 0;
-}
-
-.ef-select {
-  cursor: pointer;
-}
-
-.ef-time {
-  width: auto;
-}
-
-.ef-dot {
-  flex: none;
-  width: var(--ff-color-dot-width);
-  height: var(--ff-color-dot-height);
-  border-radius: var(--ff-color-dot-border-radius);
-  background: var(--data-chip-bg);
-}
-
-/* All day: the measured 18px box with a drawn tick, not a native checkbox. */
-.ef-allday {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--create-menu-item-padding-top);
-  margin-right: var(--create-menu-item-padding-top);
-  cursor: pointer;
-  font-family: var(--ff-allday-text-font-family);
-  font-size: var(--ff-allday-text-font-size);
-  color: var(--ff-allday-text-color);
-}
-
-.ef-allday-input {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-  margin: 0;
-}
-
-.ef-check {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--ff-allday-check-width);
-  height: var(--ff-allday-check-height);
-  border: var(--ff-allday-check-border-top);
-  border-radius: var(--ff-allday-check-border-radius);
-  box-sizing: border-box;
-}
-
-.ef-check-on {
-  border-color: var(--color-primary);
-  background: var(--color-primary);
-}
-
-.ef-check-svg {
-  width: calc(var(--sidebar-list-check-svg-on-width) - 2 * var(--sidebar-list-check-svg-on-padding-left));
-  height: calc(var(--sidebar-list-check-svg-on-height) - 2 * var(--sidebar-list-check-svg-on-padding-top));
-  visibility: hidden;
-}
-
-.ef-check-on .ef-check-svg {
-  visibility: visible;
-}
-
-.ef-check-path {
-  stroke: var(--sidebar-list-check-path-on-stroke);
-  stroke-width: var(--sidebar-list-check-path-on-stroke-width);
-}
-
-/* Text buttons ("Add Google Meet video conferencing", "Add notification"): the measured Meet
-   button of the editor, with the primary state layer. */
-.ef-meet {
-  position: relative;
-  overflow: hidden;
-  display: inline-flex;
-  align-items: center;
-  align-self: flex-start;
-  height: var(--ff-meet-button-height);
-  padding: 0 var(--ff-meet-button-padding-left);
-  border: 0;
-  border-radius: var(--ff-meet-button-border-radius);
-  background: var(--color-surface);
-  cursor: pointer;
-}
-
-.ef-meet-ripple {
-  position: absolute;
-  inset: 0;
-}
-
-.ef-meet-label {
-  position: relative;
-  font-family: var(--ff-meet-label-font-family);
-  font-size: var(--ff-meet-label-font-size);
-  color: var(--ff-meet-label-color);
-  white-space: nowrap;
-}
-
-.ef-meet-on {
-  display: flex;
-  align-items: center;
-  gap: var(--create-menu-item-padding-top);
-  min-height: var(--ff-meet-button-height);
-}
-
-.ef-meet-on-text {
-  font-family: var(--ff-meet-label-font-family);
-  font-size: var(--ff-meet-label-font-size);
-  color: var(--ff-recurrence-combo-color);
-  overflow-wrap: anywhere;
-}
-
-.ef-error {
-  color: var(--color-now-line);
-  font-size: var(--font-body-size);
+.full-form-error {
+  color: var(--md-sys-color-error);
 }

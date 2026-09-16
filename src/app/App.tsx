@@ -17,7 +17,6 @@ import { WelcomeDialog } from './WelcomeDialog';
 import { GoaDialog } from './GoaDialog';
 import { AddCalendarDialog } from './AddCalendarDialog';
 import { EventPopup } from '../event/EventPopup';
-import { QuickCreate } from '../event/QuickCreate';
 import { FullForm } from '../event/FullForm';
 import { EditScopeDialog } from '../event/EditScopeDialog';
 import { RecurrenceDialog } from '../event/RecurrenceDialog';
@@ -33,15 +32,14 @@ function rangeStart(view: ViewKind, date: number, days: number[], tz: string): s
   return String(dayStart(date, tz));
 }
 
-// Dialog motion (docs/04 section 10): a closed dialog stays mounted, exiting, for its close
-// duration. Popups fade in 150 ms, menus in 75 ms, pages (full form, settings) in 200 ms.
+// The event popup stays mounted, exiting, for its close duration (docs/11 section 10). The
+// md-dialog kinds animate themselves and leave the store from their `closed` event; until M4
+// of the transition the unmigrated dialogs still fade through the page layer.
 const dialogOpen = (d: Dialog) => d.kind !== 'none';
 function dialogExitMs(d: Dialog): number {
   switch (d.kind) {
     case 'event':
-    case 'quick-create':
       return ms(MOTION.popup_close_duration);
-    case 'full-form':
     case 'settings':
     case 'welcome':
     case 'goa':
@@ -108,8 +106,7 @@ export function App() {
       {dlg.kind === 'goa' ? <div className={pageClass}><GoaDialog /></div> : null}
       {dlg.kind === 'add-calendar' ? <div className={pageClass}><AddCalendarDialog /></div> : null}
       {dlg.kind === 'event' ? <EventPopup occurrenceId={dlg.occurrenceId} anchor={dlg.anchor} exiting={exiting} /> : null}
-      {dlg.kind === 'quick-create' ? <QuickCreate startTs={dlg.startTs} endTs={dlg.endTs} allDay={dlg.allDay} anchor={dlg.anchor} exiting={exiting} /> : null}
-      {dlg.kind === 'full-form' ? <div className={pageClass}><FullForm occurrenceId={dlg.occurrenceId} startTs={dlg.startTs} endTs={dlg.endTs} allDay={dlg.allDay} draft={dlg.draft} /></div> : null}
+      {dlg.kind === 'full-form' ? <FullForm occurrenceId={dlg.occurrenceId} startTs={dlg.startTs} endTs={dlg.endTs} allDay={dlg.allDay} draft={dlg.draft} /> : null}
       {overlay.kind === 'edit-scope' ? <EditScopeDialog occurrenceId={overlay.occurrenceId} action={overlay.action} draft={overlay.draft} /> : null}
       {overlay.kind === 'recurrence' ? <RecurrenceDialog rrule={overlay.rrule} startTs={overlay.startTs} /> : null}
       <Snackbar />

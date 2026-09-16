@@ -1,20 +1,23 @@
-import { useEffect, useState, type CSSProperties } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { format } from 'date-fns';
+import type { MdDialog } from '@material/web/dialog/dialog.js';
+import type { MdOutlinedSelect } from '@material/web/select/outlined-select.js';
+import type { MdOutlinedTextField } from '@material/web/textfield/outlined-text-field.js';
+import type { MdSwitch } from '@material/web/switch/switch.js';
 import { ipc } from '../ipc';
 import { withNotice } from '../lib/notice';
-import { chipBackground, useTheme } from '../lib/colors';
+import { writableCalendars } from '../lib/calendars';
+import { chipColors, useTheme } from '../lib/colors';
 import { hhmm, inZone, toTs } from '../lib/dates';
 import { useUi } from '../state/ui';
 import type { CalendarKey, ColorEntry, EditScope, EventDetail, EventDraft, Reminder, Transparency } from '../types/ipc';
-import { writableCalendars } from './QuickCreate';
 import { DatePicker } from './DatePicker';
 import './FullForm.css';
 
-// The event form. Google's full-page editor (component 16) was replaced on the user's request
-// (docs/99, 2026-09-15) by a modal with only what works: title, dates with pickers, all day,
-// repeat, Google Meet, location, description, calendar, colour, busy/visibility, notifications.
-// Guests, the Find-a-time tab, Drive attachments, rich text and meeting notes are gone.
-// Sizes and colours come from the measured tokens of the editor (`--ff-*`) and the dialogs.
+// The event form (docs/11 section 7): an md-dialog of 640 px with only what works in version 1
+// (docs/99, 2026-09-15): title, dates with pickers, times, all day, repeat, Google Meet,
+// location, description, calendar, colour, busy/free, visibility and notifications. Guests,
+// attachments, rich text and meeting notes are out of scope.
 
 export interface RecurrenceOption {
   label: string;
@@ -22,7 +25,7 @@ export interface RecurrenceOption {
   custom?: boolean;
 }
 
-/** Google's repeat menu for a start date: none, daily, weekly on that weekday, monthly, annually, weekdays, custom. */
+/** The repeat menu for a start date: none, daily, weekly on that weekday, monthly, annually, weekdays, custom. */
 export function recurrenceOptionsFor(startTs: number, tz: string): RecurrenceOption[] {
   const d = inZone(startTs, tz);
   const day = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'][d.getDay()] ?? 'MO';
@@ -43,12 +46,21 @@ export function nextVisibility(v: string | null): string | null {
   return order[(order.indexOf(v) + 1) % order.length] ?? null;
 }
 
-/** Times of a day in quarter hours, "HH:mm", like Google's time menu. */
+/** Times of a day in quarter hours, "HH:mm". */
 const TIMES = Array.from({ length: 96 }, (_, i) => `${String(Math.floor(i / 4)).padStart(2, '0')}:${String((i % 4) * 15).padStart(2, '0')}`);
 
-const ICON = {
-  close: 'M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z',
-};
+/** Reminder minutes → the unit the form shows them in. */
+function reminderUnit(minutes: number): { unit: 'minutes' | 'hours' | 'days'; count: number; factor: number } {
+  if (minutes > 0 && minutes % 1440 === 0) return { unit: 'days', count: minutes / 1440, factor: 1440 };
+  if (minutes > 0 && minutes % 60 === 0) return { unit: 'hours', count: minutes / 60, factor: 60 };
+  return { unit: 'minutes', count: minutes, factor: 1 };
+}
+const FACTOR: Record<'minutes' | 'hours' | 'days', number> = { minutes: 1, hours: 60, days: 1440 };
+
+const selectValue = (e: Event) => (e.target as MdOutlinedSelect).value;
+/** md-select drops an empty-string value once its options render, so "none" options use this. */
+const NONE = 'none';
+const fieldValue = (e: Event) => (e.target as MdOutlinedTextField).value;
 
 export interface FullFormProps {
   occurrenceId: string | null;
@@ -65,6 +77,7 @@ export function FullForm({ occurrenceId, startTs: initialStart, endTs: initialEn
   const settings = useUi((s) => s.settings);
   const pendingRrule = useUi((s) => s.pendingRrule);
   const theme = useTheme();
+  const dialog = useRef<MdDialog>(null);
   const writable = writableCalendars(calendars, settings?.default_calendar ?? null);
   const [detail, setDetail] = useState<EventDetail | null>(null);
   const [title, setTitle] = useState(initialDraft?.title ?? '');
@@ -85,15 +98,12 @@ export function FullForm({ occurrenceId, startTs: initialStart, endTs: initialEn
   const [error, setError] = useState<string | null>(null);
   const calendar = writable.find((c) => calendarKey && c.account_id === calendarKey.account_id && c.id === calendarKey.calendar_id) ?? writable[0];
   const accountName = (id: string) => accounts.find((a) => a.id === id)?.display_name ?? '';
-  const close = () => useUi.getState().closeDialog();
+  // The dialog closes itself (animation), then `closed` removes it from the store.
+  const close = () => dialog.current?.close();
 
   useEffect(() => {
+    dialog.current?.show();
     ipc.getColors().then((p) => setPalette(p.events)).catch(() => undefined);
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && useUi.getState().overlay.kind === 'none') useUi.getState().closeDialog();
-    };
-    document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
   }, []);
 
   // Editing: load the event and fill the form once.
@@ -164,7 +174,7 @@ export function FullForm({ occurrenceId, startTs: initialStart, endTs: initialEn
       useUi.getState().openOverlay({ kind: 'recurrence', rrule: currentRule, startTs });
       return;
     }
-    setRecurrence(value ? [value] : []);
+    setRecurrence(value === NONE ? [] : [value]);
   };
 
   const draft = (): EventDraft => ({
@@ -196,7 +206,7 @@ export function FullForm({ occurrenceId, startTs: initialStart, endTs: initialEn
         close();
         await withNotice('Saving...', 'Event saved', () => ipc.createEvent(d));
       } else if (detail?.is_recurring) {
-        // The scope dialog (component 19) applies the update (docs/03 section 4).
+        // The scope dialog applies the update (docs/03 section 4).
         useUi.getState().openOverlay({ kind: 'edit-scope', occurrenceId, action: 'update', draft: draft() });
         setBusy(false);
       } else {
@@ -210,162 +220,177 @@ export function FullForm({ occurrenceId, startTs: initialStart, endTs: initialEn
     }
   };
 
-  const dotStyle = { '--data-chip-bg': chipBackground(colorId ? (palette.find((c) => c.id === colorId)?.bg ?? calendar?.color_bg ?? '') : (calendar?.color_bg ?? ''), theme) } as CSSProperties;
+  const dot = (hex: string) => ({ '--data-chip-color': chipColors(hex, theme).color }) as CSSProperties;
   const calendarValue = calendar ? `${calendar.account_id}|${calendar.id}` : '';
+  const onCancel = (e: Event) => {
+    // Escape belongs to the dialog stacked on top (recurrence, scope) while one is open.
+    if (useUi.getState().overlay.kind !== 'none') e.preventDefault();
+  };
 
   return (
-    <div className="ef-scrim" onMouseDown={close}>
-      <div className="ef-root scope-root" role="dialog" aria-modal="true" aria-label={occurrenceId ? 'Edit event' : 'New event'} onMouseDown={(e) => e.stopPropagation()}>
-        <div className="ef-head">
-          <input className="ef-title" placeholder="Add title" aria-label="Title" value={title} onChange={(e) => setTitle(e.target.value)} autoFocus />
-          <button className="ef-save" type="button" disabled={busy || !calendar} onClick={() => void save()}>
-            <span className="ef-save-ripple ugc-state"></span>
-            <span className="ef-save-label">Save</span>
-          </button>
-          <button className="ef-close" type="button" aria-label="Close" data-tooltip="Close" onClick={close}>
-            <span className="ef-close-ripple ugc-state ugc-state-icon"></span>
-            <svg className="ef-close-icon" viewBox="0 0 24 24" focusable="false">
-              <path d={ICON.close} />
-            </svg>
-          </button>
-        </div>
-        <div className="ef-body">
-          <div className="ef-row">
-            <i className="ef-icon">schedule</i>
-            <div className="ef-cell">
-              <div className="ef-when">
-                <DatePicker value={startTs} tz={tz} label="Start date" onChange={moveStart} />
-                {!allDay ? (
-                  <select className="ef-select ef-time" aria-label="Start time" value={hhmm(startTs, tz)} onChange={(e) => moveStart(withTime(startTs, e.target.value))}>
-                    {timeOption(startTs).map((t) => (
-                      <option value={t} key={t}>{t}</option>
-                    ))}
-                  </select>
-                ) : null}
-                <span className="ef-when-to">to</span>
-                {!allDay ? (
-                  <select className="ef-select ef-time" aria-label="End time" value={hhmm(endTs, tz)} onChange={(e) => moveEnd(withTime(endTs, e.target.value))}>
-                    {timeOption(endTs).map((t) => (
-                      <option value={t} key={t}>{t}</option>
-                    ))}
-                  </select>
-                ) : null}
-                <DatePicker value={endTs} tz={tz} label="End date" onChange={moveEnd} />
-              </div>
-              <div className="ef-when-options">
-                <label className="ef-allday">
-                  <input className="ef-allday-input" type="checkbox" checked={allDay} onChange={(e) => setAllDay(e.target.checked)} />
-                  <span className={allDay ? 'ef-check ef-check-on' : 'ef-check'} aria-hidden="true">
-                    <svg className="ef-check-svg" viewBox="0 0 24 24" focusable="false">
-                      <path className="ef-check-path" d="M1.73,12.91 8.1,19.28 22.79,4.59" fill="none" />
-                    </svg>
-                  </span>
-                  <span className="ef-allday-label">All day</span>
-                </label>
-                <select className="ef-select" aria-label="Repeat" value={knownRule ? (currentRule ?? '') : 'current'} onChange={(e) => onRecurrence(e.target.value)}>
-                  {!knownRule && currentRule ? <option value="current">{detail?.recurrence_text ?? 'Custom'}</option> : null}
-                  {recurrenceOptions.map((o) => (
-                    <option value={o.custom ? 'custom' : (o.rrule ?? '')} key={o.label}>{o.label}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          </div>
-          <div className="ef-row">
-            <i className="ef-icon">videocam</i>
-            <div className="ef-cell">
-              {addMeet ? (
-                <div className="ef-meet-on">
-                  <span className="ef-meet-on-text">{detail?.meet_link ? `Google Meet: ${detail.meet_link.replace(/^https?:\/\//, '')}` : 'Google Meet video conferencing will be added on save'}</span>
-                  <button className="ef-close ef-meet-remove" type="button" aria-label="Remove Google Meet" data-tooltip="Remove Google Meet" onClick={() => setAddMeet(false)}>
-                    <span className="ef-close-ripple ugc-state ugc-state-icon"></span>
-                    <svg className="ef-close-icon" viewBox="0 0 24 24" focusable="false">
-                      <path d={ICON.close} />
-                    </svg>
-                  </button>
-                </div>
-              ) : (
-                <button className="ef-meet" type="button" onClick={() => setAddMeet(true)}>
-                  <span className="ef-meet-ripple ugc-state ugc-state-primary"></span>
-                  <span className="ef-meet-label">Add Google Meet video conferencing</span>
-                </button>
-              )}
-            </div>
-          </div>
-          <div className="ef-row">
-            <i className="ef-icon">location_on</i>
-            <div className="ef-cell">
-              <input className="ef-input" placeholder="Add location" aria-label="Location" value={location} onChange={(e) => setLocation(e.target.value)} />
-            </div>
-          </div>
-          <div className="ef-row">
-            <i className="ef-icon">notes</i>
-            <div className="ef-cell">
-              <textarea className="ef-input ef-description" placeholder="Add description" aria-label="Description" value={description} onChange={(e) => setDescription(e.target.value)} rows={4} />
-            </div>
-          </div>
-          <div className="ef-row">
-            <i className="ef-icon">calendar_today</i>
-            <div className="ef-cell">
-              <div className="ef-inline">
-                <span className="ef-dot" style={dotStyle}></span>
-                <select className="ef-select" aria-label="Calendar" value={calendarValue} onChange={(e) => { const [account_id, calendar_id] = e.target.value.split('|'); if (account_id && calendar_id) setCalendarKey({ account_id, calendar_id }); }}>
-                  {writable.map((c) => (
-                    <option value={`${c.account_id}|${c.id}`} key={`${c.account_id}|${c.id}`}>{`${c.summary} · ${accountName(c.account_id)}`}</option>
-                  ))}
-                </select>
-                <select className="ef-select" aria-label="Colour" value={colorId ?? ''} onChange={(e) => setColorId(e.target.value || null)}>
-                  <option value="">Calendar colour</option>
-                  {palette.map((c) => (
-                    <option value={c.id} key={c.id}>{c.name}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="ef-inline">
-                <select className="ef-select" aria-label="Show as" value={transparency ?? 'opaque'} onChange={(e) => setTransparency(e.target.value as Transparency)}>
-                  <option value="opaque">Busy</option>
-                  <option value="transparent">Free</option>
-                </select>
-                <select className="ef-select" aria-label="Visibility" value={visibility ?? ''} onChange={(e) => setVisibility(e.target.value || null)}>
-                  <option value="">Default visibility</option>
-                  <option value="public">Public</option>
-                  <option value="private">Private</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div className="ef-row">
-            <i className="ef-icon">notifications</i>
-            <div className="ef-cell">
-              {reminders.map((r, i) => (
-                <div className="ef-inline" key={i}>
-                  <select className="ef-select" aria-label="Notification method" value={r.method} onChange={(e) => setReminder(i, { ...r, method: e.target.value as Reminder['method'] })}>
-                    <option value="popup">Notification</option>
-                    <option value="email">Email</option>
-                  </select>
-                  <input className="ef-input ef-minutes" type="number" min={0} aria-label="Minutes before" value={r.minutes % 1440 === 0 && r.minutes > 0 ? r.minutes / 1440 : r.minutes % 60 === 0 && r.minutes > 0 ? r.minutes / 60 : r.minutes} onChange={(e) => { const n = Math.max(0, Number(e.target.value) || 0); const unit = r.minutes % 1440 === 0 && r.minutes > 0 ? 1440 : r.minutes % 60 === 0 && r.minutes > 0 ? 60 : 1; setReminder(i, { ...r, minutes: n * unit }); }} />
-                  <select className="ef-select" aria-label="Unit" value={r.minutes % 1440 === 0 && r.minutes > 0 ? 'days' : r.minutes % 60 === 0 && r.minutes > 0 ? 'hours' : 'minutes'} onChange={(e) => { const cur = r.minutes % 1440 === 0 && r.minutes > 0 ? r.minutes / 1440 : r.minutes % 60 === 0 && r.minutes > 0 ? r.minutes / 60 : r.minutes; const unit = e.target.value === 'days' ? 1440 : e.target.value === 'hours' ? 60 : 1; setReminder(i, { ...r, minutes: cur * unit }); }}>
-                    <option value="minutes">minutes</option>
-                    <option value="hours">hours</option>
-                    <option value="days">days</option>
-                  </select>
-                  <button className="ef-close" type="button" aria-label="Remove notification" data-tooltip="Remove notification" onClick={() => setReminders(reminders.filter((_, j) => j !== i))}>
-                    <span className="ef-close-ripple ugc-state ugc-state-icon"></span>
-                    <svg className="ef-close-icon" viewBox="0 0 24 24" focusable="false">
-                      <path d={ICON.close} />
-                    </svg>
-                  </button>
-                </div>
+    <md-dialog className="full-form" ref={dialog} aria-label={occurrenceId ? 'Edit event' : 'New event'} oncancel={onCancel} onclosed={() => useUi.getState().closeDialog()}>
+      <div slot="headline">{occurrenceId ? 'Edit event' : 'New event'}</div>
+      <div slot="content" className="full-form-content">
+        <md-outlined-text-field label="Title" value={title} autofocus oninput={(e) => setTitle(fieldValue(e))}></md-outlined-text-field>
+        <div className="full-form-row">
+          <DatePicker value={startTs} tz={tz} label="Start date" onChange={moveStart} />
+          {!allDay ? (
+            <md-outlined-select label="Start time" value={hhmm(startTs, tz)} onchange={(e) => moveStart(withTime(startTs, selectValue(e)))}>
+              {timeOption(startTs).map((t) => (
+                <md-select-option value={t} key={t}>
+                  <div slot="headline">{t}</div>
+                </md-select-option>
               ))}
-              <button className="ef-meet ef-add-notification" type="button" onClick={() => setReminders([...reminders, { method: 'popup', minutes: 10 }])}>
-                <span className="ef-meet-ripple ugc-state ugc-state-primary"></span>
-                <span className="ef-meet-label">Add notification</span>
-              </button>
-            </div>
-          </div>
-          {error ? <div className="ef-error" role="alert">{error}</div> : null}
+            </md-outlined-select>
+          ) : null}
         </div>
+        <div className="full-form-row">
+          <DatePicker value={endTs} tz={tz} label="End date" onChange={moveEnd} />
+          {!allDay ? (
+            <md-outlined-select label="End time" value={hhmm(endTs, tz)} onchange={(e) => moveEnd(withTime(endTs, selectValue(e)))}>
+              {timeOption(endTs).map((t) => (
+                <md-select-option value={t} key={t}>
+                  <div slot="headline">{t}</div>
+                </md-select-option>
+              ))}
+            </md-outlined-select>
+          ) : null}
+        </div>
+        <div className="full-form-row">
+          <label className="full-form-switch md-typescale-body-medium">
+            <md-switch selected={allDay} aria-label="All day" onchange={(e) => setAllDay((e.target as MdSwitch).selected)}></md-switch>
+            All day
+          </label>
+          <md-outlined-select label="Repeat" value={knownRule ? (currentRule ?? NONE) : 'current'} onchange={(e) => onRecurrence(selectValue(e))}>
+            {!knownRule && currentRule ? (
+              <md-select-option value="current">
+                <div slot="headline">{detail?.recurrence_text ?? 'Custom'}</div>
+              </md-select-option>
+            ) : null}
+            {recurrenceOptions.map((o) => (
+              <md-select-option value={o.custom ? 'custom' : (o.rrule ?? NONE)} key={o.label}>
+                <div slot="headline">{o.label}</div>
+              </md-select-option>
+            ))}
+          </md-outlined-select>
+        </div>
+        {addMeet ? (
+          <div className="full-form-meet md-typescale-body-medium">
+            <md-icon>videocam</md-icon>
+            <span className="full-form-meet-text">{detail?.meet_link ? `Google Meet: ${detail.meet_link.replace(/^https?:\/\//, '')}` : 'Google Meet will be added on save'}</span>
+            <md-icon-button aria-label="Remove Google Meet" onclick={() => setAddMeet(false)}>
+              <md-icon>close</md-icon>
+            </md-icon-button>
+          </div>
+        ) : (
+          <div>
+            <md-assist-chip label="Add Google Meet" onclick={() => setAddMeet(true)}>
+              <md-icon slot="icon">videocam</md-icon>
+            </md-assist-chip>
+          </div>
+        )}
+        <md-outlined-text-field label="Location" value={location} oninput={(e) => setLocation(fieldValue(e))}>
+          <md-icon slot="leading-icon">place</md-icon>
+        </md-outlined-text-field>
+        <md-outlined-text-field label="Description" type="textarea" rows={3} value={description} oninput={(e) => setDescription(fieldValue(e))}></md-outlined-text-field>
+        <div className="full-form-row">
+          <md-outlined-select
+            label="Calendar"
+            value={calendarValue}
+            onchange={(e) => {
+              const [account_id, calendar_id] = selectValue(e).split('|');
+              if (account_id && calendar_id) setCalendarKey({ account_id, calendar_id });
+            }}
+          >
+            {writable.map((c) => (
+              <md-select-option value={`${c.account_id}|${c.id}`} key={`${c.account_id}|${c.id}`}>
+                <span slot="start" className="full-form-dot" style={dot(c.color_bg)}></span>
+                <div slot="headline">{`${c.summary} · ${accountName(c.account_id)}`}</div>
+              </md-select-option>
+            ))}
+          </md-outlined-select>
+          <md-outlined-select label="Colour" value={colorId ?? NONE} onchange={(e) => setColorId(selectValue(e) === NONE ? null : selectValue(e))}>
+            <md-select-option value={NONE}>
+              <span slot="start" className="full-form-dot" style={dot(calendar?.color_bg ?? '')}></span>
+              <div slot="headline">Calendar colour</div>
+            </md-select-option>
+            {palette.map((c) => (
+              <md-select-option value={c.id} key={c.id}>
+                <span slot="start" className="full-form-dot" style={dot(c.bg)}></span>
+                <div slot="headline">{c.name}</div>
+              </md-select-option>
+            ))}
+          </md-outlined-select>
+        </div>
+        <div className="full-form-row">
+          <md-outlined-select label="Show as" value={transparency ?? 'opaque'} onchange={(e) => setTransparency(selectValue(e) as Transparency)}>
+            <md-select-option value="opaque">
+              <div slot="headline">Busy</div>
+            </md-select-option>
+            <md-select-option value="transparent">
+              <div slot="headline">Free</div>
+            </md-select-option>
+          </md-outlined-select>
+          <md-outlined-select label="Visibility" value={visibility ?? NONE} onchange={(e) => setVisibility(selectValue(e) === NONE ? null : selectValue(e))}>
+            <md-select-option value={NONE}>
+              <div slot="headline">Default visibility</div>
+            </md-select-option>
+            <md-select-option value="public">
+              <div slot="headline">Public</div>
+            </md-select-option>
+            <md-select-option value="private">
+              <div slot="headline">Private</div>
+            </md-select-option>
+          </md-outlined-select>
+        </div>
+        {reminders.map((r, i) => {
+          const u = reminderUnit(r.minutes);
+          return (
+            <div className="full-form-row" key={i}>
+              <md-outlined-select label="Notification" value={r.method} onchange={(e) => setReminder(i, { ...r, method: selectValue(e) as Reminder['method'] })}>
+                <md-select-option value="popup">
+                  <div slot="headline">Notification</div>
+                </md-select-option>
+                <md-select-option value="email">
+                  <div slot="headline">Email</div>
+                </md-select-option>
+              </md-outlined-select>
+              <md-outlined-text-field label="Before" type="number" min="0" value={String(u.count)} oninput={(e) => setReminder(i, { ...r, minutes: Math.max(0, Number(fieldValue(e)) || 0) * u.factor })}></md-outlined-text-field>
+              <md-outlined-select label="Unit" value={u.unit} onchange={(e) => setReminder(i, { ...r, minutes: u.count * FACTOR[selectValue(e) as keyof typeof FACTOR] })}>
+                <md-select-option value="minutes">
+                  <div slot="headline">minutes</div>
+                </md-select-option>
+                <md-select-option value="hours">
+                  <div slot="headline">hours</div>
+                </md-select-option>
+                <md-select-option value="days">
+                  <div slot="headline">days</div>
+                </md-select-option>
+              </md-outlined-select>
+              <md-icon-button aria-label="Remove notification" onclick={() => setReminders(reminders.filter((_, j) => j !== i))}>
+                <md-icon>close</md-icon>
+              </md-icon-button>
+            </div>
+          );
+        })}
+        <div>
+          <md-text-button onclick={() => setReminders([...reminders, { method: 'popup', minutes: 10 }])}>
+            <md-icon slot="icon">notifications</md-icon>
+            Add notification
+          </md-text-button>
+        </div>
+        {error ? (
+          <div className="full-form-error md-typescale-body-small" role="alert">
+            {error}
+          </div>
+        ) : null}
       </div>
-    </div>
+      <div slot="actions">
+        <md-text-button onclick={close}>Cancel</md-text-button>
+        <md-filled-button disabled={busy || !calendar} onclick={() => void save()}>
+          Save
+        </md-filled-button>
+      </div>
+    </md-dialog>
   );
 }
