@@ -1,16 +1,11 @@
 import { format } from 'date-fns';
-import { dayAria } from '../../components/MonthGrid';
-import { inZone, isSameDay, monthGrid, toTs } from '../../lib/dates';
+import { MonthGrid } from '../../components/MonthGrid';
+import { inZone, toTs } from '../../lib/dates';
 import { useUi } from '../../state/ui';
 import './YearView.css';
 
-// Component 23 (docs/design/measurements/year_view-light.json, docs/99 2026-09-15): twelve
-// month grids of six rows, four per row, like Google's year view. Every class is a measured
-// node. Clicking a day opens it in the day view (Google opens a list popup, out of scope).
-
-const DOW = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-const DOW_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-
+// Year view (docs/11 section 7): twelve surface-container-low cards, each with the month name
+// (title-medium) and a compact MonthGrid. Clicking a day opens it in the day view.
 export function YearView() {
   const date = useUi((s) => s.date);
   const tz = useUi((s) => s.tz);
@@ -22,57 +17,18 @@ export function YearView() {
     ui.setView('day');
   };
   return (
-    <div className="year-root" role="main">
-      <h1 className="year-sr">{`An overview showing all the days in the year ${year}`}</h1>
-      <div className="year-page">
-        <div className="year-grid">
-          {Array.from({ length: 12 }, (_, m) => {
-            const monthTs = toTs(new Date(year, m, 1, 12));
-            const rows = monthGrid(monthTs, tz, 6);
-            const name = format(new Date(year, m, 1), 'MMMM');
-            return (
-              <div className="year-month" key={m}>
-                <div className="year-month-inner">
-                  <div className="year-title-box">
-                    <span className="year-title">{name}</span>
-                  </div>
-                  <table className="year-table" role="grid" aria-label={name}>
-                    <thead className="year-thead">
-                      <tr className="year-head-row">
-                        {DOW.map((d, i) => (
-                          <th className="year-th" key={i} aria-label={DOW_NAMES[i]}>
-                            <span className="year-th-span">
-                              <div className="year-dow">{d}</div>
-                            </span>
-                          </th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody className="year-tbody">
-                      {rows.map((row) => (
-                        <tr className="year-row" key={row[0]}>
-                          {row.map((ts) => {
-                            const today = isSameDay(ts, now, tz);
-                            const kind = today ? '-today' : '';
-                            return (
-                              <td className="year-cell" key={ts}>
-                                <button className={`year-day${kind}`} aria-label={dayAria(ts, monthTs, now, tz)} type="button" onClick={() => openDay(ts)}>
-                                  <span className={`year-day${kind}-ripple ugc-state ugc-state-primary`}></span>
-                                  <div className={`year-day${kind}-label`}>{inZone(ts, tz).getDate()}</div>
-                                </button>
-                              </td>
-                            );
-                          })}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+    <div className="year-view" role="main" aria-label={`Year ${year}`}>
+      {Array.from({ length: 12 }, (_, m) => {
+        // Noon of the first day, so the month is the same in every zone.
+        const monthTs = toTs(new Date(year, m, 1, 12));
+        const name = format(new Date(year, m, 1), 'MMMM');
+        return (
+          <section className="year-view-month" key={m} aria-label={`${name} ${year}`}>
+            <h2 className="year-view-title md-typescale-title-medium">{name}</h2>
+            <MonthGrid monthTs={monthTs} tz={tz} todayTs={now} size="compact" onPick={openDay} />
+          </section>
+        );
+      })}
     </div>
   );
 }

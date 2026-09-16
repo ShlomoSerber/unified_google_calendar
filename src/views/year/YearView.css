@@ -1,33 +1,26 @@
-/* Measured rules live in src/styles/measured.css (.year-*). Google's page is a fixed-size
-   box for its reference window; here the root fills the main area, the grid wraps its twelve
-   month blocks (layout.year_month_cols) and the page scrolls when the window is shorter. */
-.year-root {
-  position: relative;
-  width: auto;
-  height: 100%;
+/* Year view (docs/11 section 7): cards of at least 240 px in as many columns as fit. */
+.year-view {
   flex: 1;
   min-height: 0;
-  overflow: auto;
+  overflow: hidden auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--ugc-layout-year-month-min-width), 1fr));
+  gap: var(--ugc-space-4);
+  padding: var(--ugc-space-4);
+  align-content: start;
 }
 
-.year-page {
-  position: relative;
-  width: auto;
-  height: auto;
+.year-view-month {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ugc-space-2);
+  padding: var(--ugc-space-3) var(--ugc-space-2) var(--ugc-space-2);
+  border-radius: var(--md-sys-shape-corner-large);
+  background: var(--md-sys-color-surface-container-low);
 }
 
-.year-grid {
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  width: auto;
-  height: auto;
-}
-
-.year-month {
-  flex: 0 0 var(--layout-year-month-cols);
-}
-
-.year-day,
-.year-day-today {
-  cursor: pointer;
+.year-view-title {
+  margin: 0;
+  color: var(--md-sys-color-on-surface);
 }
