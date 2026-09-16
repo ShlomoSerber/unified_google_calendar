@@ -1,40 +1,23 @@
-/* Measured rules live in src/styles/measured.css (.scope-*). The dialog is centred in the
-   viewport (edit_scope_dialog-light.json rootRect [576,328]: (1440−288)/2, (900−245)/2). */
-.scope-scrim-page {
-  background: var(--dialog-scrim-background-color);
-  position: fixed;
-  inset: 0;
-  z-index: var(--create-menu-root-z-index);
+/* Edit-scope dialog (docs/11 section 7): 560 px with three radio rows. */
+.edit-scope {
+  min-width: var(--ugc-layout-dialog-width);
+  max-width: var(--ugc-layout-dialog-width);
+}
+
+.edit-scope-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ugc-space-1);
+}
+
+.edit-scope-option {
   display: flex;
   align-items: center;
-  justify-content: center;
-}
-
-.scope-title-row {
-  margin: 0;
-}
-
-/* WebKitGTK sets the title a few pixels wider than Chrome; keep it on one line like Google. */
-.scope-title {
-  white-space: nowrap;
-}
-
-.scope-radio-input,
-.scope-radio2-input {
-  margin: 0;
-  opacity: 0;
+  gap: var(--ugc-space-3);
   cursor: pointer;
 }
 
-.scope-option,
-.scope-option2,
-.scope-cancel,
-.scope-ok {
-  cursor: pointer;
-}
-
-.scope-error {
-  position: absolute;
-  bottom: var(--scope-title-row-height);
-  color: var(--week-now-dot-background-color);
+.edit-scope-error {
+  margin-top: var(--ugc-space-2);
+  color: var(--md-sys-color-error);
 }

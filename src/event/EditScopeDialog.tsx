@@ -1,14 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import type { MdDialog } from '@material/web/dialog/dialog.js';
 import { ipc } from '../ipc';
 import { withNotice } from '../lib/notice';
 import { useUi } from '../state/ui';
 import type { EditScope, EventDraft } from '../types/ipc';
 import './EditScopeDialog.css';
 
-// Component 19 of docs/04 section 4 (docs/design/measurements/edit_scope_dialog-light.json):
-// this / this and following / all, applied per docs/03 section 4. Google hides "This and
-// following events" on the first occurrence of a series (the measured dump); the app always
-// offers the three scopes of docs/03 (edit_scope_dialog.md).
+// Scope of an edit or a deletion of a recurring event (docs/03 section 4): this event, this
+// and following, or all. Stacked over the popup or the form; applying closes both.
+
+const OPTIONS: { scope: EditScope; label: string }[] = [
+  { scope: 'this', label: 'This event' },
+  { scope: 'following', label: 'This and following events' },
+  { scope: 'all', label: 'All events' },
+];
 
 export interface EditScopeDialogProps {
   occurrenceId: string;
@@ -17,24 +22,13 @@ export interface EditScopeDialogProps {
 }
 
 export function EditScopeDialog({ occurrenceId, action, draft }: EditScopeDialogProps) {
+  const dialog = useRef<MdDialog>(null);
   const [scope, setScope] = useState<EditScope>('this');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const options: { scope: EditScope; label: string }[] = [
-    { scope: 'this', label: 'This event' },
-    { scope: 'following', label: 'This and following events' },
-    { scope: 'all', label: 'All events' },
-  ];
-  const close = () => useUi.getState().closeOverlay();
+  const close = () => dialog.current?.close();
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        e.stopImmediatePropagation();
-        close();
-      }
-    };
-    document.addEventListener('keydown', onKey, true);
-    return () => document.removeEventListener('keydown', onKey, true);
+    dialog.current?.show();
   }, []);
   const apply = async () => {
     setBusy(true);
@@ -48,58 +42,27 @@ export function EditScopeDialog({ occurrenceId, action, draft }: EditScopeDialog
     }
   };
   return (
-    <div className="scope-scrim-page" onMouseDown={close}>
-      <div className="scope-root" role="dialog" aria-modal="true" onMouseDown={(e) => e.stopPropagation()}>
-        <span className="scope-scrim">
-          <span className="scope-scrim-inner"></span>
-        </span>
-        <h2 className="scope-title-row">
-          <span className="scope-title">{action === 'delete' ? 'Delete recurring event' : 'Edit recurring event'}</span>
-        </h2>
-        <div className="scope-body">
-          <div className="scope-group" role="radiogroup">
-            {options.map((o, i) => {
-              const p = i === 0 ? 'scope-radio' : 'scope-radio2';
-              const checked = scope === o.scope;
-              return (
-                <label className={i === 0 ? 'scope-option' : 'scope-option2'} key={o.scope}>
-                  <div className={`${p}-cell`}>
-                    <div className={p}>
-                      <input className={`${p}-input`} type="radio" name="scope" checked={checked} onChange={() => setScope(o.scope)} />
-                      <div className={`${p}-ring`}>
-                        <div className={`${p}-outer`}></div>
-                        {checked ? <div className="scope-radio-dot"></div> : null}
-                      </div>
-                      <span className={`${p}-ripple`}></span>
-                    </div>
-                  </div>
-                  <div className={i === 0 ? 'scope-option-label' : 'scope-option2-label'}>{o.label}</div>
-                </label>
-              );
-            })}
+    <md-dialog className="edit-scope" ref={dialog} aria-label={action === 'delete' ? 'Delete recurring event' : 'Edit recurring event'} onclosed={() => useUi.getState().closeOverlay()}>
+      <div slot="headline">{action === 'delete' ? 'Delete recurring event' : 'Edit recurring event'}</div>
+      <div slot="content" className="edit-scope-content" role="radiogroup" aria-label="Scope">
+        {OPTIONS.map((o) => (
+          <label className="edit-scope-option md-typescale-body-medium" key={o.scope}>
+            <md-radio name="scope" value={o.scope} touch-target="wrapper" checked={scope === o.scope} onchange={() => setScope(o.scope)}></md-radio>
+            {o.label}
+          </label>
+        ))}
+        {error ? (
+          <div className="edit-scope-error md-typescale-body-small" role="alert">
+            {error}
           </div>
-        </div>
-        <div className="scope-footer">
-          <div className="scope-cancel-wrap">
-            <button className="scope-cancel" type="button" onClick={close}>
-              <span className="scope-cancel-ripple"></span>
-              <span className="scope-cancel-hit"></span>
-              <span className="scope-cancel-label">{"Cancel"}</span>
-            </button>
-          </div>
-          <div className="scope-ok-wrap">
-            <button className="scope-ok" type="button" onClick={() => void apply()} disabled={busy}>
-              <span className="scope-ok-ripple">
-                <span className="scope-ok-ripple-inner"></span>
-              </span>
-              <span className="scope-ok-n34"></span>
-              <span className="scope-ok-hit"></span>
-              <span className="scope-ok-label">{"OK"}</span>
-            </button>
-          </div>
-        </div>
+        ) : null}
       </div>
-      {error ? <div className="scope-error" role="alert">{error}</div> : null}
-    </div>
+      <div slot="actions">
+        <md-text-button onclick={close}>Cancel</md-text-button>
+        <md-filled-button disabled={busy} onclick={() => void apply()}>
+          OK
+        </md-filled-button>
+      </div>
+    </md-dialog>
   );
 }
