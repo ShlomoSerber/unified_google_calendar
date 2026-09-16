@@ -182,8 +182,15 @@ const ICON_FILE: &str = "unified-google-calendar.png";
 /// Writes today's PNGs into the user's hicolor theme (config::user_hicolor_dir). Errors are
 /// logged: the tray and window icons work without it.
 fn write_theme_icon(day: u32) {
+    write_theme_icon_into(&crate::config::user_hicolor_dir(), day);
+}
+
+/// `write_theme_icon` with the theme directory as a parameter. After the PNGs it bumps the
+/// mtime of `root`: GNOME Shell and GTK only rescan a theme when its root directory changes,
+/// and overwriting a file in place leaves that mtime alone, so without this the dock kept
+/// yesterday's number until the session restarted (user report of 2026-09-16).
+fn write_theme_icon_into(root: &std::path::Path, day: u32) {
     let idx = day.clamp(1, 31) as usize - 1;
-    let root = crate::config::user_hicolor_dir();
     for (size, icons) in HICOLOR_DIRS {
         let dir = root.join(size).join("apps");
         let result = std::fs::create_dir_all(&dir)
@@ -191,6 +198,11 @@ fn write_theme_icon(day: u32) {
         if let Err(e) = result {
             tracing::debug!(error = %e, path = %dir.display(), "day icon not written to the icon theme");
         }
+    }
+    let touched =
+        std::fs::File::open(root).and_then(|f| f.set_modified(std::time::SystemTime::now()));
+    if let Err(e) = touched {
+        tracing::debug!(error = %e, path = %root.display(), "icon theme directory not touched");
     }
 }
 
@@ -391,6 +403,29 @@ mod tests {
     use super::*;
     use crate::db::queries::events::EventRow;
     use crate::recurrence::{expand::Window, materialize_simple};
+
+    #[test]
+    fn theme_icon_rewrite_bumps_the_theme_root_mtime() {
+        let tmp = tempfile::tempdir().unwrap();
+        let root = tmp.path().join("hicolor");
+        write_theme_icon_into(&root, 15);
+        let file = root.join("128x128").join("apps").join(ICON_FILE);
+        assert_eq!(std::fs::read(&file).unwrap(), DAY_ICONS_PNG_128[14]);
+
+        // Pretend the last write was long ago, as at midnight after a day of use.
+        let past = std::time::SystemTime::UNIX_EPOCH + std::time::Duration::from_secs(1_000_000);
+        std::fs::File::open(&root)
+            .unwrap()
+            .set_modified(past)
+            .unwrap();
+        write_theme_icon_into(&root, 16);
+        assert_eq!(std::fs::read(&file).unwrap(), DAY_ICONS_PNG_128[15]);
+        let mtime = std::fs::metadata(&root).unwrap().modified().unwrap();
+        assert!(
+            mtime > past,
+            "the theme root must change so GNOME Shell rescans it"
+        );
+    }
 
     #[test]
     fn next_event_label_and_truncation() {
