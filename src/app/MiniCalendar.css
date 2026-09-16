@@ -1,0 +1,12 @@
+/* Mini calendar of the drawer (docs/11 section 7): 40 px header row, then the MonthGrid. */
+.minical-head {
+  display: flex;
+  align-items: center;
+  height: var(--ugc-layout-mini-cal-header-height);
+  padding-left: var(--ugc-space-2);
+}
+
+.minical-month {
+  flex: 1;
+  color: var(--md-sys-color-on-surface);
+}

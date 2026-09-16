@@ -161,6 +161,8 @@
     "month_cell_header_height": "28px",
     "month_chip_height": "20px",
     "year_month_min_width": "240px",
+    "year_cell_size": "28px",
+    "year_cell_size_note": "Day buttons of the compact MonthGrid in the year view (docs/11 section 7): 28 px keeps twelve six-row cards in four columns at 1440 px.",
     "agenda_row_height": "48px",
     "popup_width": "400px",
     "popup_radius": "28px",

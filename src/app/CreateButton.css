@@ -1,39 +1,4 @@
-/* Measured rules live in src/styles/measured.css (.create-button-*). Google parks the button on
-   the page, outside the drawer; the offset is the dump's rootRect (layout.create_button_*),
-   relative to .app. */
-.create-button-anchor {
-  position: absolute;
-  left: var(--layout-create-button-left);
-  top: var(--layout-create-button-top);
-}
-
-/* "Create event" is wider than Google's "Create": the button and its label grow with the text
-   and keep the measured paddings; the dropdown arrow is gone. */
-.create-button-root,
-.create-button-box,
-.create-button-label {
-  width: auto;
-}
-
-/* The state layer covers the whole (wider) button, not Google's measured 136px. */
-.create-button-ripple {
-  width: 100%;
-}
-
-.create-button-root {
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-/* Google's shadow lives on the button's wrapper (tokens.json component.motion
-   create_button_shadow_note): rest shadow, deeper while hovered, 280 ms. */
-.create-button-shadow {
-  position: relative;
-  border-radius: var(--create-button-root-border-radius);
-  box-shadow: var(--motion-create-button-rest-shadow);
-  transition: box-shadow var(--motion-create-button-shadow-duration) var(--motion-easing-standard);
-}
-
-.create-button-shadow:hover {
-  box-shadow: var(--motion-create-button-hover-shadow);
+/* The FAB sits at the left of the drawer column, not stretched. */
+.create-fab {
+  align-self: flex-start;
 }

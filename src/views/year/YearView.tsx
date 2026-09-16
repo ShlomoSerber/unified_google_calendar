@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { dayAria } from '../../app/MiniCalendar';
+import { dayAria } from '../../components/MonthGrid';
 import { inZone, isSameDay, monthGrid, toTs } from '../../lib/dates';
 import { useUi } from '../../state/ui';
 import './YearView.css';

@@ -8,7 +8,6 @@ import { MOTION } from '../styles/motion';
 import '../styles/motion.css';
 import { TopBar } from './TopBar';
 import { Sidebar } from './Sidebar';
-import { CreateButton } from './CreateButton';
 import { WeekView } from '../views/week/WeekView';
 import { MonthView } from '../views/month/MonthView';
 import { AgendaView } from '../views/agenda/AgendaView';
@@ -98,9 +97,6 @@ export function App() {
       <div className="app-body">
         <div className={sidebarOpen ? 'app-drawer' : 'app-drawer app-drawer-closed'} aria-hidden={!sidebarOpen}>
           <Sidebar />
-        </div>
-        <div className={sidebarOpen ? 'app-create' : 'app-create app-create-hidden'} aria-hidden={!sidebarOpen}>
-          <CreateButton />
         </div>
         <div className="app-main">
           <ViewStage view={view} rangeKey={`${view}:${rangeStart(view, date, days, tz)}`} navDir={navDir}>

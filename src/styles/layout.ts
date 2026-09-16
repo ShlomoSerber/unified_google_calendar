@@ -28,6 +28,7 @@ export const LAYOUT = {
   month_cell_header_height: "28px",
   month_chip_height: "20px",
   year_month_min_width: "240px",
+  year_cell_size: "28px",
   agenda_row_height: "48px",
   popup_width: "400px",
   popup_radius: "28px",

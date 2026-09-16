@@ -1,0 +1,57 @@
+/* Seven columns of circular day buttons (docs/11 section 7, mini calendar and year view). */
+.month-grid {
+  display: grid;
+  grid-template-rows: repeat(7, auto);
+}
+
+.month-grid-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  justify-items: center;
+}
+
+.month-grid-dow {
+  display: grid;
+  place-items: center;
+  width: var(--ugc-layout-mini-cal-cell);
+  height: var(--ugc-layout-mini-cal-cell);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.month-grid-cell {
+  display: grid;
+  place-items: center;
+}
+
+.month-grid-day {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--ugc-layout-mini-cal-cell);
+  height: var(--ugc-layout-mini-cal-cell);
+  border-radius: var(--md-sys-shape-corner-full);
+  color: var(--md-sys-color-on-surface);
+  --md-focus-ring-shape: var(--md-sys-shape-corner-full);
+}
+
+.month-grid-other {
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.month-grid-selected {
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+}
+
+.month-grid-today {
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  --md-ripple-hover-color: var(--md-sys-color-on-primary);
+  --md-ripple-pressed-color: var(--md-sys-color-on-primary);
+}
+
+.month-grid[data-size='compact'] .month-grid-dow,
+.month-grid[data-size='compact'] .month-grid-day {
+  width: var(--ugc-layout-year-cell-size);
+  height: var(--ugc-layout-year-cell-size);
+}
