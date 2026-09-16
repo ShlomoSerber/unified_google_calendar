@@ -1,0 +1,47 @@
+/* Plain tooltip (m3.material.io/components/tooltips/specs via theme.json layout.tooltip_*):
+   inverse-surface, extra-small corner, body-small text, 8 px horizontal padding, 24 px minimum
+   height, centred under the control. */
+.tooltip-anchor {
+  display: inline-flex;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 3;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--ugc-layout-tooltip-min-height);
+  padding: 0 var(--ugc-layout-tooltip-padding-x);
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  background: var(--md-sys-color-inverse-surface);
+  color: var(--md-sys-color-inverse-on-surface);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.tooltip-enter {
+  animation: ugc-tooltip-in var(--ugc-motion-tooltip-show-duration) var(--md-sys-motion-easing-standard-decelerate) both;
+}
+
+.tooltip-exit {
+  animation: ugc-tooltip-out var(--ugc-motion-tooltip-hide-duration) var(--md-sys-motion-easing-standard-accelerate) both;
+}
+
+@keyframes ugc-tooltip-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ugc-tooltip-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

@@ -11,6 +11,11 @@
   align-items: center;
 }
 
+.calendar-list-head > .tooltip-anchor {
+  flex: 1;
+  min-width: 0;
+}
+
 .calendar-list-toggle {
   position: relative;
   flex: 1;

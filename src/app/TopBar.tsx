@@ -4,6 +4,7 @@ import type { MdMenu } from '@material/web/menu/menu.js';
 import { ipc } from '../ipc';
 import { inZone } from '../lib/dates';
 import { useUi, type ViewKind } from '../state/ui';
+import { Tooltip } from './Tooltip';
 import './TopBar.css';
 
 // The top bar (docs/11 section 7 and section 9): drawer toggle, range title, previous/next,
@@ -66,19 +67,27 @@ export function TopBar({ weekDays }: TopBarProps) {
 
   return (
     <header className="topbar" role="banner">
-      <md-icon-button aria-label="Main drawer" onclick={toggleSidebar}>
-        <md-icon>menu</md-icon>
-      </md-icon-button>
+      <Tooltip text="Main drawer">
+        <md-icon-button aria-label="Main drawer" onclick={toggleSidebar}>
+          <md-icon>menu</md-icon>
+        </md-icon-button>
+      </Tooltip>
       <h1 className="topbar-range md-typescale-title-large">{title}</h1>
-      <md-icon-button aria-label={`Previous ${unit}`} onclick={prev}>
-        <md-icon>chevron_left</md-icon>
-      </md-icon-button>
-      <md-icon-button aria-label={`Next ${unit}`} onclick={next}>
-        <md-icon>chevron_right</md-icon>
-      </md-icon-button>
-      <md-outlined-button aria-label={`Today, ${todayLabel}`} onclick={today}>
-        Today
-      </md-outlined-button>
+      <Tooltip text={`Previous ${unit}`}>
+        <md-icon-button aria-label={`Previous ${unit}`} onclick={prev}>
+          <md-icon>chevron_left</md-icon>
+        </md-icon-button>
+      </Tooltip>
+      <Tooltip text={`Next ${unit}`}>
+        <md-icon-button aria-label={`Next ${unit}`} onclick={next}>
+          <md-icon>chevron_right</md-icon>
+        </md-icon-button>
+      </Tooltip>
+      <Tooltip text={todayLabel}>
+        <md-outlined-button aria-label={`Today, ${todayLabel}`} onclick={today}>
+          Today
+        </md-outlined-button>
+      </Tooltip>
       <span className="topbar-view">
         <md-outlined-button id="topbar-view-button" aria-haspopup="menu" trailing-icon onclick={toggleViewMenu}>
           <md-icon slot="icon">arrow_drop_down</md-icon>
@@ -93,12 +102,16 @@ export function TopBar({ weekDays }: TopBarProps) {
         </md-menu>
       </span>
       <span className="topbar-grow"></span>
-      <md-icon-button aria-label="Help" onclick={openHelp}>
-        <md-icon>help</md-icon>
-      </md-icon-button>
-      <md-icon-button aria-label="Settings" onclick={openSettings}>
-        <md-icon>settings</md-icon>
-      </md-icon-button>
+      <Tooltip text="Help">
+        <md-icon-button aria-label="Help" onclick={openHelp}>
+          <md-icon>help</md-icon>
+        </md-icon-button>
+      </Tooltip>
+      <Tooltip text="Settings">
+        <md-icon-button aria-label="Settings" onclick={openSettings}>
+          <md-icon>settings</md-icon>
+        </md-icon-button>
+      </Tooltip>
     </header>
   );
 }

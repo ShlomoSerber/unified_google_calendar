@@ -1,25 +1,45 @@
-/* Measured rules live in src/styles/measured.css (.snackbar-*). Placement and motion here:
-   centred on the bottom edge (layout.snackbar_bottom), sliding up from below
-   (motion.snackbar_slide_*). */
-.snackbar-root {
-  top: auto;
+/* Snackbar (m3.material.io/components/snackbar/specs via theme.json layout.snackbar_*):
+   inverse-surface, extra-small corner, level-3 elevation, centred on the bottom edge. */
+.snackbar {
+  position: fixed;
   left: 50%;
-  bottom: var(--layout-snackbar-bottom);
-  transform: translateX(-50%);
-  z-index: var(--create-menu-root-z-index);
+  bottom: var(--ugc-layout-snackbar-margin-bottom);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: var(--ugc-space-2);
+  box-sizing: border-box;
+  min-width: var(--ugc-layout-snackbar-min-width);
+  max-width: var(--ugc-layout-snackbar-max-width);
+  min-height: var(--ugc-layout-snackbar-height);
+  padding: 0 var(--ugc-space-1) 0 var(--ugc-space-4);
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  background: var(--md-sys-color-inverse-surface);
+  color: var(--md-sys-color-inverse-on-surface);
+  box-shadow: var(--md-sys-elevation-level3);
+  --md-icon-button-icon-color: var(--md-sys-color-inverse-on-surface);
+  --md-icon-button-hover-icon-color: var(--md-sys-color-inverse-on-surface);
+  --md-icon-button-pressed-icon-color: var(--md-sys-color-inverse-on-surface);
+  --md-icon-button-focus-icon-color: var(--md-sys-color-inverse-on-surface);
+  --md-icon-button-hover-state-layer-color: var(--md-sys-color-inverse-on-surface);
+  --md-icon-button-pressed-state-layer-color: var(--md-sys-color-inverse-on-surface);
+}
+
+.snackbar-label {
+  flex: 1;
 }
 
 .snackbar-enter {
-  animation: ugc-snackbar-in var(--motion-snackbar-slide-duration) var(--motion-easing-standard) both;
+  animation: ugc-snackbar-in var(--ugc-motion-snackbar-slide-duration) var(--md-sys-motion-easing-standard) both;
 }
 
 .snackbar-exit {
-  animation: ugc-snackbar-out var(--motion-snackbar-slide-duration) var(--motion-easing-standard) both;
+  animation: ugc-snackbar-out var(--ugc-motion-snackbar-slide-duration) var(--md-sys-motion-easing-standard) both;
 }
 
 @keyframes ugc-snackbar-in {
   from {
-    transform: translate(-50%, 100%);
+    transform: translate(-50%, calc(100% + var(--ugc-layout-snackbar-margin-bottom)));
   }
   to {
     transform: translate(-50%, 0);
@@ -31,20 +51,6 @@
     transform: translate(-50%, 0);
   }
   to {
-    transform: translate(-50%, 100%);
+    transform: translate(-50%, calc(100% + var(--ugc-layout-snackbar-margin-bottom)));
   }
-}
-
-/* The close button is a bare <button> around the measured icon box. */
-.snackbar-close-button {
-  display: flex;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: inherit;
-  cursor: pointer;
-}
-
-.snackbar-close-path {
-  fill: currentColor;
 }

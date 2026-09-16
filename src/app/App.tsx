@@ -22,7 +22,6 @@ import { FullForm } from '../event/FullForm';
 import { EditScopeDialog } from '../event/EditScopeDialog';
 import { RecurrenceDialog } from '../event/RecurrenceDialog';
 import { ViewStage } from './ViewStage';
-import { Tooltip } from './Tooltip';
 import { Snackbar } from './Snackbar';
 import './App.css';
 
@@ -114,7 +113,6 @@ export function App() {
       {overlay.kind === 'edit-scope' ? <EditScopeDialog occurrenceId={overlay.occurrenceId} action={overlay.action} draft={overlay.draft} /> : null}
       {overlay.kind === 'recurrence' ? <RecurrenceDialog rrule={overlay.rrule} startTs={overlay.startTs} /> : null}
       <Snackbar />
-      <Tooltip />
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { ipc } from '../ipc';
 import { chipColors, useTheme } from '../lib/colors';
 import { useUi } from '../state/ui';
 import type { AccountInfo, CalendarInfo } from '../types/ipc';
+import { Tooltip } from './Tooltip';
 import './CalendarList.css';
 
 // The calendar list of the drawer (docs/11 section 7), grouped by account (docs/08 F4-T3):
@@ -50,19 +51,24 @@ interface SectionProps {
 function Section({ title, tooltip, addButton, children }: SectionProps) {
   const [open, setOpen] = useState(true);
   const openAddCalendar = () => useUi.getState().openDialog({ kind: 'add-calendar' });
+  const toggle = (
+    <button className="calendar-list-toggle md-typescale-label-medium" type="button" aria-expanded={open} onClick={() => setOpen(!open)}>
+      <md-ripple></md-ripple>
+      <md-focus-ring></md-focus-ring>
+      <span className="calendar-list-toggle-label">{title}</span>
+      <md-icon>{open ? 'expand_less' : 'expand_more'}</md-icon>
+    </button>
+  );
   return (
     <div className="calendar-list-section">
       <div className="calendar-list-head">
-        <button className="calendar-list-toggle md-typescale-label-medium" type="button" aria-expanded={open} onClick={() => setOpen(!open)} title={tooltip ?? undefined}>
-          <md-ripple></md-ripple>
-          <md-focus-ring></md-focus-ring>
-          <span className="calendar-list-toggle-label">{title}</span>
-          <md-icon>{open ? 'expand_less' : 'expand_more'}</md-icon>
-        </button>
+        {tooltip ? <Tooltip text={tooltip}>{toggle}</Tooltip> : toggle}
         {addButton ? (
-          <md-icon-button aria-label="Add other calendars" onclick={openAddCalendar}>
-            <md-icon>add</md-icon>
-          </md-icon-button>
+          <Tooltip text="Add other calendars">
+            <md-icon-button aria-label="Add other calendars" onclick={openAddCalendar}>
+              <md-icon>add</md-icon>
+            </md-icon-button>
+          </Tooltip>
         ) : null}
       </div>
       {open ? (
