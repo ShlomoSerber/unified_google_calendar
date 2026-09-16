@@ -212,10 +212,13 @@
   --ugc-layout-calendar-row-height: 40px;
   --ugc-layout-calendar-row-radius: 9999px;
   --ugc-layout-month-cell-header-height: 28px;
+  --ugc-layout-month-number-size: 24px;
   --ugc-layout-month-chip-height: 20px;
+  --ugc-layout-month-dot-size: 8px;
   --ugc-layout-year-month-min-width: 240px;
   --ugc-layout-year-cell-size: 28px;
   --ugc-layout-agenda-row-height: 48px;
+  --ugc-layout-agenda-dot-size: 12px;
   --ugc-layout-popup-width: 400px;
   --ugc-layout-popup-radius: 28px;
   --ugc-layout-popup-gap: 8px;

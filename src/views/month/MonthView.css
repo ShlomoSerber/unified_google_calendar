@@ -1,54 +1,120 @@
-/* Measured rules live in src/styles/measured.css (.month-*). Only sizing of fluid nodes and the
-   dynamic calendar colour are added here. */
-.month-root {
-  height: 100%;
+/* Month view (docs/11 section 7): outline-variant cell borders, 24 px number pill, 20 px chips. */
+.month-view {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
 }
 
-.month-row-bg,
-.month-row-nums {
-  inset: 0;
+.month-view-grid {
+  display: grid;
+  grid-template-rows: auto;
+  grid-auto-rows: minmax(0, 1fr);
+  flex: 1;
+  min-height: 0;
 }
 
-.month-cells {
-  height: 100%;
+.month-view-head,
+.month-view-week {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
 }
 
-.month-cell-sr,
-.month-num,
-.month-num-today,
-.month-num-first,
-.month-num-other {
-  margin-top: var(--month-num-margin-top);
-  margin-bottom: var(--month-num-margin-bottom);
+.month-view-dow {
+  display: grid;
+  place-items: center;
+  height: var(--ugc-layout-month-cell-header-height);
+  color: var(--md-sys-color-on-surface-variant);
+  border-bottom: var(--ugc-layout-divider-width) solid var(--md-sys-color-outline-variant);
 }
 
-.month-num-today {
-  margin-top: var(--month-num-today-margin-top);
+.month-view-cell {
+  position: relative;
+  min-width: 0;
+  border-right: var(--ugc-layout-divider-width) solid var(--md-sys-color-outline-variant);
+  border-bottom: var(--ugc-layout-divider-width) solid var(--md-sys-color-outline-variant);
 }
 
-.month-cell-sr {
-  margin: 0;
+.month-view-cell:last-child {
+  border-right: 0;
 }
 
-.month-num,
-.month-num-today,
-.month-num-first,
-.month-num-other,
-.month-chip,
-.month-timed,
-.month-more {
+/* Spans start in their first cell and cross the cell's right edge, so cells never clip;
+   the week row does. The day number sits centred in the cell header. */
+.month-view-week {
+  overflow: hidden;
+}
+
+.month-view-number {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--ugc-layout-month-number-size);
+  height: var(--ugc-layout-month-number-size);
+  margin: calc((var(--ugc-layout-month-cell-header-height) - var(--ugc-layout-month-number-size)) / 2) auto 0;
+  padding: 0 var(--ugc-space-1);
+  border-radius: var(--md-sys-shape-corner-full);
+  color: var(--md-sys-color-on-surface);
+  --md-focus-ring-shape: var(--md-sys-shape-corner-full);
+}
+
+.month-view-other {
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.month-view-today {
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  --md-ripple-hover-color: var(--md-sys-color-on-primary);
+  --md-ripple-pressed-color: var(--md-sys-color-on-primary);
+}
+
+.month-view-chip,
+.month-view-timed,
+.month-view-more {
+  position: absolute;
+  left: var(--ugc-layout-chip-gap);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: var(--ugc-space-1);
+  height: var(--ugc-layout-month-chip-height);
+  padding: 0 var(--ugc-space-1) 0 var(--ugc-space-2);
+  border-radius: var(--ugc-layout-chip-radius);
+  overflow: hidden;
   cursor: pointer;
+  z-index: 1;
+  --md-focus-ring-shape: var(--ugc-layout-chip-radius);
 }
 
-.month-chip {
-  background-color: var(--data-chip-bg);
+.month-view-chip {
+  border-left: var(--ugc-layout-chip-border) solid var(--data-chip-color);
+  background: var(--data-chip-container);
+  color: var(--data-chip-on-container);
 }
 
-.month-timed-dot {
-  border-color: var(--data-calendar-color);
+.month-view-timed {
+  width: calc(100% - var(--ugc-layout-chip-gap) * 2);
+  color: var(--md-sys-color-on-surface);
 }
 
-.month-timed-dot {
-  width: 0;
-  height: 0;
+.month-view-dot {
+  flex: none;
+  width: var(--ugc-layout-month-dot-size);
+  height: var(--ugc-layout-month-dot-size);
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--data-chip-color);
+}
+
+.month-view-text {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.month-view-more {
+  width: calc(100% - var(--ugc-layout-chip-gap) * 2);
+  color: var(--md-sys-color-primary);
 }
