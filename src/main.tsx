@@ -8,6 +8,8 @@ import './styles/tokens.css';
 import './styles/typescale.css';
 import './styles/fonts.css';
 import './styles/base.css';
+// Registers the <md-*> elements before any component renders one.
+import './m3/register';
 import { App } from './app/App';
 
 if (import.meta.env.DEV) {
