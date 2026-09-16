@@ -1,31 +1,93 @@
-/* Measured rules live in src/styles/measured.css (.agenda-*). Sizing of the fluid boxes and the
-   calendar colour of the dot are added here. */
-.agenda-main {
-  inset: 0 var(--layout-main-gap-right) 0 0;
+/* Schedule view (docs/11 section 7): day groups with a 40 px date circle and 48 px rows. */
+.agenda-view {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden auto;
+  padding: var(--ugc-space-2) var(--ugc-space-4);
 }
 
-.agenda-main-box {
-  inset: 0;
+.agenda-view-empty {
+  margin: var(--ugc-space-4);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
-.agenda-main-sr,
-.agenda-date-h2 {
-  margin: 0;
+.agenda-view-group {
+  display: grid;
+  grid-template-columns: var(--ugc-layout-agenda-date-width) minmax(0, 1fr);
+  gap: var(--ugc-space-4);
+  padding: var(--ugc-space-2) 0;
+  border-bottom: var(--ugc-layout-divider-width) solid var(--md-sys-color-outline-variant);
 }
 
-.agenda-date,
-.agenda-date-today,
-.agenda-title {
+.agenda-view-today {
+  border-bottom-color: var(--md-sys-color-error);
+}
+
+.agenda-view-date {
+  display: flex;
+  align-items: center;
+  gap: var(--ugc-space-2);
+  align-self: start;
+  height: var(--ugc-layout-agenda-row-height);
+}
+
+.agenda-view-number {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--ugc-layout-day-number-size);
+  height: var(--ugc-layout-day-number-size);
+  border-radius: var(--md-sys-shape-corner-full);
+  color: var(--md-sys-color-on-surface);
+  --md-focus-ring-shape: var(--md-sys-shape-corner-full);
+}
+
+.agenda-view-today .agenda-view-number {
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  --md-ripple-hover-color: var(--md-sys-color-on-primary);
+  --md-ripple-pressed-color: var(--md-sys-color-on-primary);
+}
+
+.agenda-view-month {
+  color: var(--md-sys-color-on-surface-variant);
+  white-space: nowrap;
+}
+
+.agenda-view-today .agenda-view-month {
+  color: var(--md-sys-color-primary);
+}
+
+.agenda-view-event {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--ugc-space-3);
+  height: var(--ugc-layout-agenda-row-height);
+  padding: 0 var(--ugc-space-3);
+  border-radius: var(--md-sys-shape-corner-small);
   cursor: pointer;
+  --md-focus-ring-shape: var(--md-sys-shape-corner-small);
 }
 
-/* The calendar dot comes last in the DOM and first on screen (probe pending: see agenda_view.md). */
-.agenda-dot-cell {
-  order: -1;
+.agenda-view-dot {
+  flex: none;
+  width: var(--ugc-layout-agenda-dot-size);
+  height: var(--ugc-layout-agenda-dot-size);
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--data-chip-color);
 }
 
-.agenda-dot {
-  border-color: var(--data-calendar-color);
-  width: 0;
-  height: 0;
+.agenda-view-title {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--md-sys-color-on-surface);
+}
+
+.agenda-view-time {
+  color: var(--md-sys-color-on-surface-variant);
+  white-space: nowrap;
 }

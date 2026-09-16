@@ -34,6 +34,7 @@ export const LAYOUT = {
   year_cell_size: "28px",
   agenda_row_height: "48px",
   agenda_dot_size: "12px",
+  agenda_date_width: "120px",
   popup_width: "400px",
   popup_radius: "28px",
   popup_gap: "8px",

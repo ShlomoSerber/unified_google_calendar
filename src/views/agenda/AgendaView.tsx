@@ -1,17 +1,18 @@
+import type { MouseEvent } from 'react';
 import { format } from 'date-fns';
-import { chipBackground, useTheme } from '../../lib/colors';
+import { useTheme } from '../../lib/colors';
 import { dayStart, fromIsoDate, hhmm, inZone, isSameDay, isoDate } from '../../lib/dates';
 import { useUi } from '../../state/ui';
 import { useViewData } from '../../state/useViewData';
 import type { ViewOccurrence } from '../../types/ipc';
-import { chipDescription } from '../week/EventChip';
+import { chipDescription, chipStyle } from '../week/EventChip';
 import './AgendaView.css';
 
-// Component 13 of docs/04 section 4 (docs/design/measurements/agenda_view-light.json): one
-// group per day with events, starting at the anchor date; 32px rows with time, title and the
-// calendar dot; a red separator under today's group.
+// Schedule view (docs/11 section 7): one group per day with events, starting at the anchor
+// date. The date sits in a 40 px circle (today: primary); rows of 48 px carry the calendar's
+// colour dot, the title (body-large) and the time (body-medium). A divider under today.
 
-/** Days shown from the anchor: Google's schedule loads a rolling range; six weeks here. */
+/** Days shown from the anchor: six weeks. */
 const AGENDA_DAYS = 42;
 
 export function AgendaView() {
@@ -35,7 +36,7 @@ export function AgendaView() {
     const list = items.filter((o) => o.start < day + 86_400 && o.end > day).sort((a, b) => Number(!a.all_day) - Number(!b.all_day) || a.start - b.start);
     if (list.length) groups.push({ day, items: list });
   }
-  const openEvent = (o: ViewOccurrence) => (e: React.MouseEvent<HTMLDivElement>) => {
+  const openEvent = (o: ViewOccurrence) => (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     useUi.getState().openDialog({ kind: 'event', occurrenceId: o.id, anchor: e.currentTarget.getBoundingClientRect() });
   };
@@ -46,66 +47,42 @@ export function AgendaView() {
   };
 
   return (
-    <div className="agenda-main" role="main">
-      <h1 className="agenda-main-sr">{`Schedule starting ${format(inZone(from, tz), 'EEEE, MMMM d, yyyy')}`}</h1>
-      <div className="agenda-main-box">
-        <div className="agenda-root" role="grid">
-          {groups.map(({ day, items: list }) => {
-            const d = inZone(day, tz);
-            const today = isSameDay(day, now, tz);
-            const dayLabel = `${format(d, 'EEEE, MMMM d')}${today ? ', today' : ''}`;
-            return (
-              <div className="agenda-group" role="rowgroup" key={day}>
-                {list.map((o, i) => {
-                  const title = o.title ?? '(No title)';
-                  const time = o.all_day ? 'All day' : `${hhmm(o.start, tz)} – ${hhmm(o.end, tz)}`;
-                  const dot = { '--data-calendar-color': chipBackground(o.color_bg, theme) } as React.CSSProperties;
-                  return (
-                    <div className={i === 0 ? 'agenda-row-first' : 'agenda-row'} role="row" key={o.id}>
-                      {i === 0 ? (
-                        <div className="agenda-date-cell" role="gridcell">
-                          <h2 className="agenda-date-h2">
-                            <button className={today ? 'agenda-date-today' : 'agenda-date'} aria-label={dayLabel} type="button" onClick={() => openDay(day)}>
-                              <span className={today ? 'agenda-date-today-ripple' : 'agenda-date-ripple'}></span>
-                              <div className={today ? 'agenda-daynum-today' : 'agenda-daynum'}>{d.getDate()}</div>
-                            </button>
-                            <div className={today ? 'agenda-date-label-box' : 'agenda-date-label-box-other'}>
-                              <div className={today ? 'agenda-date-label' : 'agenda-date-label-other'}>{format(d, 'MMM')}{`, ${format(d, 'EEE')}`}</div>
-                            </div>
-                          </h2>
-                        </div>
-                      ) : (
-                        <div className="agenda-date-sr" role="gridcell">
-                          {dayLabel}
-                        </div>
-                      )}
-                      <div className={i === 0 ? 'agenda-pres' : 'agenda-pres-next'} role="presentation">
-                        <div className="agenda-time-cell" role="gridcell">
-                          {time}
-                        </div>
-                        <div className="agenda-title-cell" role="gridcell">
-                          <div className="agenda-title" role="button" tabIndex={0} data-title={title} aria-label={chipDescription(o, tz, calendarName(o), format(d, 'MMMM d, yyyy'))} onClick={openEvent(o)}>
-                            {title}
-                          </div>
-                          {o.location ? <div className="agenda-location">{o.location}</div> : null}
-                        </div>
-                        <div className="agenda-dot-cell" role="gridcell">
-                          <div className="agenda-dot-box">
-                            <div className="agenda-dot" style={dot}>
-                              <span className="agenda-dot-sr">{`Calendar: ${calendarName(o)}`}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+    <div className="agenda-view" role="main" aria-label={`Schedule starting ${format(inZone(from, tz), 'EEEE, MMMM d, yyyy')}`}>
+      {groups.length === 0 ? <p className="agenda-view-empty md-typescale-body-medium">No events in the next six weeks.</p> : null}
+      {groups.map(({ day, items: list }) => {
+        const d = inZone(day, tz);
+        const today = isSameDay(day, now, tz);
+        const dayLabel = `${format(d, 'EEEE, MMMM d')}${today ? ', today' : ''}`;
+        return (
+          <section className={today ? 'agenda-view-group agenda-view-today' : 'agenda-view-group'} key={day} aria-label={dayLabel}>
+            <div className="agenda-view-date">
+              <button className="agenda-view-number md-typescale-title-medium" type="button" aria-label={dayLabel} onClick={() => openDay(day)}>
+                <md-ripple></md-ripple>
+                <md-focus-ring></md-focus-ring>
+                {d.getDate()}
+              </button>
+              <span className="agenda-view-month md-typescale-label-medium">{format(d, 'MMM, EEE')}</span>
+            </div>
+            <div className="agenda-view-rows" role="list">
+              {list.map((o) => {
+                const title = o.title ?? '(No title)';
+                const time = o.all_day ? 'All day' : `${hhmm(o.start, tz)} – ${hhmm(o.end, tz)}`;
+                return (
+                  <div className="agenda-view-row" role="listitem" key={o.id}>
+                    <div className="agenda-view-event" role="button" tabIndex={0} style={chipStyle(o.color_bg, theme)} aria-label={chipDescription(o, tz, calendarName(o), format(d, 'MMMM d, yyyy'))} onClick={openEvent(o)}>
+                      <md-ripple></md-ripple>
+                      <md-focus-ring></md-focus-ring>
+                      <span className="agenda-view-dot"></span>
+                      <span className="agenda-view-title md-typescale-body-large">{title}</span>
+                      <span className="agenda-view-time md-typescale-body-medium">{time}</span>
                     </div>
-                  );
-                })}
-                {today ? <div className="agenda-separator"></div> : null}
-              </div>
-            );
-          })}
-        </div>
-      </div>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        );
+      })}
     </div>
   );
 }
