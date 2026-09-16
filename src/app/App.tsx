@@ -2,9 +2,9 @@ import { useEffect } from 'react';
 import { ipc, onAccountChanged, onClockMinute, onSyncStatus } from '../ipc';
 import { format } from 'date-fns';
 import { dayStart, inZone, weekDays } from '../lib/dates';
-import { installRipples, ms, usePresence } from '../lib/motion';
+import { ms, usePresence } from '../lib/motion';
 import { useUi, type Dialog, type ViewKind } from '../state/ui';
-import { MOTION } from '../styles/legacy-motion';
+import { MOTION } from '../styles/motion';
 import '../styles/motion.css';
 import { TopBar } from './TopBar';
 import { Sidebar } from './Sidebar';
@@ -22,7 +22,6 @@ import { QuickCreate } from '../event/QuickCreate';
 import { FullForm } from '../event/FullForm';
 import { EditScopeDialog } from '../event/EditScopeDialog';
 import { RecurrenceDialog } from '../event/RecurrenceDialog';
-import { ViewSelector } from './ViewSelector';
 import { ViewStage } from './ViewStage';
 import { Tooltip } from './Tooltip';
 import { Snackbar } from './Snackbar';
@@ -44,8 +43,6 @@ function dialogExitMs(d: Dialog): number {
     case 'event':
     case 'quick-create':
       return ms(MOTION.popup_close_duration);
-    case 'view-menu':
-      return ms(MOTION.menu_close_duration);
     case 'full-form':
     case 'settings':
     case 'welcome':
@@ -69,8 +66,6 @@ export function App() {
   const days = weekDays(date, tz);
   const { shown: dlg, exiting } = usePresence(dialog, dialogOpen, dialogExitMs);
   const pageClass = exiting ? 'motion-layer motion-page-exit' : 'motion-layer motion-page';
-
-  useEffect(() => installRipples(), []);
 
   useEffect(() => {
     const { setAccounts, setCalendars, setNow, setSettings, setSyncStatus } = useUi.getState();
@@ -122,7 +117,6 @@ export function App() {
       {dlg.kind === 'full-form' ? <div className={pageClass}><FullForm occurrenceId={dlg.occurrenceId} startTs={dlg.startTs} endTs={dlg.endTs} allDay={dlg.allDay} draft={dlg.draft} /></div> : null}
       {overlay.kind === 'edit-scope' ? <EditScopeDialog occurrenceId={overlay.occurrenceId} action={overlay.action} draft={overlay.draft} /> : null}
       {overlay.kind === 'recurrence' ? <RecurrenceDialog rrule={overlay.rrule} startTs={overlay.startTs} /> : null}
-      {dlg.kind === 'view-menu' ? <ViewSelector exiting={exiting} /> : null}
       <Snackbar />
       <Tooltip />
     </div>

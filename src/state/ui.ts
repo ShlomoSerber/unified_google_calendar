@@ -18,7 +18,6 @@ export type Dialog =
   | { kind: 'settings' }
   | { kind: 'welcome' }
   | { kind: 'goa' }
-  | { kind: 'view-menu' }
   | { kind: 'add-calendar' };
 
 export interface UiState {

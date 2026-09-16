@@ -1,8 +1,13 @@
+/* The shell (docs/11 section 7): the window is a surface-container; the calendar sits on a
+   surface with its top-left corner rounded. The drawer collapses by width so the main area
+   reflows with it (docs/11 section 9, App.tsx). */
 .app {
   position: relative;
   display: flex;
   flex-direction: column;
   height: 100%;
+  background: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface);
 }
 
 .app-body {
@@ -11,44 +16,32 @@
   min-height: 0;
 }
 
-/* The drawer stays mounted and slides like Google's (.QQYuzf: transform translateX(-256px) → none,
-   layout.sidebar_transition_*); the wrapper's width follows so the main area reflows with it. */
 .app-drawer {
-  display: flex;
-  flex-direction: column;
   flex: none;
-  width: var(--layout-sidebar-width);
+  width: var(--ugc-layout-sidebar-width);
   min-height: 0;
   overflow: hidden;
   transition:
-    width var(--layout-sidebar-transition-duration) var(--layout-sidebar-transition-timing),
+    width var(--ugc-motion-drawer-duration) var(--ugc-motion-drawer-easing),
     visibility 0s linear 0s;
 }
 
-.app-drawer > .sidebar-root {
-  transition: transform var(--layout-sidebar-transition-duration) var(--layout-sidebar-transition-timing);
+.app-drawer > * {
+  width: var(--ugc-layout-sidebar-width);
+  height: 100%;
+  transition: transform var(--ugc-motion-drawer-duration) var(--ugc-motion-drawer-easing);
 }
 
 .app-drawer-closed {
   width: 0;
   visibility: hidden;
   transition:
-    width var(--layout-sidebar-transition-duration) var(--layout-sidebar-transition-timing),
-    visibility 0s linear var(--layout-sidebar-transition-duration);
+    width var(--ugc-motion-drawer-duration) var(--ugc-motion-drawer-easing),
+    visibility 0s linear var(--ugc-motion-drawer-duration);
 }
 
-.app-drawer-closed > .sidebar-root {
-  transform: translateX(calc(-1 * var(--layout-sidebar-width)));
-}
-
-/* The Create button lives outside the drawer (CreateButton.css); it fades with it. */
-.app-create {
-  transition: opacity var(--layout-sidebar-transition-duration) var(--layout-sidebar-transition-timing);
-}
-
-.app-create-hidden {
-  opacity: 0;
-  pointer-events: none;
+.app-drawer-closed > * {
+  transform: translateX(calc(-1 * var(--ugc-layout-sidebar-width)));
 }
 
 .app-main {
@@ -57,6 +50,8 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
+  background: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+  border-top-left-radius: var(--ugc-layout-main-radius);
+  overflow: hidden;
 }
-
-/* Each view renders Google's absolute main box inside this area (layout.main_gap_*). */

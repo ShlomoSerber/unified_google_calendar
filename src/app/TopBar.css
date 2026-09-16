@@ -1,75 +1,24 @@
-/* Every measured rule lives in src/styles/measured.css (.topbar-*). This file re-flows the
-   measured nodes into the user's order (docs/99, 2026-09-15): the containers that Google sizes
-   for its own content (left slot with the logo, table cells of fixed width) become fluid, and
-   Today, which followed the arrows in Google, follows the view selector here. */
-.topbar-left {
+/* Top bar (docs/11 section 7): surface-container, no border, no shadow; title-large title. */
+.topbar {
+  display: flex;
+  align-items: center;
   flex: none;
-  width: auto;
-  min-width: 0;
-  padding-right: 0;
+  gap: var(--ugc-space-2);
+  height: var(--ugc-layout-topbar-height);
+  padding: 0 var(--ugc-layout-topbar-padding-x);
 }
 
-.topbar-n15,
-.topbar-n18,
-.topbar-n19,
-.topbar-n44 {
-  width: auto;
-}
-
-.topbar-n15 {
-  flex: none;
-}
-
-.topbar-today {
-  margin-right: 0;
-  margin-left: var(--topbar-n86-margin-left);
-}
-
-/* The state layer fills the button's padding box whatever width the font gives the label. */
-.topbar-n22,
-.topbar-n92 {
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-}
-
-/* hover_drawer_button: the menu button's background changes with no transition. */
-.topbar-drawer:hover {
-  background-color: var(--motion-drawer-button-hover-background);
-}
-
-/* The view button keeps one width whatever the selection: every label is stacked, invisible,
-   under the visible one, so the widest ("Schedule") sets the size (user rule, 2026-09-15). */
-.topbar-n86,
-.topbar-n87,
-.topbar-n88,
-.topbar-n89,
-.topbar-view-button {
-  width: auto;
-}
-
-.topbar-view-stack {
-  display: grid;
-}
-
-.topbar-view-stack > .topbar-view-label {
-  grid-area: 1 / 1;
-  width: auto;
+.topbar-range {
+  margin: 0 var(--ugc-space-2);
   white-space: nowrap;
+  color: var(--md-sys-color-on-surface);
 }
 
-.topbar-view-ghost {
-  visibility: hidden;
+/* The view button and its menu share this parent so the menu can anchor by id. */
+.topbar-view {
+  position: relative;
 }
 
-/* The range title grows with its text ("September – October 2026"); nothing overlaps it. */
-.topbar-n44,
-.topbar-n45,
-.topbar-n46,
-.topbar-n48,
-.topbar-n49,
-.topbar-month-title {
-  width: auto;
-  white-space: nowrap;
+.topbar-grow {
+  flex: 1;
 }

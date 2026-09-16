@@ -9,11 +9,12 @@ import { App } from './App';
 
 describe('App', () => {
   it('renders the top bar, the drawer and the week grid', () => {
-    render(<App />);
+    const { container } = render(<App />);
     expect(screen.getByRole('banner')).toBeTruthy();
-    // The logo and the "Calendar" title were removed on the user's request (docs/99); the slot stays.
-    expect(screen.queryByRole('heading', { level: 1, name: 'Calendar' })).toBeNull();
-    expect(screen.getByRole('button', { name: /^Today, / })).toBeTruthy();
+    expect(container.querySelector('.topbar-range')?.textContent).toMatch(/\d{4}$/); // range title
+    // <md-*> elements are inert in jsdom (vitest.setup.ts): the Today button is found by its label.
+    expect(container.querySelector('md-outlined-button[aria-label^="Today, "]')).toBeTruthy();
+    expect(container.querySelectorAll('md-menu-item')).toHaveLength(5); // view menu
     expect(screen.getByRole('grid', { name: /\d{4}$/ })).toBeTruthy(); // mini calendar
     expect(screen.getByRole('main')).toBeTruthy(); // the view's own main box
     expect(screen.getAllByRole('columnheader').filter((e) => e.tagName === 'DIV')).toHaveLength(7); // week header (the mini calendar has 7 <th>)
