@@ -40,7 +40,6 @@ function dialogExitMs(d: Dialog): number {
   switch (d.kind) {
     case 'event':
       return ms(MOTION.popup_close_duration);
-    case 'settings':
     case 'welcome':
     case 'goa':
     case 'add-calendar':
@@ -101,7 +100,7 @@ export function App() {
           </ViewStage>
         </div>
       </div>
-      {dlg.kind === 'settings' ? <div className={pageClass}><SettingsDialog /></div> : null}
+      {dlg.kind === 'settings' ? <SettingsDialog /> : null}
       {dlg.kind === 'welcome' ? <div className={pageClass}><WelcomeDialog /></div> : null}
       {dlg.kind === 'goa' ? <div className={pageClass}><GoaDialog /></div> : null}
       {dlg.kind === 'add-calendar' ? <div className={pageClass}><AddCalendarDialog /></div> : null}

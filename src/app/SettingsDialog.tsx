@@ -1,20 +1,28 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import type { MdDialog } from '@material/web/dialog/dialog.js';
+import type { MdOutlinedSelect } from '@material/web/select/outlined-select.js';
+import type { MdOutlinedTextField } from '@material/web/textfield/outlined-text-field.js';
 import { ipc } from '../ipc';
 import { useUi } from '../state/ui';
 import type { GoaStatus, Settings } from '../types/ipc';
 import './SettingsDialog.css';
 
-// F7-T6 (docs/07 section 5, docs/08): Settings. Google's settings page was not measured (it is a
-// separate product surface); this dialog reuses the measured dialog tokens (title row, rows,
-// comboboxes and footer buttons of the recurrence and scope dialogs).
+// Settings (docs/07 section 5, docs/11 section 7): a 640 px md-dialog with sections for
+// accounts, iCal calendars, time zones, events, push notifications and GNOME Online Accounts.
 
 const UNAVAILABLE = 'Not available in this version';
+const OAUTH_HINT = 'Create ~/.config/unified-google-calendar/oauth.json first (docs/09 section A)';
+/** md-select drops an empty-string value once its options render, so "none" options use this. */
+const NONE = 'none';
+const fieldValue = (e: Event) => (e.target as MdOutlinedTextField).value;
+const selectValue = (e: Event) => (e.target as MdOutlinedSelect).value;
 
 export function SettingsDialog() {
   const settings = useUi((s) => s.settings);
   const accounts = useUi((s) => s.accounts);
   const calendars = useUi((s) => s.calendars);
   const syncStatus = useUi((s) => s.syncStatus);
+  const dialog = useRef<MdDialog>(null);
   const [draft, setDraftState] = useState<Settings | null>(null);
   // The form starts from the loaded settings (derived until the user edits).
   const current = draft ?? settings;
@@ -25,9 +33,10 @@ export function SettingsDialog() {
   const [icalName, setIcalName] = useState('');
   const [icalUrl, setIcalUrl] = useState('');
   const [icalEmail, setIcalEmail] = useState('');
-  const close = () => useUi.getState().closeDialog();
+  const close = () => dialog.current?.close();
 
   useEffect(() => {
+    dialog.current?.show();
     ipc.goaStatus().then(setGoa).catch(() => undefined);
   }, []);
 
@@ -81,143 +90,145 @@ export function SettingsDialog() {
       return disable ? "Calendar is off in GNOME's Online Accounts for your Google accounts." : 'Online Accounts left as they are.';
     });
 
-  if (!current) return null;
   const form = current;
   const googleAccounts = accounts.filter((a) => a.kind === 'google');
   const writable = calendars.filter((c) => c.access_role === 'owner' || c.access_role === 'writer');
 
   return (
-    <div className="settings-scrim" onMouseDown={close}>
-      <div className="settings-root scope-root" role="dialog" aria-modal="true" aria-label="Settings" onMouseDown={(e) => e.stopPropagation()}>
-        <h2 className="scope-title-row">
-          <span className="scope-title">Settings</span>
-        </h2>
-        <div className="settings-body">
-          <section className="settings-section">
-            <div className="settings-heading">Accounts</div>
-            <ul className="settings-list">
-              {accounts.map((a) => {
-                const s = syncStatus[a.id];
-                const state = s?.state ?? a.sync_state;
-                return (
-                  <li className="settings-row" key={a.id}>
-                    <span className="settings-name">{a.display_name}</span>
-                    <span className="settings-meta">
-                      {a.kind === 'google' ? (a.email ?? 'Google') : 'iCal · read-only'} · {state}
-                      {a.sync_error ? ` · ${a.sync_error}` : ''}
-                    </span>
-                    {a.kind === 'google' && state === 'auth_required' ? (
-                      <button className="settings-button" type="button" disabled={busy} onClick={addGoogle}>
-                        Sign in again
-                      </button>
-                    ) : null}
-                    <button className="settings-button" type="button" disabled={busy} onClick={() => remove(a.id, a.display_name)}>
-                      Remove
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-            <div className="settings-actions">
-              <button className="settings-button" type="button" disabled={busy || !form.oauth_configured} title={form.oauth_configured ? undefined : 'Create ~/.config/unified-google-calendar/oauth.json first (docs/09 section A)'} onClick={addGoogle}>
-                Add Google account
-              </button>
-              <button className="settings-button" type="button" disabled={busy} onClick={() => void run('Syncing…', async () => ipc.syncNow().then(() => 'Sync requested.'))}>
-                Sync now
-              </button>
-            </div>
-            <div className="settings-actions">
-              <input className="settings-input" placeholder="Name (e.g. RappiCard)" value={icalName} onChange={(e) => setIcalName(e.target.value)} />
-              <input className="settings-input settings-input-wide" placeholder="Secret iCal address (https://…/basic.ics)" value={icalUrl} onChange={(e) => setIcalUrl(e.target.value)} />
-              <input className="settings-input" placeholder="Your e-mail in that calendar (optional)" value={icalEmail} onChange={(e) => setIcalEmail(e.target.value)} />
-              <button className="settings-button" type="button" disabled={busy || !icalName || !icalUrl} onClick={addIcal}>
-                Add iCal calendar
-              </button>
-            </div>
-          </section>
-          <section className="settings-section">
-            <div className="settings-heading">Time zones</div>
-            <label className="settings-field">
-              <span className="settings-label">Primary time zone</span>
-              <input className="settings-input" value={form.primary_tz} onChange={(e) => setDraft({ ...form, primary_tz: e.target.value })} />
-            </label>
-            <label className="settings-field">
-              <span className="settings-label">Secondary time zone (empty for none)</span>
-              <input className="settings-input" value={form.secondary_tz ?? ''} onChange={(e) => setDraft({ ...form, secondary_tz: e.target.value || null })} />
-            </label>
-          </section>
-          <section className="settings-section">
-            <div className="settings-heading">Events</div>
-            <label className="settings-field">
-              <span className="settings-label">Default calendar for new events</span>
-              <select className="settings-select" value={form.default_calendar ? `${form.default_calendar.account_id}|${form.default_calendar.calendar_id}` : ''} onChange={(e) => { const [account_id, calendar_id] = e.target.value.split('|'); setDraft({ ...form, default_calendar: account_id && calendar_id ? { account_id, calendar_id } : null }); }}>
-                <option value="">First writable calendar</option>
-                {writable.map((c) => (
-                  <option key={`${c.account_id}|${c.id}`} value={`${c.account_id}|${c.id}`}>{`${c.summary} · ${accounts.find((a) => a.id === c.account_id)?.display_name ?? ''}`}</option>
-                ))}
-              </select>
-            </label>
-            <label className="settings-field">
-              <span className="settings-label">Account for the Argentina holidays calendar</span>
-              <select className="settings-select" value={form.holidays_account ?? ''} onChange={(e) => setDraft({ ...form, holidays_account: e.target.value || null })}>
-                <option value="">None</option>
-                {googleAccounts.map((a) => (
-                  <option key={a.id} value={a.id}>{a.display_name}</option>
-                ))}
-              </select>
-            </label>
-          </section>
-          <section className="settings-section">
-            <div className="settings-heading">Push notifications (Tailscale Funnel)</div>
-            <label className="settings-field">
-              <span className="settings-label">Public URL of this machine (https://…ts.net)</span>
-              <input className="settings-input settings-input-wide" value={form.public_base_url ?? ''} placeholder="Leave empty to poll every 60 seconds" onChange={(e) => setDraft({ ...form, public_base_url: e.target.value || null })} />
-            </label>
-            <div className="settings-actions">
-              <button className="settings-button" type="button" disabled={busy || !form.public_base_url} onClick={testPush}>
-                Test
-              </button>
-              <span className="settings-meta">{form.push_enabled ? 'Push is on.' : 'Push is off: the app polls every 60 seconds.'}{form.push_error ? ` Last error: ${form.push_error}` : ''}</span>
-            </div>
-          </section>
-          <section className="settings-section">
-            <div className="settings-heading">GNOME Online Accounts</div>
-            {goa && goa.accounts.length > 0 ? (
+    <md-dialog className="settings" ref={dialog} aria-label="Settings" onclosed={() => useUi.getState().closeDialog()}>
+      <div slot="headline">Settings</div>
+      <div slot="content" className="settings-content">
+        {form ? (
+          <>
+            <section className="settings-section">
+              <h3 className="settings-heading md-typescale-title-medium">Accounts</h3>
+              <md-list aria-label="Accounts">
+                {accounts.map((a) => {
+                  const s = syncStatus[a.id];
+                  const state = s?.state ?? a.sync_state;
+                  return (
+                    <md-list-item key={a.id}>
+                      <div slot="headline">{a.display_name}</div>
+                      <div slot="supporting-text">{`${a.kind === 'google' ? (a.email ?? 'Google') : a.kind === 'ical' ? 'iCal · read-only' : 'This computer'} · ${state}${a.sync_error ? ` · ${a.sync_error}` : ''}`}</div>
+                      <div slot="end" className="settings-item-actions">
+                        {a.kind === 'google' && state === 'auth_required' ? (
+                          <md-text-button disabled={busy} onclick={addGoogle}>
+                            Sign in again
+                          </md-text-button>
+                        ) : null}
+                        {a.kind !== 'local' ? (
+                          <md-text-button disabled={busy} onclick={() => remove(a.id, a.display_name)}>
+                            Remove
+                          </md-text-button>
+                        ) : null}
+                      </div>
+                    </md-list-item>
+                  );
+                })}
+              </md-list>
               <div className="settings-actions">
-                <span className="settings-meta">{`GNOME's calendar panel also shows ${goa.accounts.length} Google account${goa.accounts.length === 1 ? '' : 's'}: ${goa.accounts.map((a) => `${a.identity}${a.calendar_disabled ? ' (Calendar off)' : ''}`).join(', ')}.`}</span>
-                <button className="settings-button" type="button" disabled={busy || goa.accounts.every((a) => a.calendar_disabled)} onClick={() => goaToggle(true)}>
-                  Turn off their Calendar
-                </button>
+                <md-filled-tonal-button disabled={busy || !form.oauth_configured} title={form.oauth_configured ? undefined : OAUTH_HINT} onclick={addGoogle}>
+                  Add Google account
+                </md-filled-tonal-button>
+                <md-outlined-button disabled={busy} onclick={() => void run('Syncing…', async () => ipc.syncNow().then(() => 'Sync requested.'))}>
+                  <md-icon slot="icon">sync</md-icon>
+                  Sync now
+                </md-outlined-button>
               </div>
-            ) : (
-              <span className="settings-meta">No Google accounts in Online Accounts.</span>
-            )}
-          </section>
-          <section className="settings-section">
-            <span className="settings-meta" title={UNAVAILABLE}>Week starts on Monday, 24-hour clock, system theme (fixed in version 1).</span>
-          </section>
-          {message ? <p className="settings-message">{message}</p> : null}
-        </div>
-        <div className="scope-footer">
-          <div className="scope-cancel-wrap">
-            <button className="scope-cancel" type="button" onClick={close}>
-              <span className="scope-cancel-ripple"></span>
-              <span className="scope-cancel-hit"></span>
-              <span className="scope-cancel-label">Close</span>
-            </button>
-          </div>
-          <div className="scope-ok-wrap">
-            <button className="scope-ok" type="button" disabled={busy} onClick={save}>
-              <span className="scope-ok-ripple">
-                <span className="scope-ok-ripple-inner"></span>
-              </span>
-              <span className="scope-ok-n34"></span>
-              <span className="scope-ok-hit"></span>
-              <span className="scope-ok-label">Save</span>
-            </button>
-          </div>
-        </div>
+            </section>
+            <section className="settings-section">
+              <h3 className="settings-heading md-typescale-title-medium">iCal calendar</h3>
+              <md-outlined-text-field label="Name" placeholder="RappiCard" value={icalName} oninput={(e) => setIcalName(fieldValue(e))}></md-outlined-text-field>
+              <md-outlined-text-field label="Secret iCal address" placeholder="https://…/basic.ics" value={icalUrl} oninput={(e) => setIcalUrl(fieldValue(e))}></md-outlined-text-field>
+              <md-outlined-text-field label="Your e-mail in that calendar (optional)" value={icalEmail} oninput={(e) => setIcalEmail(fieldValue(e))}></md-outlined-text-field>
+              <div className="settings-actions">
+                <md-filled-tonal-button disabled={busy || !icalName || !icalUrl} onclick={addIcal}>
+                  Add
+                </md-filled-tonal-button>
+              </div>
+            </section>
+            <section className="settings-section">
+              <h3 className="settings-heading md-typescale-title-medium">Time zones</h3>
+              <md-outlined-text-field label="Primary time zone" value={form.primary_tz} oninput={(e) => setDraft({ ...form, primary_tz: fieldValue(e) })}></md-outlined-text-field>
+              <md-outlined-text-field label="Secondary time zone" supporting-text="Empty for none" value={form.secondary_tz ?? ''} oninput={(e) => setDraft({ ...form, secondary_tz: fieldValue(e) || null })}></md-outlined-text-field>
+            </section>
+            <section className="settings-section">
+              <h3 className="settings-heading md-typescale-title-medium">Events</h3>
+              <md-outlined-select
+                label="Default calendar for new events"
+                value={form.default_calendar ? `${form.default_calendar.account_id}|${form.default_calendar.calendar_id}` : NONE}
+                onchange={(e) => {
+                  const [account_id, calendar_id] = selectValue(e).split('|');
+                  setDraft({ ...form, default_calendar: account_id && calendar_id ? { account_id, calendar_id } : null });
+                }}
+              >
+                <md-select-option value={NONE}>
+                  <div slot="headline">First writable calendar</div>
+                </md-select-option>
+                {writable.map((c) => (
+                  <md-select-option key={`${c.account_id}|${c.id}`} value={`${c.account_id}|${c.id}`}>
+                    <div slot="headline">{`${c.summary} · ${accounts.find((a) => a.id === c.account_id)?.display_name ?? ''}`}</div>
+                  </md-select-option>
+                ))}
+              </md-outlined-select>
+              <md-outlined-select label="Account for the Argentina holidays calendar" value={form.holidays_account ?? NONE} onchange={(e) => setDraft({ ...form, holidays_account: selectValue(e) === NONE ? null : selectValue(e) })}>
+                <md-select-option value={NONE}>
+                  <div slot="headline">None</div>
+                </md-select-option>
+                {googleAccounts.map((a) => (
+                  <md-select-option key={a.id} value={a.id}>
+                    <div slot="headline">{a.display_name}</div>
+                  </md-select-option>
+                ))}
+              </md-outlined-select>
+            </section>
+            <section className="settings-section">
+              <h3 className="settings-heading md-typescale-title-medium">Push notifications (Tailscale Funnel)</h3>
+              <div className="settings-actions">
+                <md-outlined-text-field className="settings-grow" label="Public URL of this machine" placeholder="https://…ts.net" supporting-text="Leave empty to poll every 60 seconds" value={form.public_base_url ?? ''} oninput={(e) => setDraft({ ...form, public_base_url: fieldValue(e) || null })}></md-outlined-text-field>
+                <md-outlined-button disabled={busy || !form.public_base_url} onclick={testPush}>
+                  Test
+                </md-outlined-button>
+              </div>
+              <p className="settings-note md-typescale-body-small">
+                {form.push_enabled ? 'Push is on.' : 'Push is off: the app polls every 60 seconds.'}
+                {form.push_error ? ` Last error: ${form.push_error}` : ''}
+              </p>
+            </section>
+            <section className="settings-section">
+              <h3 className="settings-heading md-typescale-title-medium">GNOME Online Accounts</h3>
+              {goa && goa.accounts.length > 0 ? (
+                <>
+                  <p className="settings-note md-typescale-body-small">{`GNOME's calendar panel also shows ${goa.accounts.length} Google account${goa.accounts.length === 1 ? '' : 's'}: ${goa.accounts.map((a) => `${a.identity}${a.calendar_disabled ? ' (Calendar off)' : ''}`).join(', ')}.`}</p>
+                  <div className="settings-actions">
+                    <md-outlined-button disabled={busy || goa.accounts.every((a) => a.calendar_disabled)} onclick={() => goaToggle(true)}>
+                      Turn off their Calendar
+                    </md-outlined-button>
+                  </div>
+                </>
+              ) : (
+                <p className="settings-note md-typescale-body-small">No Google accounts in Online Accounts.</p>
+              )}
+            </section>
+            <p className="settings-note md-typescale-body-small" title={UNAVAILABLE}>
+              Week starts on Monday, 24-hour clock, system theme (fixed in version 1).
+            </p>
+            {message ? (
+              <p className="settings-message md-typescale-body-small" role="status">
+                {message}
+              </p>
+            ) : null}
+          </>
+        ) : (
+          <p className="settings-note md-typescale-body-medium">Loading settings…</p>
+        )}
       </div>
-    </div>
+      <div slot="actions">
+        <md-text-button onclick={close}>Close</md-text-button>
+        <md-filled-button disabled={busy || !form} onclick={save}>
+          Save
+        </md-filled-button>
+      </div>
+    </md-dialog>
   );
 }

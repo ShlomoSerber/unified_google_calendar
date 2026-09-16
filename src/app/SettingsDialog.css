@@ -1,101 +1,53 @@
-/* Settings (F7-T6): built from the measured dialog tokens (.scope-*, .rec-*, .qc-*). Widths use
-   the recurrence dialog's proportions; the dialog is centred like Google's dialogs. */
-.settings-scrim {
-  background: var(--dialog-scrim-background-color);
-  position: fixed;
-  inset: 0;
-  z-index: var(--create-menu-root-z-index);
+/* Settings dialog (docs/11 section 7): 640 px, sections with title-medium headings. */
+.settings {
+  min-width: var(--ugc-layout-form-width);
+  max-width: var(--ugc-layout-form-width);
+  max-height: calc(100% - var(--ugc-space-12));
+}
+
+.settings-content {
   display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.settings-root {
-  width: calc(var(--rec-root-width) * 2);
-  max-height: calc(100% - var(--layout-topbar-height));
-  height: auto;
-}
-
-.settings-body {
-  flex: 1;
-  min-height: 0;
-  overflow: auto;
-  padding: 0 var(--scope-title-row-padding-left);
+  flex-direction: column;
+  gap: var(--ugc-space-6);
+  /* The account list sits on the dialog's own surface. */
+  --md-list-container-color: var(--md-sys-color-surface-container-high);
+  --md-list-item-container-color: var(--md-sys-color-surface-container-high);
 }
 
 .settings-section {
-  padding: var(--create-menu-item-padding-top) var(--create-menu-item-padding-left);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ugc-space-3);
 }
 
 .settings-heading {
-  font-weight: var(--sidebar-list-header-label-font-weight);
-  line-height: var(--rec-on-label-line-height);
-  color: var(--color-on-surface);
-}
-
-.settings-list {
-  list-style: none;
   margin: 0;
-  padding: 0;
+  color: var(--md-sys-color-on-surface);
 }
 
-.settings-row,
+.settings-item-actions {
+  display: flex;
+  gap: var(--ugc-space-1);
+}
+
 .settings-actions {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: var(--create-menu-item-padding-top);
-  min-height: var(--create-menu-item-min-height);
+  flex-wrap: wrap;
+  gap: var(--ugc-space-2);
 }
 
-.settings-name {
-  font-weight: var(--sidebar-list-header-label-font-weight);
-}
-
-.settings-meta,
-.settings-message {
-  color: var(--color-on-surface-variant);
-}
-
-.settings-message {
-  margin: var(--create-menu-item-padding-top) 0 0;
-}
-
-.settings-field {
-  display: flex;
-  flex-direction: column;
-  gap: var(--create-menu-item-padding-top);
-  margin-top: var(--create-menu-item-padding-top);
-}
-
-.settings-label {
-  color: var(--color-on-surface-variant);
-}
-
-.settings-input,
-.settings-select {
-  height: var(--ff-recurrence-combo-height);
-  padding: 0 var(--ff-recurrence-combo-padding-left);
-  border: 0;
-  border-radius: var(--ff-recurrence-combo-border-radius);
-  background: var(--ff-recurrence-combo-background-color);
-  color: var(--ff-recurrence-combo-color);
+.settings-grow {
+  flex: 1;
   min-width: 0;
 }
 
-.settings-input-wide {
-  flex: 1;
+.settings-note {
+  margin: 0;
+  color: var(--md-sys-color-on-surface-variant);
 }
 
-.settings-button {
-  height: var(--rec-cancel-height);
-  padding: 0 var(--rec-cancel-padding-left);
-  border-radius: var(--rec-cancel-border-radius);
-  color: var(--rec-cancel-label-color);
-  font-weight: var(--rec-cancel-label-font-weight);
-}
-
-.settings-button:disabled {
-  color: var(--color-on-surface-variant);
-  cursor: default;
+.settings-message {
+  margin: 0;
+  color: var(--md-sys-color-primary);
 }
