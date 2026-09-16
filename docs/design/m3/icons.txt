@@ -1,6 +1,7 @@
 add
 arrow_drop_down
 calendar_today
+call
 check
 chevron_left
 chevron_right
@@ -15,14 +16,13 @@ expand_less
 expand_more
 group
 help
-launch
-location_on
 menu
 more_vert
 notes
 notifications
+open_in_new
 person
-phone
+place
 refresh
 remove
 schedule
