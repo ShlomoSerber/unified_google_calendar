@@ -125,3 +125,7 @@ bash scripts/bump-version.sh <x.y.z>   # solo si cambia la versión
 ```
 
 El `sudo apt install "./src-tauri/target/release/bundle/deb/..."` lo corre el usuario. El build de release tarda varios minutos y usa `lto` con `codegen-units = 1`; no lanzarlo con otra compilación en curso.
+
+## Registro de cambios
+
+- 2026-09-16 — Sesión de planificación de la transición a Material 3: el usuario eligió "M3 total" sobre un mockup de tres opciones (`docs/design/m3/mockup.html`). Quedan escritos `docs/11-material3.md`, `docs/12-plan-m3.md`, `docs/design/m3/theme.json` (con `scripts/gen-m3-tokens.mjs` probado), `scripts/check-m3.sh`, el skill `m3-transition` y la entrada de `99`. El código en `main` sigue siendo la réplica de Google hasta que se ejecute el plan; mientras tanto, cualquier reporte del usuario se atiende como mantenimiento sobre el código actual sin invertir en fidelidad con Google. Al cerrar la transición, la sección 1 de este documento se reescribe (`docs/12` sección 7).

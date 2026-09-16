@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>UGC · mockups de las tres opciones (2026-09-16)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Mockup de decisión de la transición a Material 3 (docs/99-decisiones.md, 2026-09-16).
+     La opción elegida es la 3 ("M3 total"). Las otras dos quedan como referencia de lo descartado.
+     Carga @material/web desde esm.run: necesita red. No es código de la app. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+<script type="importmap">
+{ "imports": { "@material/web/": "https://esm.run/@material/web/" } }
+</script>
+<script type="module">
+  import '@material/web/all.js';
+  import {styles as typescaleStyles} from '@material/web/typography/md-typescale-styles.js';
+  document.adoptedStyleSheets.push(typescaleStyles.styleSheet);
+  document.documentElement.classList.add('mw-ready');
+</script>
+<style>
+/* ---------- Material 3 color roles (Google's M3 blue theme) ---------- */
+:root {
+  --md-sys-color-primary: #0b57d0;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-primary-container: #d3e3fd;
+  --md-sys-color-on-primary-container: #041e49;
+  --md-sys-color-secondary: #00639b;
+  --md-sys-color-on-secondary: #ffffff;
+  --md-sys-color-secondary-container: #c2e7ff;
+  --md-sys-color-on-secondary-container: #001d35;
+  --md-sys-color-tertiary: #146c2e;
+  --md-sys-color-on-tertiary: #ffffff;
+  --md-sys-color-tertiary-container: #c4eed0;
+  --md-sys-color-on-tertiary-container: #072711;
+  --md-sys-color-error: #b3261e;
+  --md-sys-color-on-error: #ffffff;
+  --md-sys-color-error-container: #f9dedc;
+  --md-sys-color-on-error-container: #410e0b;
+  --md-sys-color-surface: #ffffff;
+  --md-sys-color-surface-dim: #d3dbe5;
+  --md-sys-color-surface-bright: #ffffff;
+  --md-sys-color-surface-container-lowest: #ffffff;
+  --md-sys-color-surface-container-low: #f8fafd;
+  --md-sys-color-surface-container: #f0f4f9;
+  --md-sys-color-surface-container-high: #e9eef6;
+  --md-sys-color-surface-container-highest: #dde3ea;
+  --md-sys-color-on-surface: #1f1f1f;
+  --md-sys-color-on-surface-variant: #444746;
+  --md-sys-color-surface-variant: #e1e3e1;
+  --md-sys-color-outline: #747775;
+  --md-sys-color-outline-variant: #c4c7c5;
+  --md-sys-color-inverse-surface: #303030;
+  --md-sys-color-inverse-on-surface: #f2f2f2;
+  --md-sys-color-inverse-primary: #a8c7fa;
+  --md-sys-color-scrim: #000000;
+  --md-sys-color-shadow: #000000;
+  --md-ref-typeface-brand: 'Google Sans', 'Roboto', sans-serif;
+  --md-ref-typeface-plain: 'Roboto', sans-serif;
+  --tone-custom-container: #fde293;
+  --tone-on-custom-container: #3d2e00;
+
+  /* Google Calendar palette (options 1 grid and 2) */
+  --g-bg: #ffffff;
+  --g-text: #1f1f1f;
+  --g-text2: #444746;
+  --g-text3: #70757a;
+  --g-line: #dadce0;
+  --g-hover: #f1f3f4;
+  --g-blue: #1a73e8;
+  --g-blue-soft: #e8f0fe;
+  --g-elev: #ffffff;
+  --g-shadow: 0 1px 3px rgba(60,64,67,.3), 0 4px 8px 3px rgba(60,64,67,.15);
+  --g-shadow-sm: 0 1px 2px rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15);
+  --g-today: #1a73e8;
+  --g-now: #ea4335;
+}
+:root[data-theme="dark"] {
+  --md-sys-color-primary: #a8c7fa;
+  --md-sys-color-on-primary: #062e6f;
+  --md-sys-color-primary-container: #0842a0;
+  --md-sys-color-on-primary-container: #d3e3fd;
+  --md-sys-color-secondary: #7fcfff;
+  --md-sys-color-on-secondary: #003355;
+  --md-sys-color-secondary-container: #004a77;
+  --md-sys-color-on-secondary-container: #c2e7ff;
+  --md-sys-color-tertiary: #6dd58c;
+  --md-sys-color-on-tertiary: #0a3818;
+  --md-sys-color-tertiary-container: #0f5223;
+  --md-sys-color-on-tertiary-container: #c4eed0;
+  --md-sys-color-error: #f2b8b5;
+  --md-sys-color-on-error: #601410;
+  --md-sys-color-error-container: #8c1d18;
+  --md-sys-color-on-error-container: #f9dedc;
+  --md-sys-color-surface: #131314;
+  --md-sys-color-surface-dim: #131314;
+  --md-sys-color-surface-bright: #37393b;
+  --md-sys-color-surface-container-lowest: #0e0e0e;
+  --md-sys-color-surface-container-low: #1b1b1c;
+  --md-sys-color-surface-container: #1e1f20;
+  --md-sys-color-surface-container-high: #282a2c;
+  --md-sys-color-surface-container-highest: #333537;
+  --md-sys-color-on-surface: #e3e3e3;
+  --md-sys-color-on-surface-variant: #c4c7c5;
+  --md-sys-color-surface-variant: #444746;
+  --md-sys-color-outline: #8e918f;
+  --md-sys-color-outline-variant: #444746;
+  --md-sys-color-inverse-surface: #e3e3e3;
+  --md-sys-color-inverse-on-surface: #303030;
+  --md-sys-color-inverse-primary: #0b57d0;
+  --tone-custom-container: #5a4a00;
+  --tone-on-custom-container: #ffe08a;
+
+  --g-bg: #1b1b1b;
+  --g-text: #e3e3e3;
+  --g-text2: #c4c7c5;
+  --g-text3: #9aa0a6;
+  --g-line: #3c4043;
+  --g-hover: #303134;
+  --g-blue: #8ab4f8;
+  --g-blue-soft: #394457;
+  --g-elev: #2d2e30;
+  --g-shadow: 0 1px 3px rgba(0,0,0,.5), 0 4px 8px 3px rgba(0,0,0,.35);
+  --g-shadow-sm: 0 1px 2px rgba(0,0,0,.5), 0 1px 3px 1px rgba(0,0,0,.35);
+  --g-today: #8ab4f8;
+  --g-now: #f28b82;
+}
+
+/* ---------- viewer chrome (not part of any option) ---------- */
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body { font-family: 'Roboto', system-ui, sans-serif; background: #202124; color: #e8eaed; display: flex; flex-direction: column; }
+.viewer-bar { height: 56px; flex: none; display: flex; align-items: center; gap: 8px; padding: 0 16px; background: #202124; border-bottom: 1px solid #3c4043; }
+.viewer-bar .tabs { display: flex; gap: 4px; }
+.viewer-bar .tab { height: 36px; padding: 0 16px; border-radius: 18px; border: 1px solid #5f6368; background: transparent; color: #e8eaed; font: 500 14px/36px Roboto, sans-serif; cursor: pointer; }
+.viewer-bar .tab[aria-selected="true"] { background: #8ab4f8; color: #202124; border-color: #8ab4f8; }
+.viewer-bar .spacer { flex: 1; }
+.viewer-bar .toggle { height: 36px; padding: 0 12px; border-radius: 18px; border: 1px solid #5f6368; background: transparent; color: #e8eaed; font: 500 13px/34px Roboto, sans-serif; cursor: pointer; }
+.viewer-bar .toggle[aria-pressed="true"] { background: #3c4043; }
+.notes { flex: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 12px 16px; background: #171717; border-bottom: 1px solid #3c4043; font-size: 13px; line-height: 18px; color: #bdc1c6; }
+.notes[hidden] { display: none; }
+.notes b { color: #e8eaed; display: block; margin-bottom: 4px; }
+.notes ul { margin: 0; padding-left: 18px; }
+.stage { flex: 1; min-height: 0; position: relative; }
+#screen { position: absolute; inset: 0; overflow: hidden; }
+.offline { position: absolute; left: 50%; top: 80px; transform: translateX(-50%); background: #fde293; color: #3d2e00; padding: 8px 16px; border-radius: 8px; font-size: 13px; z-index: 50; }
+.mw-ready .offline { display: none; }
+
+/* ---------- shared screen skeleton ---------- */
+.screen {
+  --hour-h: 48px; --gutter: 102px; --sidebar: 256px; --topbar: 64px; --dayhead: 84px;
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 20px; --sp-6: 24px;
+  height: 100%; display: grid; grid-template-rows: var(--topbar) 1fr; grid-template-columns: var(--sidebar) 1fr;
+  font-family: 'Roboto', sans-serif; font-size: 14px; position: relative; overflow: hidden;
+}
+.topbar { grid-column: 1 / -1; display: flex; align-items: center; gap: var(--sp-2); padding: 0 var(--sp-2) 0 var(--sp-2); }
+.topbar .date { font-size: 22px; font-weight: 400; margin: 0 var(--sp-2); white-space: nowrap; }
+.topbar .grow { flex: 1; }
+.sidebar { overflow: hidden auto; display: flex; flex-direction: column; gap: var(--sp-4); padding: var(--sp-2) var(--sp-3) var(--sp-4) var(--sp-3); }
+.stagegrid { display: grid; grid-template-rows: auto auto 1fr; min-height: 0; }
+.dayhead { display: grid; grid-template-columns: var(--gutter) repeat(7, 1fr); height: var(--dayhead); }
+.dayhead .cell { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: var(--sp-2); }
+.dayhead .dow { font-size: 11px; font-weight: 500; letter-spacing: .8px; text-transform: uppercase; line-height: 32px; }
+.dayhead .num { width: 46px; height: 46px; line-height: 46px; text-align: center; font-size: 26px; border-radius: 50%; }
+.allday { display: grid; grid-template-columns: var(--gutter) repeat(7, 1fr); min-height: 28px; padding-bottom: var(--sp-1); }
+.allday .cell { padding: 2px 2px 0 2px; }
+.scroller { overflow: auto; position: relative; }
+.grid { display: grid; grid-template-columns: var(--gutter) repeat(7, 1fr); height: calc(var(--hour-h) * 24); position: relative; }
+.gutter { position: relative; }
+.gutter .h { position: absolute; right: 0; width: 100%; display: flex; justify-content: flex-end; gap: var(--sp-3); padding-right: var(--sp-2); transform: translateY(-50%); font-size: 10px; }
+.gutter .h span { min-width: 34px; text-align: right; }
+.col { position: relative; }
+.col .line { position: absolute; left: 0; right: 0; height: 0; }
+.ev { position: absolute; left: 2px; right: 6px; overflow: hidden; cursor: pointer; padding: 2px 6px; font-size: 12px; line-height: 16px; }
+.ev .t { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ev .s { opacity: .9; }
+.ev.short { padding-top: 2px; }
+.ev.short .s { display: none; }
+.nowline { position: absolute; left: 0; right: 0; height: 2px; z-index: 3; pointer-events: none; }
+.nowline::before { content: ""; position: absolute; left: -6px; top: -5px; width: 12px; height: 12px; border-radius: 50%; background: inherit; }
+.mini { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0; text-align: center; font-size: 10px; }
+.mini .wd { font-weight: 500; height: 24px; line-height: 24px; }
+.mini .d { height: 24px; line-height: 24px; border-radius: 50%; margin: 1px auto; width: 24px; cursor: pointer; }
+.mini .d.other { opacity: .5; }
+.minihead { display: flex; align-items: center; justify-content: space-between; padding: 0 var(--sp-1); font-size: 14px; font-weight: 500; }
+.callist h3 { font-size: 14px; font-weight: 500; margin: 0 0 var(--sp-1) 0; padding: var(--sp-1) var(--sp-1); }
+.callist .row { display: flex; align-items: center; gap: var(--sp-2); height: 32px; padding: 0 var(--sp-1); border-radius: 4px; }
+.callist .row .name { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.popup { position: absolute; z-index: 10; width: 400px; }
+.popup .hdr { display: flex; justify-content: flex-end; gap: 0; }
+.popup .body { padding: 0 var(--sp-6) var(--sp-5) var(--sp-4); display: grid; grid-template-columns: 24px 1fr; column-gap: var(--sp-4); row-gap: var(--sp-3); align-items: start; }
+.popup .dot { width: 16px; height: 16px; border-radius: 4px; margin: 4px; }
+.popup .title { font-size: 22px; line-height: 28px; font-weight: 400; }
+.popup .when { font-size: 14px; }
+.popup .mi { font-size: 20px; }
+.form-fields { display: flex; flex-direction: column; gap: var(--sp-4); min-width: 480px; }
+.form-row { display: flex; gap: var(--sp-3); align-items: center; }
+.form-row > * { flex: 1; }
+.form-row .switchrow { display: flex; align-items: center; gap: var(--sp-3); flex: none; }
+.ms { font-family: 'Material Symbols Outlined'; font-weight: normal; font-style: normal; font-size: 24px; line-height: 1; display: inline-block; vertical-align: middle; -webkit-font-smoothing: antialiased; }
+
+/* ---------- OPTION 1: hybrid (M3 controls, Google-measured grid) ---------- */
+.screen[data-opt="1"] { background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface); }
+.screen[data-opt="1"] .topbar { border-bottom: 1px solid var(--md-sys-color-outline-variant); }
+.screen[data-opt="1"] .sidebar { border-right: 1px solid var(--md-sys-color-outline-variant); }
+.screen[data-opt="1"] .dayhead, .screen[data-opt="1"] .allday { border-bottom: 1px solid var(--g-line); }
+.screen[data-opt="1"] .dayhead .cell, .screen[data-opt="1"] .allday .cell, .screen[data-opt="1"] .col { border-left: 1px solid var(--g-line); }
+.screen[data-opt="1"] .dayhead .dow { color: var(--g-text3); }
+.screen[data-opt="1"] .dayhead .num { color: var(--g-text); }
+.screen[data-opt="1"] .dayhead .today .dow { color: var(--g-today); }
+.screen[data-opt="1"] .dayhead .today .num { background: var(--g-today); color: #fff; }
+.screen[data-opt="1"] .col .line { border-top: 1px solid var(--g-line); }
+.screen[data-opt="1"] .gutter .h { color: var(--g-text3); }
+.screen[data-opt="1"] .ev { border-radius: 4px; color: #fff; }
+.screen[data-opt="1"] .ev.allday { position: static; border-radius: 4px; padding: 0 8px; height: 22px; line-height: 22px; }
+.screen[data-opt="1"] .nowline { background: var(--g-now); }
+.screen[data-opt="1"] .mini .wd { color: var(--md-sys-color-on-surface-variant); }
+.screen[data-opt="1"] .mini .d:hover { background: var(--md-sys-color-surface-container-high); }
+.screen[data-opt="1"] .mini .d.today { background: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); }
+.screen[data-opt="1"] .mini .d.sel { background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); }
+.screen[data-opt="1"] .callist .row:hover { background: var(--md-sys-color-surface-container); }
+.screen[data-opt="1"] .popup { background: var(--md-sys-color-surface-container-low); border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,.3), 0 4px 8px 3px rgba(0,0,0,.15); }
+.screen[data-opt="1"] .popup .mi { color: var(--md-sys-color-on-surface-variant); }
+.screen[data-opt="1"] .topbar .date { font-family: var(--md-ref-typeface-brand); }
+
+/* ---------- OPTION 2: cleanup, no library, Google look on a strict 4/8 scale ---------- */
+.screen[data-opt="2"] { background: var(--g-bg); color: var(--g-text); }
+.screen[data-opt="2"] .topbar { border-bottom: 1px solid var(--g-line); }
+.screen[data-opt="2"] .sidebar { border-right: 1px solid var(--g-line); }
+.screen[data-opt="2"] .dayhead, .screen[data-opt="2"] .allday { border-bottom: 1px solid var(--g-line); }
+.screen[data-opt="2"] .dayhead .cell, .screen[data-opt="2"] .allday .cell, .screen[data-opt="2"] .col { border-left: 1px solid var(--g-line); }
+.screen[data-opt="2"] .dayhead .dow { color: var(--g-text3); }
+.screen[data-opt="2"] .dayhead .today .dow { color: var(--g-today); }
+.screen[data-opt="2"] .dayhead .today .num { background: var(--g-today); color: #fff; }
+.screen[data-opt="2"] .col .line { border-top: 1px solid var(--g-line); }
+.screen[data-opt="2"] .gutter .h { color: var(--g-text3); }
+.screen[data-opt="2"] .ev { border-radius: 4px; color: #fff; }
+.screen[data-opt="2"] .ev.allday { position: static; border-radius: 4px; padding: 0 8px; height: 22px; line-height: 22px; }
+.screen[data-opt="2"] .nowline { background: var(--g-now); }
+.screen[data-opt="2"] .mini .wd { color: var(--g-text3); }
+.screen[data-opt="2"] .mini .d:hover { background: var(--g-hover); }
+.screen[data-opt="2"] .mini .d.today { background: var(--g-blue); color: #fff; }
+.screen[data-opt="2"] .mini .d.sel { background: var(--g-blue-soft); color: var(--g-blue); }
+.screen[data-opt="2"] .callist .row:hover { background: var(--g-hover); }
+.screen[data-opt="2"] .popup { background: var(--g-elev); border-radius: 8px; box-shadow: var(--g-shadow); }
+.screen[data-opt="2"] .popup .mi { color: var(--g-text2); }
+.g-btn { height: 36px; padding: 0 16px; border-radius: 4px; border: 1px solid var(--g-line); background: transparent; color: var(--g-text); font: 500 14px/34px Roboto, sans-serif; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+.g-btn:hover { background: var(--g-hover); }
+.g-btn.primary { background: var(--g-blue); color: #fff; border-color: transparent; }
+.g-btn.text { border-color: transparent; color: var(--g-blue); }
+.g-icon { width: 40px; height: 40px; border-radius: 50%; border: 0; background: transparent; color: var(--g-text2); cursor: pointer; display: inline-grid; place-items: center; }
+.g-icon:hover { background: var(--g-hover); }
+.g-create { height: 48px; padding: 0 24px 0 16px; border-radius: 24px; border: 0; background: var(--g-elev); color: var(--g-text); box-shadow: var(--g-shadow-sm); font: 500 14px Roboto, sans-serif; display: inline-flex; align-items: center; gap: 12px; cursor: pointer; }
+.g-create:hover { box-shadow: var(--g-shadow); }
+.g-create .ms { font-size: 28px; color: var(--g-blue); }
+.g-check { width: 18px; height: 18px; border-radius: 3px; display: inline-grid; place-items: center; color: #fff; flex: none; }
+.g-check .ms { font-size: 16px; font-variation-settings: 'wght' 700; }
+.g-select { position: relative; }
+.g-menu { position: absolute; top: 40px; right: 0; background: var(--g-elev); box-shadow: var(--g-shadow); border-radius: 4px; padding: 8px 0; min-width: 160px; display: none; z-index: 20; }
+.g-menu.open { display: block; }
+.g-menu div { height: 36px; line-height: 36px; padding: 0 16px; cursor: pointer; }
+.g-menu div:hover { background: var(--g-hover); }
+.g-chip { height: 32px; padding: 0 12px; border-radius: 8px; border: 1px solid var(--g-line); background: transparent; color: var(--g-text); font: 500 14px Roboto, sans-serif; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
+.g-chip .ms { font-size: 18px; color: var(--g-blue); }
+dialog.g-dialog { border: 0; border-radius: 8px; background: var(--g-elev); color: var(--g-text); box-shadow: var(--g-shadow); padding: 0; min-width: 560px; }
+dialog.g-dialog::backdrop { background: rgba(0,0,0,.32); }
+dialog.g-dialog .dh { display: flex; align-items: center; justify-content: space-between; padding: 8px 8px 8px 24px; font-size: 22px; }
+dialog.g-dialog .db { padding: 8px 24px 16px 24px; }
+dialog.g-dialog .da { display: flex; justify-content: flex-end; gap: 8px; padding: 8px 24px 24px 24px; }
+.g-field { display: flex; flex-direction: column; gap: 4px; }
+.g-field label { font-size: 12px; color: var(--g-text3); }
+.g-field input, .g-field select, .g-field textarea { height: 40px; border: 1px solid var(--g-line); border-radius: 4px; background: transparent; color: var(--g-text); padding: 0 12px; font: 14px Roboto, sans-serif; }
+.g-field textarea { height: 72px; padding: 8px 12px; resize: none; }
+.g-field input:focus, .g-field select:focus, .g-field textarea:focus { outline: 2px solid var(--g-blue); border-color: transparent; }
+.g-switch { width: 36px; height: 20px; border-radius: 10px; background: var(--g-blue); position: relative; display: inline-block; }
+.g-switch::after { content: ""; position: absolute; right: 2px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; }
+
+/* ---------- OPTION 3: full M3 (grid on the M3 scale too) — THE CHOSEN ONE ---------- */
+.screen[data-opt="3"] { --gutter: 100px; --sidebar: 300px; --dayhead: 72px; --hour-h: 52px; background: var(--md-sys-color-surface-container); color: var(--md-sys-color-on-surface); grid-template-rows: var(--topbar) 1fr; }
+.screen[data-opt="3"] .topbar { background: var(--md-sys-color-surface-container); }
+.screen[data-opt="3"] .sidebar { padding: var(--sp-2) var(--sp-4) var(--sp-4) var(--sp-4); gap: var(--sp-4); }
+.screen[data-opt="3"] .stagegrid { background: var(--md-sys-color-surface); border-radius: 24px 0 0 0; margin: 0 0 0 0; overflow: hidden; }
+.screen[data-opt="3"] .dayhead { padding: var(--sp-2) 0 0 0; }
+.screen[data-opt="3"] .dayhead .dow { color: var(--md-sys-color-on-surface-variant); text-transform: none; letter-spacing: .5px; font-size: 12px; line-height: 20px; }
+.screen[data-opt="3"] .dayhead .num { width: 40px; height: 40px; line-height: 40px; font-size: 22px; font-family: var(--md-ref-typeface-brand); }
+.screen[data-opt="3"] .dayhead .today .num { background: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); }
+.screen[data-opt="3"] .dayhead .today .dow { color: var(--md-sys-color-primary); font-weight: 500; }
+.screen[data-opt="3"] .allday { border-bottom: 1px solid var(--md-sys-color-outline-variant); }
+.screen[data-opt="3"] .col { border-left: 1px solid var(--md-sys-color-outline-variant); }
+.screen[data-opt="3"] .col .line { border-top: 1px solid var(--md-sys-color-outline-variant); }
+.screen[data-opt="3"] .gutter .h { color: var(--md-sys-color-on-surface-variant); font-size: 11px; }
+.screen[data-opt="3"] .ev { border-radius: 8px; left: 3px; right: 5px; padding: 4px 8px; border-left: 3px solid; }
+.screen[data-opt="3"] .ev.allday { position: static; height: 24px; line-height: 24px; padding: 0 8px; border-left-width: 3px; }
+.screen[data-opt="3"] .nowline { background: var(--md-sys-color-error); }
+.screen[data-opt="3"] .mini { font-size: 12px; }
+.screen[data-opt="3"] .mini .wd { color: var(--md-sys-color-on-surface-variant); height: 32px; line-height: 32px; }
+.screen[data-opt="3"] .mini .d { width: 32px; height: 32px; line-height: 32px; }
+.screen[data-opt="3"] .mini .d:hover { background: var(--md-sys-color-surface-container-highest); }
+.screen[data-opt="3"] .mini .d.today { outline: 1px solid var(--md-sys-color-primary); color: var(--md-sys-color-primary); font-weight: 500; }
+.screen[data-opt="3"] .mini .d.sel { background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); }
+.screen[data-opt="3"] .minihead { font-family: var(--md-ref-typeface-brand); }
+.screen[data-opt="3"] .callist h3 { color: var(--md-sys-color-on-surface-variant); font-size: 12px; letter-spacing: .5px; }
+.screen[data-opt="3"] .callist .row { height: 40px; border-radius: 20px; padding: 0 var(--sp-2) 0 var(--sp-1); }
+.screen[data-opt="3"] .callist .row:hover { background: var(--md-sys-color-surface-container-high); }
+.screen[data-opt="3"] .popup { background: var(--md-sys-color-surface-container-high); border-radius: 28px; box-shadow: 0 2px 6px 2px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.3); }
+.screen[data-opt="3"] .popup .hdr { padding: var(--sp-2) var(--sp-2) 0 0; }
+.screen[data-opt="3"] .popup .body { padding: 0 var(--sp-6) var(--sp-6) var(--sp-6); }
+.screen[data-opt="3"] .popup .title { font-family: var(--md-ref-typeface-brand); font-size: 24px; line-height: 32px; }
+.screen[data-opt="3"] .popup .dot { border-radius: 50%; }
+.screen[data-opt="3"] .popup .mi { color: var(--md-sys-color-on-surface-variant); }
+.screen[data-opt="3"] .topbar .date { font-family: var(--md-ref-typeface-brand); }
+</style>
+</head>
+<body>
+<div class="viewer-bar">
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" data-opt="1" aria-selected="false">1 · Híbrido M3</button>
+    <button class="tab" role="tab" data-opt="2" aria-selected="false">2 · Limpieza sin librería</button>
+    <button class="tab" role="tab" data-opt="3" aria-selected="true">3 · M3 total (elegida)</button>
+  </div>
+  <div class="spacer"></div>
+  <button class="toggle" id="notes-toggle" aria-pressed="true">Notas</button>
+  <button class="toggle" id="theme-toggle" aria-pressed="false">Modo oscuro</button>
+</div>
+<div class="notes" id="notes">
+  <div>
+    <b>1 · Híbrido M3 (descartada)</b>
+    <ul>
+      <li>Controles de <code>@material/web</code>: Create como FAB extendido, íconos, selector de vista con menú, checkboxes, diálogo, campos, switch.</li>
+      <li>Colores por roles M3 (surface, primary, outline). Modo oscuro sale de los roles, no de una segunda medición.</li>
+      <li>Grilla, cabecera de días, gutter y chips conservan las medidas de Google: 84 px de cabecera, 48 px por hora, 256 px de cajón.</li>
+    </ul>
+  </div>
+  <div>
+    <b>2 · Limpieza sin librería (descartada)</b>
+    <ul>
+      <li>Sin dependencia nueva. Aspecto Google: botón Create blanco con sombra, azul 1a73e8, radios de 4 px.</li>
+      <li>Escala única de espaciado 4/8/12/16/24 y alturas fijas: botones 36, íconos 40, filas del cajón 32, campos 40.</li>
+      <li>Los controles siguen siendo caseros: sin ripple, sin estados de foco M3, cada uno mantenido a mano.</li>
+    </ul>
+  </div>
+  <div>
+    <b>3 · M3 total (elegida el 2026-09-16)</b>
+    <ul>
+      <li>Todo sobre la escala M3, grilla incluida: fondo surface-container, área de calendario como superficie redondeada, chips tonales con borde de color.</li>
+      <li>Cajón de 300 px con filas de 40 px y forma pill, cabecera de días de 72 px con círculo de 40 px.</li>
+      <li>Ya no se parece a calendar.google.com; se parece a Calendar de Android con Material You. Las mediciones quedan como referencia histórica.</li>
+      <li>Especificación en <code>docs/11-material3.md</code>, plan en <code>docs/12-plan-m3.md</code>.</li>
+    </ul>
+  </div>
+</div>
+<div class="stage">
+  <div class="offline">Sin conexión a esm.run los controles Material 3 de las opciones 1 y 3 no se renderizan.</div>
+  <div id="screen"></div>
+</div>
+
+<script>
+const CALS = [
+  { id: 'g1', name: 'Greelow · principal', color: '#039be5', tone: 'primary' },
+  { id: 'g2', name: 'Greelow · secundaria', color: '#7986cb', tone: 'secondary' },
+  { id: 'rc', name: 'RappiCard (iCal)', color: '#33b679', tone: 'tertiary' },
+  { id: 'lo', name: 'Personal (local)', color: '#f6bf26', tone: 'custom' },
+];
+const EVENTS = [
+  { d: 0, s: 9, e: 9.5, t: 'Daily standup', c: 'g1' },
+  { d: 0, s: 14, e: 15, t: 'Revisión de PRs', c: 'g2' },
+  { d: 1, s: 10, e: 11, t: 'Pipeline BrowserStack', c: 'rc' },
+  { d: 1, s: 13, e: 14, t: 'Comida', c: 'lo' },
+  { d: 2, s: 9, e: 9.5, t: 'Daily standup', c: 'g1' },
+  { d: 2, s: 11, e: 12.5, t: 'Sync integración RappiCard', c: 'rc', meet: true, open: true },
+  { d: 2, s: 16, e: 17, t: 'Dentista', c: 'lo' },
+  { d: 3, s: 9, e: 9.5, t: 'Daily standup', c: 'g1' },
+  { d: 3, s: 15, e: 16.5, t: 'Sprint planning', c: 'g2' },
+  { d: 4, s: 9, e: 9.5, t: 'Daily standup', c: 'g1' },
+  { d: 4, s: 12, e: 13, t: 'Retro', c: 'g2' },
+];
+const ALLDAY = [{ d: 2, t: 'Independencia de México', c: 'lo' }];
+const DAYS = ['lun', 'mar', 'mié', 'jue', 'vie', 'sáb', 'dom'];
+const NUMS = [14, 15, 16, 17, 18, 19, 20];
+const TODAY = 2;
+const NOW = 10 + 2 / 60;
+
+const cal = id => CALS.find(c => c.id === id);
+const hh = h => `${String(Math.floor(h)).padStart(2, '0')}:${h % 1 ? '30' : '00'}`;
+const m3 = opt => opt !== '2';
+
+function chipStyle(opt, c) {
+  if (!m3(opt) || opt === '1') return `background:${c.color}`;
+  const tone = c.tone === 'custom'
+    ? 'background:var(--tone-custom-container);color:var(--tone-on-custom-container)'
+    : `background:var(--md-sys-color-${c.tone}-container);color:var(--md-sys-color-on-${c.tone}-container)`;
+  return `${tone};border-left-color:${c.color}`;
+}
+
+function icon(name) { return `<span class="ms">${name}</span>`; }
+function iconBtn(opt, name, extra = '') {
+  return m3(opt)
+    ? `<md-icon-button ${extra}><md-icon>${name}</md-icon></md-icon-button>`
+    : `<button class="g-icon" ${extra}>${icon(name)}</button>`;
+}
+function textBtn(opt, label, extra = '') {
+  return m3(opt) ? `<md-text-button ${extra}>${label}</md-text-button>` : `<button class="g-btn text" ${extra}>${label}</button>`;
+}
+function outlinedBtn(opt, label, extra = '') {
+  return m3(opt) ? `<md-outlined-button ${extra}>${label}</md-outlined-button>` : `<button class="g-btn" ${extra}>${label}</button>`;
+}
+function filledBtn(opt, label, extra = '') {
+  return m3(opt) ? `<md-filled-button ${extra}>${label}</md-filled-button>` : `<button class="g-btn primary" ${extra}>${label}</button>`;
+}
+function createBtn(opt) {
+  if (m3(opt)) return `<md-fab id="create" variant="primary" label="Crear" lowered><md-icon slot="icon">add</md-icon></md-fab>`;
+  return `<button class="g-create" id="create">${icon('add')}Crear</button>`;
+}
+function viewSelect(opt) {
+  if (m3(opt)) {
+    return `<span style="position:relative">
+      <md-outlined-button id="view-btn" trailing-icon>Semana<md-icon slot="icon">arrow_drop_down</md-icon></md-outlined-button>
+      <md-menu id="view-menu" anchor="view-btn">
+        ${['Día', 'Semana', 'Mes', 'Año', 'Agenda'].map(v => `<md-menu-item><div slot="headline">${v}</div></md-menu-item>`).join('')}
+      </md-menu></span>`;
+  }
+  return `<span class="g-select"><button class="g-btn" id="view-btn">Semana ${icon('arrow_drop_down')}</button>
+    <div class="g-menu" id="view-menu">${['Día', 'Semana', 'Mes', 'Año', 'Agenda'].map(v => `<div>${v}</div>`).join('')}</div></span>`;
+}
+function checkbox(opt, c) {
+  if (m3(opt)) return `<md-checkbox touch-target="wrapper" checked style="--md-checkbox-selected-container-color:${c.color};--md-checkbox-selected-hover-container-color:${c.color};--md-checkbox-selected-pressed-container-color:${c.color};--md-checkbox-selected-focus-container-color:${c.color};--md-checkbox-selected-icon-color:#fff;--md-checkbox-outline-color:${c.color}"></md-checkbox>`;
+  return `<span class="g-check" style="background:${c.color}">${icon('check')}</span>`;
+}
+function meetChip(opt) {
+  if (m3(opt)) return `<md-assist-chip label="Unirse con Google Meet"><md-icon slot="icon">videocam</md-icon></md-assist-chip>`;
+  return `<button class="g-chip">${icon('videocam')}Unirse con Google Meet</button>`;
+}
+
+function topbar(opt) {
+  return `<div class="topbar">
+    ${iconBtn(opt, 'menu')}
+    ${outlinedBtn(opt, 'Hoy')}
+    ${iconBtn(opt, 'chevron_left')}
+    ${iconBtn(opt, 'chevron_right')}
+    <span class="date">Septiembre de 2026</span>
+    <span class="grow"></span>
+    ${iconBtn(opt, 'refresh')}
+    ${iconBtn(opt, 'settings')}
+    ${viewSelect(opt)}
+  </div>`;
+}
+
+function mini(opt) {
+  const cells = [];
+  const start = -1;
+  for (let i = 0; i < 42; i++) {
+    const day = i + start;
+    let label, cls = 'd';
+    if (day < 1) { label = 31 + day; cls += ' other'; }
+    else if (day > 30) { label = day - 30; cls += ' other'; }
+    else label = day;
+    if (day === 16) cls += ' today';
+    else if (day >= 14 && day <= 20) cls += ' sel';
+    cells.push(`<div class="${cls}">${label}</div>`);
+  }
+  return `<div class="minihead"><span>Septiembre de 2026</span><span>${iconBtn(opt, 'chevron_left')}${iconBtn(opt, 'chevron_right')}</span></div>
+    <div class="mini">${['L', 'M', 'X', 'J', 'V', 'S', 'D'].map(w => `<div class="wd">${w}</div>`).join('')}${cells.join('')}</div>`;
+}
+
+function calList(opt) {
+  return `<div class="callist"><h3>Mis calendarios</h3>
+    ${CALS.map(c => `<div class="row">${checkbox(opt, c)}<span class="name">${c.name}</span>${iconBtn(opt, 'more_vert')}</div>`).join('')}
+  </div>`;
+}
+
+function sidebar(opt) {
+  return `<div class="sidebar">
+    <div>${createBtn(opt)}</div>
+    <div>${mini(opt)}</div>
+    ${calList(opt)}
+  </div>`;
+}
+
+function popup(opt, ev) {
+  const c = cal(ev.c);
+  return `<div class="popup" style="top:calc(var(--hour-h) * ${ev.s} - 8px); left:calc(100% + 8px)">
+    <div class="hdr">${iconBtn(opt, 'edit', 'id="edit"')}${iconBtn(opt, 'delete')}${iconBtn(opt, 'mail')}${iconBtn(opt, 'more_vert')}${iconBtn(opt, 'close', 'id="close-popup"')}</div>
+    <div class="body">
+      <div class="dot" style="background:${c.color}"></div>
+      <div>
+        <div class="title">${ev.t}</div>
+        <div class="when">Miércoles, 16 de septiembre · ${hh(ev.s)} – ${hh(ev.e)}</div>
+      </div>
+      <span class="mi ms">videocam</span><div>${meetChip(opt)}<div style="font-size:12px;opacity:.7;margin-top:4px">meet.google.com/abc-defg-hij</div></div>
+      <span class="mi ms">group</span><div>3 invitados<div style="font-size:12px;opacity:.7">2 sí, 1 pendiente</div></div>
+      <span class="mi ms">calendar_today</span><div>${c.name}</div>
+    </div>
+  </div>`;
+}
+
+function grid(opt) {
+  const head = `<div class="dayhead"><div></div>${DAYS.map((d, i) => `<div class="cell ${i === TODAY ? 'today' : ''}"><div class="dow">${d}</div><div class="num">${NUMS[i]}</div></div>`).join('')}</div>`;
+  const allday = `<div class="allday"><div class="gutter"></div>${DAYS.map((_, i) => `<div class="cell">${ALLDAY.filter(a => a.d === i).map(a => `<div class="ev allday" style="${chipStyle(opt, cal(a.c))}"><span class="t">${a.t}</span></div>`).join('')}</div>`).join('')}</div>`;
+  const hours = [];
+  for (let h = 1; h < 24; h++) {
+    const mx = (h + 21) % 24;
+    hours.push(`<div class="h" style="top:calc(var(--hour-h) * ${h})"><span>${String(mx).padStart(2, '0')}:00</span><span>${String(h).padStart(2, '0')}:00</span></div>`);
+  }
+  const cols = DAYS.map((_, i) => {
+    const lines = Array.from({ length: 24 }, (_, h) => `<div class="line" style="top:calc(var(--hour-h) * ${h})"></div>`).join('');
+    const evs = EVENTS.filter(e => e.d === i).map(e => `<div class="ev ${e.e - e.s <= 0.5 ? 'short' : ''}" data-open="${e.open ? 1 : 0}" style="top:calc(var(--hour-h) * ${e.s});height:calc(var(--hour-h) * ${e.e - e.s} - 2px);${chipStyle(opt, cal(e.c))}"><div class="t">${e.t}</div><div class="s">${hh(e.s)} – ${hh(e.e)}</div></div>`).join('');
+    const now = i === TODAY ? `<div class="nowline" style="top:calc(var(--hour-h) * ${NOW})"></div>` : '';
+    const pop = EVENTS.filter(e => e.d === i && e.open).map(e => popup(opt, e)).join('');
+    return `<div class="col">${lines}${evs}${now}${pop}</div>`;
+  }).join('');
+  return `<div class="stagegrid">${head}${allday}<div class="scroller" id="scroller"><div class="grid"><div class="gutter">${hours.join('')}</div>${cols}</div></div></div>`;
+}
+
+function formDialog(opt) {
+  if (m3(opt)) {
+    return `<md-dialog id="form">
+      <div slot="headline">Nuevo evento</div>
+      <form slot="content" id="evform" method="dialog" class="form-fields">
+        <md-outlined-text-field label="Título" value="Sync integración RappiCard"></md-outlined-text-field>
+        <div class="form-row">
+          <md-outlined-text-field label="Fecha" value="16 sep 2026" type="text"></md-outlined-text-field>
+          <md-outlined-text-field label="Inicio" value="11:00"></md-outlined-text-field>
+          <md-outlined-text-field label="Fin" value="12:30"></md-outlined-text-field>
+          <div class="switchrow"><md-switch></md-switch><span>Todo el día</span></div>
+        </div>
+        <div class="form-row">
+          <md-outlined-select label="Calendario">
+            ${CALS.map((c, i) => `<md-select-option value="${c.id}" ${i === 2 ? 'selected' : ''}><div slot="headline">${c.name}</div></md-select-option>`).join('')}
+          </md-outlined-select>
+          <md-outlined-select label="Repetir">
+            ${['No se repite', 'Cada día', 'Cada semana el miércoles', 'Personalizado'].map((r, i) => `<md-select-option value="${i}" ${i === 0 ? 'selected' : ''}><div slot="headline">${r}</div></md-select-option>`).join('')}
+          </md-outlined-select>
+        </div>
+        <md-outlined-text-field label="Invitados" placeholder="Agregar invitados"></md-outlined-text-field>
+        <md-outlined-text-field label="Descripción" type="textarea" rows="3"></md-outlined-text-field>
+        <label style="display:flex;align-items:center;gap:12px"><md-checkbox touch-target="wrapper" checked></md-checkbox>Agregar videollamada de Google Meet</label>
+      </form>
+      <div slot="actions">
+        <md-text-button form="evform">Cancelar</md-text-button>
+        <md-filled-button form="evform">Guardar</md-filled-button>
+      </div>
+    </md-dialog>`;
+  }
+  return `<dialog class="g-dialog" id="form">
+    <div class="dh"><span>Nuevo evento</span><button class="g-icon" id="close-form">${icon('close')}</button></div>
+    <div class="db form-fields">
+      <div class="g-field"><label>Título</label><input value="Sync integración RappiCard"></div>
+      <div class="form-row">
+        <div class="g-field"><label>Fecha</label><input value="16 sep 2026"></div>
+        <div class="g-field"><label>Inicio</label><input value="11:00"></div>
+        <div class="g-field"><label>Fin</label><input value="12:30"></div>
+        <div class="switchrow"><span class="g-switch"></span><span>Todo el día</span></div>
+      </div>
+      <div class="form-row">
+        <div class="g-field"><label>Calendario</label><select>${CALS.map((c, i) => `<option ${i === 2 ? 'selected' : ''}>${c.name}</option>`).join('')}</select></div>
+        <div class="g-field"><label>Repetir</label><select><option>No se repite</option><option>Cada día</option><option>Cada semana el miércoles</option><option>Personalizado</option></select></div>
+      </div>
+      <div class="g-field"><label>Invitados</label><input placeholder="Agregar invitados"></div>
+      <div class="g-field"><label>Descripción</label><textarea></textarea></div>
+      <label style="display:flex;align-items:center;gap:12px"><span class="g-check" style="background:var(--g-blue)">${icon('check')}</span>Agregar videollamada de Google Meet</label>
+    </div>
+    <div class="da"><button class="g-btn text" id="cancel-form">Cancelar</button><button class="g-btn primary" id="save-form">Guardar</button></div>
+  </dialog>`;
+}
+
+function screen(opt) {
+  return `<div class="screen" data-opt="${opt}">${topbar(opt)}${sidebar(opt)}${grid(opt)}${formDialog(opt)}</div>`;
+}
+
+function wire(opt) {
+  const root = document.getElementById('screen');
+  const form = root.querySelector('#form');
+  const open = () => (m3(opt) ? form.show() : form.showModal());
+  const close = () => form.close();
+  root.querySelector('#create').addEventListener('click', open);
+  root.querySelector('#edit').addEventListener('click', open);
+  root.querySelectorAll('#close-form, #cancel-form, #save-form').forEach(b => b.addEventListener('click', close));
+  const popup = root.querySelector('.popup');
+  root.querySelector('#close-popup').addEventListener('click', () => { popup.style.display = 'none'; });
+  root.querySelectorAll('.ev[data-open="0"]').forEach(e => e.addEventListener('click', () => { popup.style.display = ''; }));
+  const vb = root.querySelector('#view-btn');
+  const vm = root.querySelector('#view-menu');
+  vb.addEventListener('click', () => { if (m3(opt)) vm.open = !vm.open; else vm.classList.toggle('open'); });
+  if (!m3(opt)) vm.querySelectorAll('div').forEach(d => d.addEventListener('click', () => vm.classList.remove('open')));
+  const sc = root.querySelector('#scroller');
+  sc.scrollTop = parseFloat(getComputedStyle(root.querySelector('.screen')).getPropertyValue('--hour-h')) * 7.5;
+}
+
+function render(opt) {
+  document.getElementById('screen').innerHTML = screen(opt);
+  document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', String(t.dataset.opt === opt)));
+  try { localStorage.setItem('ugc-opt', opt); } catch (e) {}
+  wire(opt);
+}
+
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => render(t.dataset.opt)));
+const themeBtn = document.getElementById('theme-toggle');
+function setTheme(dark) {
+  document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+  themeBtn.setAttribute('aria-pressed', String(dark));
+  try { localStorage.setItem('ugc-theme', dark ? 'dark' : 'light'); } catch (e) {}
+}
+themeBtn.addEventListener('click', () => setTheme(document.documentElement.dataset.theme !== 'dark'));
+const notesBtn = document.getElementById('notes-toggle');
+notesBtn.addEventListener('click', () => {
+  const n = document.getElementById('notes');
+  n.hidden = !n.hidden;
+  notesBtn.setAttribute('aria-pressed', String(!n.hidden));
+});
+
+let startOpt = '3', startDark = matchMedia('(prefers-color-scheme: dark)').matches;
+try {
+  startOpt = localStorage.getItem('ugc-opt') || startOpt;
+  const t = localStorage.getItem('ugc-theme'); if (t) startDark = t === 'dark';
+} catch (e) {}
+setTheme(startDark);
+render(startOpt);
+</script>
+</body>
+</html>
