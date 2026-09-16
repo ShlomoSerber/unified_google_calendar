@@ -259,3 +259,4 @@ Componentes nuevos: `src/components/MonthGrid.tsx` (+ `.css`), `src/m3/register.
 ## Registro de cambios
 
 - 2026-09-16 — Versión inicial, escrita en la sesión de planificación de la transición (`docs/99`, entrada del 2026-09-16).
+- 2026-09-16 — Transición ejecutada (M0 a M6, versión 0.2.0). Desvíos menores respecto de las secciones 4 y 9 registrados en `docs/99`, entrada "Ejecución de la transición a Material 3": nombres de glifo en `icons.txt`, tokens de layout nuevos en `theme.json`, dos filas de fecha y hora en el formulario, gutter dentro del scroller, valores `none` en los `md-select`.
