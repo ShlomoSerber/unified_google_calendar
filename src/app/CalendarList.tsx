@@ -1,18 +1,14 @@
 import { useState, type CSSProperties, type ReactNode } from 'react';
 import { ipc } from '../ipc';
-import { chipBackground, useTheme } from '../lib/colors';
+import { chipColors, useTheme } from '../lib/colors';
 import { useUi } from '../state/ui';
 import type { AccountInfo, CalendarInfo } from '../types/ipc';
+import './CalendarList.css';
 
-// Component 5 of docs/04 section 4, grouped by account (docs/08 F4-T3). The DOM mirrors
-// nodes 282-401 of docs/design/measurements/sidebar-light.json: every Google account gets a
-// "My calendars"-style section titled with the account; iCal calendars share the
-// "Other calendars" section, whose "+" opens the settings to add one (docs/99 entry F4-T3).
-
-// Paths read from the SVGs calendar.google.com inlines (probed 2026-09-14): the checkbox tick is
-// a stroked polyline (Material Components checkbox), the "+" is Material Design "add" (Apache 2.0).
-const CHECK = 'M1.73,12.91 8.1,19.28 22.79,4.59';
-const ADD_PATH = 'M20 13h-7v7h-2v-7H4v-2h7V4h2v7h7v2z';
+// The calendar list of the drawer (docs/11 section 7), grouped by account (docs/08 F4-T3):
+// every Google account gets a collapsible section titled with the account; iCal and local
+// calendars share "Other calendars", whose "+" opens the Add calendar dialog. Each row is a
+// pill with a checkbox in the calendar's colour (docs/11 section 6).
 
 interface RowProps {
   calendar: CalendarInfo;
@@ -23,8 +19,8 @@ interface RowProps {
 function CalendarRow({ calendar, label, typeLabel }: RowProps) {
   const theme = useTheme();
   const on = calendar.visible;
-  const suffix = on ? '-on' : '';
-  const color = { '--data-calendar-color': chipBackground(calendar.color_bg, theme) } as CSSProperties;
+  const color = { '--data-calendar-color': chipColors(calendar.color_bg, theme).color } as CSSProperties;
+  // Optimistic toggle with rollback if the backend refuses.
   const toggle = () => {
     const next = !calendar.visible;
     const { calendars, setCalendars } = useUi.getState();
@@ -35,97 +31,46 @@ function CalendarRow({ calendar, label, typeLabel }: RowProps) {
     });
   };
   return (
-    <div className="sidebar-list-row-wrap" role="presentation">
-      <li className="sidebar-list-row" role="listitem">
-        <div className="sidebar-list-row-inner">
-          <div className="sidebar-list-check-area">
-            <div className="sidebar-list-check-box">
-              <div className="sidebar-list-check" style={color}>
-                <input className="sidebar-list-check-input" type="checkbox" aria-label={label} checked={on} onChange={toggle} />
-                <div className={`sidebar-list-check-mark${suffix}`}>
-                  <svg className={`sidebar-list-check-svg${suffix}`} viewBox="0 0 24 24" focusable="false">
-                    <path className={`sidebar-list-check-path${suffix}`} d={CHECK} fill="none" />
-                  </svg>
-                  <div className="sidebar-list-check-mixed"></div>
-                </div>
-                <span className="sidebar-list-check-ripple ugc-state ugc-state-calendar"></span>
-              </div>
-            </div>
-          </div>
-          <div className="sidebar-list-label-box">
-            <span className="sidebar-list-label">{label}</span>
-            {typeLabel ? <span className="sidebar-list-type">{typeLabel}</span> : null}
-          </div>
-        </div>
-      </li>
-    </div>
+    <label className="calendar-list-row" role="listitem" style={color}>
+      <md-ripple></md-ripple>
+      <md-checkbox touch-target="wrapper" aria-label={label} checked={on} onchange={toggle}></md-checkbox>
+      <span className="calendar-list-name md-typescale-body-medium">{label}</span>
+      {typeLabel ? <span className="calendar-list-type md-typescale-label-small">{typeLabel}</span> : null}
+    </label>
   );
 }
 
 interface SectionProps {
-  id: string;
   title: string;
-  avatar: string | null;
   tooltip: string | null;
   addButton: boolean;
   children: ReactNode;
 }
 
-function Section({ id, title, avatar, tooltip, addButton, children }: SectionProps) {
+function Section({ title, tooltip, addButton, children }: SectionProps) {
   const [open, setOpen] = useState(true);
   const openAddCalendar = () => useUi.getState().openDialog({ kind: 'add-calendar' });
-  const n = addButton ? '2' : '';
-  const header = (
-    <button className={`sidebar-list-header${n}`} type="button" aria-expanded={open} onClick={() => setOpen(!open)} title={tooltip ?? undefined}>
-      <span className={`sidebar-list-header${n}-ripple ugc-state ugc-state-primary`}></span>
-      <div className={`sidebar-list-header${n}-box`}>
-        <div className={`sidebar-list-header${n}-row`}>
-          {avatar ? (
-            <span className="sidebar-list-avatar" aria-hidden="true">
-              {avatar}
-            </span>
-          ) : null}
-          <div className={`sidebar-list-header${n}-label`}>{title}</div>
-          <i className={`sidebar-list-header${n}-arrow`}>{open ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}</i>
-        </div>
-      </div>
-    </button>
-  );
   return (
-    <>
-      {addButton ? (
-        <div className="sidebar-list-header2-wrap">
-          {header}
-          <div className="sidebar-list-add-wrap">
-            <div className="sidebar-list-add-box">
-              <div className="sidebar-list-add-inner">
-                <span className="sidebar-list-add-span">
-                  <button className="sidebar-list-add" aria-label="Add other calendars" type="button" onClick={openAddCalendar} data-tooltip="Add other calendars">
-                    <span className="sidebar-list-add-ripple ugc-state ugc-state-icon"></span>
-                    <span className="sidebar-list-add-icon-box">
-                      <svg className="sidebar-list-add-icon" viewBox="0 0 24 24" focusable="false">
-                        <path className="sidebar-list-add-path" d={ADD_PATH} />
-                      </svg>
-                    </span>
-                    <div className="sidebar-list-add-overlay"></div>
-                  </button>
-                </span>
-                <div className="sidebar-list-add-foot"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : (
-        header
-      )}
+    <div className="calendar-list-section">
+      <div className="calendar-list-head">
+        <button className="calendar-list-toggle md-typescale-label-medium" type="button" aria-expanded={open} onClick={() => setOpen(!open)} title={tooltip ?? undefined}>
+          <md-ripple></md-ripple>
+          <md-focus-ring></md-focus-ring>
+          <span className="calendar-list-toggle-label">{title}</span>
+          <md-icon>{open ? 'expand_less' : 'expand_more'}</md-icon>
+        </button>
+        {addButton ? (
+          <md-icon-button aria-label="Add other calendars" onclick={openAddCalendar}>
+            <md-icon>add</md-icon>
+          </md-icon-button>
+        ) : null}
+      </div>
       {open ? (
-        <div className="sidebar-list-body">
-          <div className="sidebar-list" role="list" aria-label={title} data-section={id}>
-            {children}
-          </div>
+        <div className="calendar-list-rows" role="list" aria-label={title}>
+          {children}
         </div>
       ) : null}
-    </>
+    </div>
   );
 }
 
@@ -144,32 +89,17 @@ export function CalendarList() {
   const calendarsOf = (a: AccountInfo) => calendars.filter((c) => c.account_id === a.id && !c.hidden_remote).sort(byOrder);
 
   return (
-    <div className="sidebar-lists">
-      <h2 className="sidebar-lists-sr">Calendar list</h2>
-      <div className="sidebar-lists-box">
-        <div className="sidebar-lists-inner">
-          <div className="sidebar-list-panel" role="complementary">
-            <div className="sidebar-list-wrap">
-              {google.map((a, i) => (
-                <div key={a.id}>
-                  {i > 0 ? <div className="sidebar-list-gap"></div> : null}
-                  <Section id={a.id} title={a.display_name} avatar={(a.email ?? a.display_name).charAt(0).toUpperCase()} tooltip={accountTooltip(a)} addButton={false}>
-                    {calendarsOf(a).map((c) => (
-                      <CalendarRow key={c.id} calendar={c} label={c.summary} typeLabel={null} />
-                    ))}
-                  </Section>
-                </div>
-              ))}
-              {google.length > 0 ? <div className="sidebar-list-gap"></div> : null}
-              <Section id="other" title="Other calendars" avatar={null} tooltip={null} addButton={true}>
-                {others.flatMap((a) =>
-                  calendarsOf(a).map((c) => <CalendarRow key={`${a.id}/${c.id}`} calendar={c} label={c.summary} typeLabel="iCal" />),
-                )}
-              </Section>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="calendar-list">
+      {google.map((a) => (
+        <Section key={a.id} title={a.display_name} tooltip={accountTooltip(a)} addButton={false}>
+          {calendarsOf(a).map((c) => (
+            <CalendarRow key={c.id} calendar={c} label={c.summary} typeLabel={null} />
+          ))}
+        </Section>
+      ))}
+      <Section title="Other calendars" tooltip={null} addButton={true}>
+        {others.flatMap((a) => calendarsOf(a).map((c) => <CalendarRow key={`${a.id}/${c.id}`} calendar={c} label={c.summary} typeLabel={a.kind === 'ical' ? 'iCal' : null} />))}
+      </Section>
     </div>
   );
 }

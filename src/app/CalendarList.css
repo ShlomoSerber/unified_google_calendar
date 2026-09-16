@@ -1,0 +1,67 @@
+/* Calendar list (docs/11 section 7): label-medium section headers with a chevron, pill rows of
+   40 px with a checkbox painted in the calendar's colour (docs/11 section 6). */
+.calendar-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ugc-space-2);
+}
+
+.calendar-list-head {
+  display: flex;
+  align-items: center;
+}
+
+.calendar-list-toggle {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--ugc-space-2);
+  min-width: 0;
+  height: var(--ugc-layout-calendar-row-height);
+  padding: 0 var(--ugc-space-2) 0 var(--ugc-space-3);
+  border-radius: var(--ugc-layout-calendar-row-radius);
+  color: var(--md-sys-color-on-surface-variant);
+  --md-focus-ring-shape: var(--ugc-layout-calendar-row-radius);
+}
+
+.calendar-list-toggle-label {
+  flex: 1;
+  text-align: start;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.calendar-list-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--ugc-space-1);
+  height: var(--ugc-layout-calendar-row-height);
+  padding: 0 var(--ugc-space-3) 0 var(--ugc-space-1);
+  border-radius: var(--ugc-layout-calendar-row-radius);
+  cursor: pointer;
+  --md-checkbox-selected-container-color: var(--data-calendar-color);
+  --md-checkbox-selected-hover-container-color: var(--data-calendar-color);
+  --md-checkbox-selected-pressed-container-color: var(--data-calendar-color);
+  --md-checkbox-selected-focus-container-color: var(--data-calendar-color);
+  --md-checkbox-outline-color: var(--data-calendar-color);
+  --md-checkbox-hover-outline-color: var(--data-calendar-color);
+  --md-checkbox-pressed-outline-color: var(--data-calendar-color);
+  --md-checkbox-focus-outline-color: var(--data-calendar-color);
+  --md-checkbox-selected-icon-color: var(--md-sys-color-on-primary);
+}
+
+.calendar-list-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--md-sys-color-on-surface);
+}
+
+.calendar-list-type {
+  color: var(--md-sys-color-on-surface-variant);
+}

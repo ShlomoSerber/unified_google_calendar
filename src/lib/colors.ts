@@ -1,13 +1,15 @@
-// Calendar and event colours as Google paints them (docs/04 section 7): the backend stores the
-// hex the API reports; the UI shows the measured light/dark tone from docs/design/tokens.json.
+// Calendar and event colours (docs/11 section 6): the backend stores the hex the API reports;
+// the UI shows the Material 3 custom-color roles derived from it in src/styles/palette.ts.
 import { useSyncExternalStore } from 'react';
-import { COLOR_MAP } from '../styles/legacy-palette';
+import { COLOR_MAP, type ChipColors } from '../styles/palette';
+import { COLOR_MAP as LEGACY_COLOR_MAP } from '../styles/legacy-palette';
 
 export type Theme = 'light' | 'dark';
+export type { ChipColors };
 
 const query = typeof window !== 'undefined' && typeof window.matchMedia === 'function' ? window.matchMedia('(prefers-color-scheme: dark)') : null;
 
-/** The system theme (docs/08 F4-T5: `prefers-color-scheme`, no manual selector in version 1). */
+/** The system theme (`prefers-color-scheme`, no manual selector in version 1). */
 export function useTheme(): Theme {
   return useSyncExternalStore(
     (cb) => {
@@ -19,7 +21,19 @@ export function useTheme(): Theme {
   );
 }
 
-/** Measured chip background for a stored colour, or the colour itself when it is not in the palette. */
+/**
+ * Chip roles (border and dot, container, text) for a stored colour. A hex outside the palette
+ * (a colour Google adds later) keeps its own tone for the border and a 24 % mix over the
+ * surface for the container, with the surface's text colour on it.
+ */
+export function chipColors(hex: string, theme: Theme): ChipColors {
+  const known = COLOR_MAP[hex.toLowerCase()];
+  if (known) return known[theme];
+  return { color: hex, container: `color-mix(in srgb, ${hex} 24%, var(--md-sys-color-surface))`, onContainer: 'var(--md-sys-color-on-surface)' };
+}
+
+/** Until M3-T2 of the transition: the Google-measured chip background the unmigrated
+ *  components still paint (docs/12). Deleted with legacy-palette.ts. */
 export function chipBackground(hex: string, theme: Theme): string {
-  return COLOR_MAP[hex.toLowerCase()]?.[theme].bg ?? hex;
+  return LEGACY_COLOR_MAP[hex.toLowerCase()]?.[theme].bg ?? hex;
 }
