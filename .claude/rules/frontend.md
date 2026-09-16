@@ -20,4 +20,3 @@ paths:
 - No timers in JS except UI animation. Periodic work lives in Rust.
 - Keyboard shortcuts, drag and drop, search and Tasks are version 2. Do not add them. What `@material/web` brings for free (Escape, Tab, arrows in menus and radios, focus rings) is fine.
 - Tests: `src/m3/register.ts` is mocked in `vitest.setup.ts`; component tests query the app's own roles and `aria-label`s, never the inside of a `<md-*>`. `npm run lint && npm run typecheck && npm test && node scripts/check-tokens.mjs` must pass before every commit.
-- Until M5 of the transition, `src/styles/legacy.css` and `measured.css` keep unmigrated components alive. A migrated component never references them; a new component never references them.

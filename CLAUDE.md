@@ -2,9 +2,9 @@
 
 Desktop app for Ubuntu that shows several Google accounts plus local personal events in one calendar. Tauri 2 + Rust backend, React + TypeScript frontend, SQLite, Google Calendar API v3, push notifications through Tailscale Funnel, mirror into GNOME's calendar panel via Evolution Data Server.
 
-The design phase is finished and every architectural decision is written in `docs/`. The implementation plan of `docs/08-plan-de-implementacion.md` is complete (F0–F8 closed on 2026-09-14) and the `.deb` 0.1.6 is installed on the user's machine.
+The design phase is finished and every architectural decision is written in `docs/`. The implementation plan of `docs/08-plan-de-implementacion.md` is complete (F0–F8 closed on 2026-09-14); the `.deb` 0.2.0 (Material 3) is the current delivery.
 
-**State on 2026-09-16: the UI is about to move from a pixel replica of calendar.google.com to Material 3.** The decision is recorded in `docs/99-decisiones.md` (entry 2026-09-16), the design system in `docs/11-material3.md`, the tasks in `docs/12-plan-m3.md`. Until the transition is executed, the code on `main` is still the Google replica. When the user asks for the transition ("hace la transición a M3"), use the `m3-transition` skill and run the whole plan in one session. Anything else the user reports is maintenance: read `docs/10-mantenimiento.md` first.
+**State on 2026-09-16: the UI is Material 3.** The transition from the pixel replica of calendar.google.com was decided (`docs/99-decisiones.md`, entry 2026-09-16), specified in `docs/11-material3.md`, planned in `docs/12-plan-m3.md` and executed the same day (commits `M0-T1` to `M6`, `.deb` 0.2.0). Everything the user reports now is maintenance: read `docs/10-mantenimiento.md` first.
 
 ## Read before doing anything
 
@@ -13,13 +13,13 @@ The design phase is finished and every architectural decision is written in `doc
 3. `docs/02-arquitectura.md` — stack, modules, IPC contract, RAM budget, security.
 4. `docs/11-material3.md` — the visual system (tokens, fonts, `@material/web` in React 19, component mapping, CSS rules). `docs/04-fidelidad-visual.md` is historical.
 5. `docs/10-mantenimiento.md` — current state, known limitations, how to run and debug the app off the user's display.
-6. For the transition: `docs/12-plan-m3.md`. For maintenance of already delivered work: the task in `docs/08` the bug belongs to.
+6. For maintenance of already delivered work: the task in `docs/08` the bug belongs to, or the task in `docs/12-plan-m3.md` for anything visual.
 
 Then read the documents the task lists. Do not start coding a task without having read them in this session.
 
 ## Non-negotiable rules
 
-- **No invented UI values.** Every size, color, font, radius, shadow and duration in the frontend is a `var(--md-sys-*)`, `var(--ugc-*)` or `<md-*>` attribute that comes from `docs/design/m3/theme.json` through `node scripts/gen-m3-tokens.mjs`. A value enters `theme.json` only if it is a Material 3 system token, a value from a cited m3.material.io spec page, or an app layout size on the 4 px grid with a `<name>_note`. Never type a pixel value or a color in a component stylesheet. (Before the transition the same rule held with `docs/design/tokens.json` measured on Google; that pipeline is deleted in M5.)
+- **No invented UI values.** Every size, color, font, radius, shadow and duration in the frontend is a `var(--md-sys-*)`, `var(--ugc-*)` or `<md-*>` attribute that comes from `docs/design/m3/theme.json` through `node scripts/gen-m3-tokens.mjs`. A value enters `theme.json` only if it is a Material 3 system token, a value from a cited m3.material.io spec page, or an app layout size on the 4 px grid with a `<name>_note`. Never type a pixel value or a color in a component stylesheet.
 - **No decision changes without a record.** If you must deviate from `docs/02`, `03`, `05`, `06`, `07` or `11`, write the entry in `docs/99-decisiones.md` first, then change the code.
 - **No new dependencies** beyond those listed in `docs/02-arquitectura.md` section 1, `docs/08` and `docs/11` section 2 without an entry in `docs/99-decisiones.md` stating why.
 - **No product code for version-2 features.** Drag and drop, search, keyboard shortcuts, Google Tasks, .ics, autostart, auto-update: do not implement. Focus rings and menu keyboard navigation that `@material/web` brings are not "keyboard shortcuts".
@@ -41,13 +41,11 @@ cargo test --manifest-path src-tauri/Cargo.toml   # use CARGO_BUILD_JOBS=2 and c
 npm run lint && npm run typecheck && npm test
 node scripts/gen-m3-tokens.mjs            # docs/design/m3/theme.json -> src/styles/{tokens.css,typescale.css,layout.ts,motion.ts,palette.ts}
 node scripts/check-tokens.mjs             # fails if CSS uses a literal value or an undefined token
-bash scripts/check-m3.sh                  # gate to close the M3 transition (docs/12 section 7)
+bash scripts/check-m3.sh                  # gate of the M3 transition (docs/12 section 7); run it after any UI change
 bash scripts/measure-ram.sh               # PSS of the running app processes
 bash scripts/check-eds.sh                 # verifies the Evolution Data Server mirror
 bash scripts/bump-version.sh x.y.z        # same version in package.json, tauri.conf.json, Cargo.toml
 ```
-
-Until M5 of the transition deletes them, `node scripts/gen-tokens.mjs`, `scripts/gen-measured-css.mjs` and `scripts/measure/` still exist for the old pipeline. Do not run them for new work.
 
 ## Working protocol per task
 
@@ -60,7 +58,7 @@ Until M5 of the transition deletes them, `node scripts/gen-tokens.mjs`, `scripts
 7. Commit with the task id.
 8. Report: what was done, what the verification printed, what is left, and which step of `docs/09-setup-usuario.md` the user must do next if any.
 
-Close a phase of `docs/08` only through the `close-phase` skill. Close the M3 transition only through `docs/12` section 7.
+Close a phase of `docs/08` only through the `close-phase` skill. The M3 transition closed through `docs/12` section 7 on 2026-09-16.
 
 ## Conventions
 
@@ -72,4 +70,4 @@ Close a phase of `docs/08` only through the `close-phase` skill. Close the M3 tr
 
 ## Repository map
 
-See `docs/02-arquitectura.md` section 4 for the intended tree (`src/m3/` and `src/components/MonthGrid.tsx` are added by the transition). Research reports with sources for every API claim are in `docs/research/`. Design tokens and the decision mockup live in `docs/design/m3/`; `docs/design/google/` (after M5) keeps the historical measurements of calendar.google.com.
+See `docs/02-arquitectura.md` section 4 for the intended tree (`src/m3/` and `src/components/MonthGrid.tsx` were added by the transition). Research reports with sources for every API claim are in `docs/research/`. Design tokens and the decision mockup live in `docs/design/m3/`; `docs/design/google/` keeps the historical measurements of calendar.google.com.

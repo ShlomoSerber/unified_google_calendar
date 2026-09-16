@@ -1,7 +1,7 @@
 # Unified Google Calendar
 
 Desktop app for Ubuntu (GNOME, Wayland) that shows several Google accounts plus local events in
-one calendar with the Google Calendar web UI. Tauri 2 + Rust backend, React + TypeScript
+one calendar with a Material 3 UI (`@material/web`). Tauri 2 + Rust backend, React + TypeScript
 frontend, SQLite, Google Calendar API v3 with push notifications through Tailscale Funnel, and a
 mirror into GNOME's calendar panel through Evolution Data Server.
 
@@ -22,19 +22,15 @@ Development: `npm run tauri dev`. Checks: `cargo clippy --manifest-path src-taur
 `cargo test --manifest-path src-tauri/Cargo.toml`, `npm run lint && npm run typecheck && npm test`.
 Phase gates: `bash scripts/check-phase.sh <N>`.
 
-Pixel fidelity (`docs/04-fidelidad-visual.md`): `node scripts/measure/capture.mjs` dumps
-calendar.google.com components with the `~/.chrome-measure` profile, `scripts/measure/extract-tokens.mjs`
-+ `scripts/gen-tokens.mjs` + `scripts/gen-measured-css.mjs` turn the dumps into `docs/design/tokens.json`
-and the generated stylesheets, `scripts/measure/app-capture.mjs` dumps the app on a private Xvfb
-display and `scripts/measure/report.mjs [--gate 4|7]` compares both sides. Results per component
-are in `docs/design/measurements/<component>.md`. Motion (`docs/04` section 10): `node scripts/measure/animations.mjs`
-records every Web Animation calendar.google.com runs per scenario into `docs/design/measurements/animations-<theme>.json`;
-the derived tokens live in `tokens.json` under `component.motion`.
+Visual system (`docs/11-material3.md`): every colour, size, type role, shape, motion and elevation
+value comes from `docs/design/m3/theme.json`; `node scripts/gen-m3-tokens.mjs` turns it into
+`src/styles/{tokens.css,typescale.css,layout.ts,motion.ts,palette.ts}` and `node scripts/check-tokens.mjs`
+fails on any literal value in a component stylesheet. `bash scripts/check-m3.sh` is the gate of the transition.
 
 ## Install
 
 ```bash
-sudo apt install "./src-tauri/target/release/bundle/deb/Unified Google Calendar_0.1.0_amd64.deb"
+sudo apt install "./src-tauri/target/release/bundle/deb/Unified Google Calendar_0.2.0_amd64.deb"
 ```
 
 Before the first run create `~/.config/unified-google-calendar/oauth.json` with your Google Cloud
@@ -53,5 +49,5 @@ bash scripts/uninstall-data.sh   # removes config, database, tokens, logs and th
 
 - `src-tauri/` Rust backend: `auth`, `google`, `sync`, `db`, `recurrence`, `commands`, `reminders`, `tray`, `webhook`, `eds`.
 - `src/` React frontend: `app`, `views`, `event`, `components`, `ipc`, `state`, `styles`, `types`.
-- `docs/design/tokens.json` measured design tokens → `src/styles/tokens.css` (`node scripts/gen-tokens.mjs`).
-- `scripts/` phase gates, RAM and EDS checks, measurement tools.
+- `docs/design/m3/theme.json` Material 3 tokens → `src/styles/` generated files (`node scripts/gen-m3-tokens.mjs`); `docs/design/google/` is the historical record of the previous Google-replica UI.
+- `scripts/` phase gates, the M3 gate, RAM and EDS checks.

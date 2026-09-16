@@ -11,5 +11,4 @@ paths:
 - Calendar and event chip colors come from `color.custom_colors` through the same generator (`src/styles/palette.ts`). Do not add per-color overrides in CSS.
 - After editing `theme.json`: `node scripts/gen-m3-tokens.mjs && node scripts/check-tokens.mjs`, and commit the JSON together with the generated `src/styles/tokens.css`, `typescale.css`, `layout.ts`, `motion.ts`, `palette.ts`. Never edit a generated file by hand; `scripts/check-m3.sh` regenerates and compares.
 - `docs/design/m3/mockup.html` is the decision mockup (option 3 is the chosen one). It is a reference, not code: nothing is copied from it into `src/`.
-- `docs/design/google/` (before M5: `docs/design/measurements/`, `tokens.json`, `token-spec.json`) is the historical record of calendar.google.com measured on 2026-09-14. It rules nothing. Do not add to it and do not read it to decide a value.
-- Before the transition removes it, `src/styles/legacy.css` and `src/styles/measured.css` exist only so unmigrated components keep compiling. Never add a rule or a variable to them.
+- `docs/design/google/` is the historical record of calendar.google.com measured on 2026-09-14 (the previous Google-replica UI, removed on 2026-09-16). It rules nothing. Do not add to it and do not read it to decide a value.
