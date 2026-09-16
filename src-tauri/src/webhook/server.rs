@@ -35,8 +35,6 @@ pub struct WebhookState {
     pub db: DbHandle,
     pub ticks: mpsc::Sender<SyncTick>,
     pub verify_dir: PathBuf,
-    /// Only used by the dev-only measurement route.
-    pub app: Option<tauri::AppHandle>,
     limiter: Arc<Mutex<HashMap<String, (Instant, u32)>>>,
 }
 
@@ -46,7 +44,6 @@ impl WebhookState {
             db,
             ticks,
             verify_dir,
-            app: None,
             limiter: Arc::new(Mutex::new(HashMap::new())),
         }
     }
@@ -212,31 +209,10 @@ async fn fallback(
     StatusCode::NOT_FOUND.into_response()
 }
 
-/// Dev only: `POST /dev/measure` with a JSON body forwards it to the webview as the
-/// `dev:measure` event (docs/04 section 3 automation). Absent in release builds.
-#[cfg(debug_assertions)]
-async fn dev_measure(State(state): State<WebhookState>, body: String) -> Response {
-    use tauri::Emitter;
-    let Some(app) = state.app.as_ref() else {
-        return StatusCode::SERVICE_UNAVAILABLE.into_response();
-    };
-    let payload: serde_json::Value = match serde_json::from_str(&body) {
-        Ok(v) => v,
-        Err(_) => return StatusCode::BAD_REQUEST.into_response(),
-    };
-    match app.emit("dev:measure", payload) {
-        Ok(()) => StatusCode::ACCEPTED.into_response(),
-        Err(_) => StatusCode::INTERNAL_SERVER_ERROR.into_response(),
-    }
-}
-
 pub fn router(state: WebhookState) -> Router {
-    let router = Router::new()
+    Router::new()
         .route("/gcal/webhook", post(webhook))
-        .route("/healthz", get(healthz));
-    #[cfg(debug_assertions)]
-    let router = router.route("/dev/measure", post(dev_measure));
-    router
+        .route("/healthz", get(healthz))
         .fallback(fallback)
         .layer(DefaultBodyLimit::max(BODY_LIMIT))
         .with_state(state)
@@ -258,9 +234,8 @@ pub async fn serve(state: WebhookState, port: u16) -> Result<(), AppError> {
 }
 
 /// Start the server in the background. Errors (port busy) are logged, never fatal.
-pub fn start(app: tauri::AppHandle, db: DbHandle, ticks: mpsc::Sender<SyncTick>, port: u16) {
-    let mut state = WebhookState::new(db, ticks, crate::config::verify_dir());
-    state.app = Some(app);
+pub fn start(db: DbHandle, ticks: mpsc::Sender<SyncTick>, port: u16) {
+    let state = WebhookState::new(db, ticks, crate::config::verify_dir());
     tauri::async_runtime::spawn(async move {
         if let Err(e) = serve(state, port).await {
             tracing::error!(error = %e, "webhook server failed; push notifications are unavailable");

@@ -94,7 +94,7 @@ pub fn run() {
                 })
                 .unwrap_or(config::DEFAULT_WEBHOOK_PORT);
             if let Ok(h) = db::handle() {
-                webhook::start(app.handle().clone(), h, ticks, port);
+                webhook::start(h, ticks, port);
             }
             reminders::start(app.handle().clone());
             clock::start(app.handle().clone());

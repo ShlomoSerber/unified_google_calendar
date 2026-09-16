@@ -2,7 +2,6 @@
 //!
 //! Every `#[tauri::command]` converts `AppError` into its `user_message()` at this boundary.
 
-pub mod dev;
 pub mod events;
 pub mod google_events;
 pub mod settings;
@@ -479,12 +478,6 @@ pub async fn goa_disable_calendars(disable: bool) -> CmdResult<types::GoaStatus>
     goa_status().await
 }
 
-/// Dev only: store a webview `dumpRegion` result for `scripts/measure/diff-layout.mjs`.
-#[tauri::command]
-pub fn dev_dump(name: String, json: String) -> CmdResult<String> {
-    dev::write_dump(&name, &json).map_err(to_ipc)
-}
-
 #[tauri::command]
 pub fn get_colors() -> CmdResult<types::ColorPalette> {
     Ok(types::ColorPalette {
@@ -522,8 +515,7 @@ pub fn handler() -> impl Fn(tauri::ipc::Invoke) -> bool + Send + Sync + 'static 
         test_push,
         goa_status,
         goa_disable_calendars,
-        add_ical_calendar,
-        dev_dump
+        add_ical_calendar
     ]
 }
 
@@ -550,7 +542,6 @@ pub const COMMAND_NAMES: &[&str] = &[
     "goa_status",
     "goa_disable_calendars",
     "add_ical_calendar",
-    "dev_dump",
 ];
 
 #[cfg(test)]

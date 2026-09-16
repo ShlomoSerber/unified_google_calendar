@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactElement } from 'react';
 import { ms } from '../lib/motion';
-import { MOTION } from '../styles/legacy-motion';
+import { MOTION } from '../styles/motion';
 import type { ViewKind } from '../state/ui';
 
 // The main area's motion (docs/04 section 10, measurements/animations.md): a date change slides

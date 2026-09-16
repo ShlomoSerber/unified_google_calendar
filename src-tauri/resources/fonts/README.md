@@ -26,6 +26,3 @@ python3 -m fontTools.subset /tmp/claude-1000/MaterialSymbolsOutlined.ttf \
 (`call`, `place`, `open_in_new`; the aliases `phone`, `location_on`, `launch` are not glyph names
 and `pyftsubset` rejects them). `<md-icon>place</md-icon>` renders the icon. The webview loads
 these files through the `public/fonts` symlink (vite copies them into `dist/`).
-
-Until M5-T1 of the Material 3 transition `GoogleMaterialIcons-subset.woff2` (Material Icons,
-Apache 2.0, the icon family of the previous Google-replica UI) stays for the unmigrated components.

@@ -1,7 +1,7 @@
 // Column layout of overlapping timed chips in a day column.
 // Overlapping chips form a cluster; within a cluster each chip takes the first free column;
 // a chip's width spans to the next occupied column to its right. This is the classic
-// Google Calendar layout; the measured overlap offset of component 10 is applied in CSS
+// Google Calendar layout; the overlap offset (chip_width_factor) is applied in WeekView
 // through tokens, not here.
 import type { ViewOccurrence } from '../../types/ipc';
 

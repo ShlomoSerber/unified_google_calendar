@@ -68,7 +68,7 @@ pub struct ViewOccurrence {
     pub all_day: bool,
     pub color_bg: String,
     pub color_fg: String,
-    /// `colorId` of the event when set, so the UI can pick the measured palette tokens.
+    /// `colorId` of the event when set, so the UI can pick the palette colour.
     pub color_id: Option<String>,
     /// `confirmed` | `tentative`
     pub status: String,

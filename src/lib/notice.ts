@@ -1,8 +1,8 @@
-// The snackbar of component 24 (docs/design/measurements/snackbar.md): Google shows "Saving..." /
+// The snackbar (docs/11 section 7) shows "Saving..." /
 // "Deleting..." the moment a request starts and "Event saved" / "Event deleted" when it returns.
 // `withNotice` wraps a write so every caller gets the same feedback (docs/99, 2026-09-15).
 import { useUi } from '../state/ui';
-import { MOTION } from '../styles/legacy-motion';
+import { MOTION } from '../styles/motion';
 import { ms } from './motion';
 
 let holdTimer = 0;

@@ -29,14 +29,7 @@ case "$N" in
      need_file src-tauri/tests/fixtures/google ;;
   3) need_file src-tauri/src/google/events.rs
      grep -q "conferenceDataVersion" src-tauri/src/google/events.rs && echo "ok: conferenceDataVersion present" || { echo "FAIL: conferenceDataVersion missing in google/events.rs"; fail=1; } ;;
-  4|7) run node scripts/gen-tokens.mjs; run node scripts/check-tokens.mjs
-     # Component 20 (scrollbars) has no dumpRegion pair: ::-webkit-scrollbar is probed and documented in scrollbars.md.
-     if [ "$N" = 4 ]; then comps="topbar create_button mini_calendar calendar_list week_header allday_row hour_grid now_line event_chip"; else comps="day_view month_view agenda_view event_popup quick_create full_form view_selector recurrence_dialog edit_scope_dialog"; need_file docs/design/measurements/scrollbars.md; fi
-     for c in $comps; do for t in light dark; do need_file "docs/design/measurements/$c-$t.json"; need_file "docs/design/measurements/$c-$t-app.json"; done; need_file "docs/design/measurements/$c.md"; done
-     # Every state of every component, with the per-component options and allowances of report.mjs
-     # (each allowance is justified in docs/design/measurements/<component>.md).
-     run node scripts/measure/report.mjs --gate "$N"
-     need_file src-tauri/resources/fonts/OFL.txt ;;
+  4|7) echo "phases 4 and 7 (Google-replica UI) were superseded by the Material 3 transition: bash scripts/check-m3.sh" ;;
   5) need_file src-tauri/src/webhook/server.rs; need_file src-tauri/src/sync/push.rs; need_file src-tauri/src/sync/sleep.rs ;;
   6) need_file src-tauri/src/eds/mirror.rs; need_file src-tauri/src/reminders/notify.rs; need_file src-tauri/src/tray.rs
      run bash scripts/check-eds.sh ;;
