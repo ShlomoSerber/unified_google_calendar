@@ -1,9 +1,11 @@
 import { format } from 'date-fns';
 import { inZone, isSameDay } from '../../lib/dates';
 import { useUi } from '../../state/ui';
+import './WeekHeader.css';
 
-// Component 6 of docs/04 section 4 (docs/design/measurements/week_header-light.json).
-// Today's column uses the *-today node classes; the others share one set.
+// Day headers of the week and day views (docs/11 section 7): weekday name (label-medium,
+// on-surface-variant) over the day number in a 40 px circle (title-large, brand typeface).
+// Today: primary circle with on-primary number and a primary name. Clicking a day opens it.
 
 export interface WeekHeaderProps {
   days: number[];
@@ -23,27 +25,22 @@ export function WeekHeader({ days, now }: WeekHeaderProps) {
     ui.setView('day');
   };
   return (
-    <div className="week-header-root" role="row">
-      <div className="week-header-pres" role="presentation">
-        <div className="week-header-pad"></div>
-        {days.map((ts) => {
-          const d = inZone(ts, tz);
-          const t = isSameDay(ts, now, tz) ? '-today' : '';
-          const aria = dayHeaderAria(ts, tz, t !== '');
-          return (
-            <div className={`week-header-col${t}`} role="columnheader" key={ts}>
-              <div className={`week-header-col-line${t}`}></div>
-              <h2 className={`week-header-h2${t}`} aria-label={aria}>
-                <div className={`week-header-dow${t}`}>{format(d, 'EEE')}</div>
-                <button className={`week-header-daybtn${t}`} aria-label={aria} type="button" onClick={() => openDay(ts)}>
-                  <span className={`week-header-daybtn${t}-ripple`}></span>
-                  <div className={`week-header-daynum${t}`}>{d.getDate()}</div>
-                </button>
-              </h2>
-            </div>
-          );
-        })}
-      </div>
+    <div className="week-header" role="row">
+      {days.map((ts) => {
+        const d = inZone(ts, tz);
+        const today = isSameDay(ts, now, tz);
+        const aria = dayHeaderAria(ts, tz, today);
+        return (
+          <div className={today ? 'week-header-day week-header-today' : 'week-header-day'} role="columnheader" aria-label={aria} key={ts}>
+            <span className="week-header-name md-typescale-label-medium">{format(d, 'EEE')}</span>
+            <button className="week-header-number md-typescale-title-large" aria-label={aria} type="button" onClick={() => openDay(ts)}>
+              <md-ripple></md-ripple>
+              <md-focus-ring></md-focus-ring>
+              {d.getDate()}
+            </button>
+          </div>
+        );
+      })}
     </div>
   );
 }

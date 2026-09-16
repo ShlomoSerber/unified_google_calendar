@@ -19,6 +19,7 @@ export const LAYOUT = {
   chip_min_height: "16px",
   chip_gap: "2px",
   chip_width_factor: "1.7",
+  divider_width: "1px",
   now_line_height: "1px",
   now_dot_size: "12px",
   mini_cal_cell: "32px",

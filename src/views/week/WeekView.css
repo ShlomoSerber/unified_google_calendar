@@ -1,296 +1,110 @@
-/* Measured rules live in src/styles/measured.css (.week-*, .week-header-*, .allday-*, .chip-*).
-   This file adds what a computed-style dump cannot express: the hour lines Google draws with
-   ::after, auto margins that the dump resolved to used values, the dynamic calendar colour of
-   each chip, and flex sizing of the fluid nodes. */
-
-.week-root {
+/* Week and day views (docs/11 section 7): gutter of 72 px (104 with a second zone), 48 px
+   hours, outline-variant hairlines, error-coloured now line in today's column. */
+.week {
+  display: flex;
+  flex-direction: column;
   flex: 1;
   min-height: 0;
 }
 
-.week-top-right,
-.week-body,
-.week-scroller,
-.allday-pres {
+.week-fixed,
+.week-grid {
+  display: grid;
+  grid-template-columns: var(--ugc-layout-gutter-width) minmax(0, 1fr);
+}
+
+.week[data-zones='2'] .week-fixed,
+.week[data-zones='2'] .week-grid {
+  grid-template-columns: var(--ugc-layout-gutter-width-two-zones) minmax(0, 1fr);
+}
+
+/* The scrolling grid: the hour gutter and then one column per day, all equal. */
+.week-grid {
+  grid-template-columns: var(--ugc-layout-gutter-width) repeat(auto-fit, minmax(0, 1fr));
+}
+
+.week[data-zones='2'] .week-grid {
+  grid-template-columns: var(--ugc-layout-gutter-width-two-zones) repeat(auto-fit, minmax(0, 1fr));
+}
+
+/* Top block: tz labels | day headers, then an empty gutter cell | the all-day row. */
+.week-fixed {
+  flex: none;
+  position: relative;
+  z-index: 1;
+  grid-template-rows: auto auto;
+  background: var(--md-sys-color-surface);
+}
+
+.week-fixed[data-scrolled='true'] {
+  box-shadow: var(--md-sys-elevation-level1);
+}
+
+.week-tz {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: var(--ugc-space-2);
+  padding: 0 var(--ugc-space-2) var(--ugc-space-2) 0;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.week-scroll {
   flex: 1;
-  min-width: 0;
-}
-
-.week-body {
   min-height: 0;
+  overflow: hidden auto;
+  position: relative;
 }
 
-.week-body-inner {
-  flex: 1;
-  min-height: 0;
+.week-grid {
+  height: calc(var(--ugc-layout-hour-row-height) * 24);
 }
 
-/* Component 20: Google's grid scrollbar is an overlay bar (tokens.json component.scrollbar_note);
-   WebKitGTK draws GTK's overlay scrollbar when the element is left unstyled. The hour gutter
-   scrolls in sync with the grid and never shows a bar. */
-.week-gutter {
-  scrollbar-width: none;
+/* Gutter: each hour cell prints its label centred on the line above it. */
+.week-hour {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--ugc-space-2);
+  height: var(--ugc-layout-hour-row-height);
+  padding-right: var(--ugc-space-2);
+  transform: translateY(-50%);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
-.week-gutter::-webkit-scrollbar {
-  display: none;
+.week-column {
+  position: relative;
+  border-left: var(--ugc-layout-divider-width) solid var(--md-sys-color-outline-variant);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(var(--ugc-layout-hour-row-height) - var(--ugc-layout-divider-width)),
+    var(--md-sys-color-outline-variant) calc(var(--ugc-layout-hour-row-height) - var(--ugc-layout-divider-width)),
+    var(--md-sys-color-outline-variant) var(--ugc-layout-hour-row-height)
+  );
 }
 
-/* Hour lines: each hour cell draws one line across the row with ::after
-   (probed on calendar.google.com: content "", absolute, left 0, right 0, z-index 3,
-   border-bottom equal to the row's top border). */
-.week-line::after {
-  content: '';
+.week-now {
   position: absolute;
   left: 0;
   right: 0;
-  margin-top: var(--week-line-after-margin-top);
-  border-bottom: var(--week-lines-border-top);
-  z-index: 3;
-}
-
-/* Shadow under the header block and the fades at both ends (probed pseudo-elements, see
-   docs/design/tokens.json component.week.body_inner_before_note). */
-.week-body-inner:not([data-scrolled='true'])::before {
-  display: none;
-}
-
-.week-body-inner::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: var(--week-body-inner-before-left);
-  right: var(--week-body-inner-before-right);
-  height: var(--week-body-inner-before-height);
-  box-shadow: var(--week-body-inner-before-box-shadow);
-  z-index: var(--week-body-inner-before-z-index);
+  z-index: 2;
+  height: var(--ugc-layout-now-line-height);
+  background: var(--md-sys-color-error);
   pointer-events: none;
 }
 
-/* Google fades the ends of the top hour line under the gutter and the scrollbar with these two
-   white gradients; the user wants the line plain (docs/99, 2026-09-15). */
-.week-gutter::before,
-.week-body-inner::after {
-  display: none;
+.week-now::before {
   content: '';
   position: absolute;
-  top: 0;
-  height: var(--week-gutter-before-height);
-  width: var(--week-gutter-before-width);
-  z-index: var(--week-body-inner-before-z-index);
-  pointer-events: none;
-}
-
-.week-gutter::before {
-  left: 0;
-  background-image: var(--week-gutter-before-background-image);
-}
-
-.week-body-inner::after {
-  right: var(--week-body-inner-after-right);
-  background-image: var(--week-body-inner-after-background-image);
-}
-
-.week-header-col,
-.week-header-col-today,
-.week-daycol,
-.week-allday-overlay-col,
-.allday-cell,
-.allday-cell-empty,
-.allday-li {
-  flex: 1 1 0;
-  min-width: 0;
-}
-
-.week-header-h2,
-.week-header-h2-today,
-.allday-cells {
-  flex: 1;
-  min-width: 0;
-}
-
-.week-header-h2,
-.week-header-h2-today,
-.week-daycol-sr,
-.allday-cell-sr,
-.allday-cell-empty-sr {
-  margin: 0;
-}
-
-/* The day number disc is centred with auto margins; the dump recorded their used values. */
-.week-header-daybtn,
-.week-header-daybtn-today {
-  margin-left: auto;
-  margin-right: auto;
-  cursor: pointer;
-}
-
-.week-header-dow,
-.week-header-dow-today {
-  text-align: center;
-}
-
-.week-gutter-label {
-  display: block;
-}
-
-.week-allday-overlay-cols,
-.allday-ul,
-.allday-cells {
-  width: 100%;
-}
-
-.allday-ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.allday-chip,
-.chip-root,
-.chip-short-root,
-.chip-tiny-root {
-  cursor: pointer;
-}
-
-/* Stacked chips (column 1+ of a cluster) sit above the previous column and carry an outline
-   in the surface colour (probed ::after, docs/design/tokens.json component.chip.stacked_after_note). */
-.chip-root {
-  z-index: calc(var(--chip-root-z-index) + var(--data-column, 0));
-}
-
-.chip-stacked::after {
-  content: '';
-  position: absolute;
-  left: var(--chip-stacked-after-left);
-  top: var(--chip-stacked-after-top);
-  right: var(--chip-stacked-after-left);
-  bottom: var(--chip-stacked-after-top);
-  border: var(--chip-stacked-after-border-top);
-  border-radius: var(--chip-stacked-after-border-radius);
-  pointer-events: none;
-}
-
-/* Every chip takes its calendar's colour (ViewOccurrence.color_bg via --data-chip-bg); the
-   measured chip carried the fixtures calendar's green. Declined chips invert it. */
-.allday-chip,
-.chip-root:not(.chip-declined-root),
-.chip-short-root,
-.chip-tiny-root {
-  background-color: var(--data-chip-bg);
-}
-
-.chip-declined-body,
-.chip-declined-title-box,
-.chip-declined-title,
-.chip-declined-time {
-  color: var(--data-chip-bg);
-}
-
-.chip-body,
-.chip-short-body,
-.chip-tiny-body,
-.chip-mid-body,
-.chip-short-inner,
-.chip-tiny-inner {
-  width: auto;
-}
-
-.chip-inner,
-.chip-mid-inner,
-.chip-loc-inner {
-  flex: 1;
-  min-width: 0;
-  width: auto;
-}
-
-.chip-mid-title-box {
-  width: auto;
-}
-
-.chip-short-line,
-.chip-tiny-line {
-  width: auto;
-  min-width: 0;
+  left: calc(-1 * var(--ugc-layout-now-dot-size) / 2);
+  top: calc(-1 * (var(--ugc-layout-now-dot-size) - var(--ugc-layout-now-line-height)) / 2);
+  width: var(--ugc-layout-now-dot-size);
+  height: var(--ugc-layout-now-dot-size);
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--md-sys-color-error);
 }
 
 .week-error {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: var(--chip-body-padding-left);
-  background: var(--color-surface);
-  color: var(--color-on-surface);
-}
-
-/* Day view: the measured header shows today; another day takes the week header's plain colours. */
-.day-header-dow-other {
-  color: var(--week-header-dow-color);
-}
-
-.day-header-daynum-other {
-  color: var(--week-header-daynum-color);
-  background-color: transparent;
-}
-
-/* Google's main box is absolute; it fills the area left of the 16px gaps (layout.main_gap_*). */
-.day-main {
-  inset: 0 var(--layout-main-gap-right) var(--layout-main-gap-bottom) 0;
-  margin: 0;
-}
-
-.day-main-box {
-  inset: 0;
-}
-
-.day-main-sr {
-  margin: 0;
-}
-
-.week-root {
-  height: 100%;
-}
-
-/* The day view grid has no left padding (day_view-light.json node 4); its measured rule cannot
-   say so because the dump omits values equal to a div's default. */
-.day-root {
-  padding-left: 0;
-}
-
-/* Google hides these scrollers' bars with ::-webkit-scrollbar rules that WebKitGTK does not
-   honour (measurements/scrollbars.md); their overlay thumb showed as a stray grey bar under the
-   time-zone labels, painted even over open menus. They only scroll programmatically. */
-.week-header-pres,
-.week-allday-overlay-inner,
-.week-allday-row,
-.allday-root,
-.day-header-pres,
-.day-allday-overlay-inner,
-.day-allday-root {
-  overflow-x: hidden;
-}
-
-.week-gutter,
-.day-gutter {
-  overflow-y: hidden;
-}
-
-/* The measured now line has no horizontal extent in the dump (Google sets it in a rule the dump
-   did not export); it spans today's column, thinner than Google's by the user's choice
-   (tokens.json component.now_line_thin). */
-.week-now-line {
-  left: 0;
-  right: 0;
-  border-top-width: var(--now-line-thin-border-width);
-  pointer-events: none;
-}
-
-/* The hour gutter's measured height is the grid's visible height at the reference window; in a
-   shorter window it kept scrolling past the grid and the last hours never lined up (user
-   report, 2026-09-15). It stretches with the scroller instead. */
-.week-gutter,
-.day-gutter {
-  height: auto;
-  align-self: stretch;
+  padding: var(--ugc-space-4);
+  color: var(--md-sys-color-error);
 }

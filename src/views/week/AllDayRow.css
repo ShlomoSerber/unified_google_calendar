@@ -1,0 +1,35 @@
+/* All-day row (docs/11 section 7): cells with column borders, chips of 24 px laid over them. */
+.all-day-row {
+  position: relative;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  min-height: var(--ugc-layout-allday-row-min-height);
+  border-bottom: var(--ugc-layout-divider-width) solid var(--md-sys-color-outline-variant);
+}
+
+.all-day-cell {
+  border-left: var(--ugc-layout-divider-width) solid var(--md-sys-color-outline-variant);
+}
+
+.all-day-chip {
+  position: absolute;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  height: var(--ugc-layout-allday-chip-height);
+  padding: 0 var(--ugc-layout-chip-padding-x);
+  border-left: var(--ugc-layout-chip-border) solid var(--data-chip-color);
+  border-radius: var(--ugc-layout-chip-radius);
+  background: var(--data-chip-container);
+  color: var(--data-chip-on-container);
+  overflow: hidden;
+  cursor: pointer;
+  --md-focus-ring-shape: var(--ugc-layout-chip-radius);
+}
+
+.all-day-chip-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

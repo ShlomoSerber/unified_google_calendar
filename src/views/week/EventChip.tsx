@@ -1,27 +1,17 @@
-import type { CSSProperties } from 'react';
+import type { CSSProperties, MouseEvent } from 'react';
 import { hhmm } from '../../lib/dates';
-import { chipBackground, useTheme } from '../../lib/colors';
+import { chipColors, useTheme } from '../../lib/colors';
 import { useUi } from '../../state/ui';
-import { EVENT_COLOR_NAMES } from '../../styles/legacy-palette';
+import { EVENT_COLOR_NAMES } from '../../styles/palette';
 import type { ViewOccurrence } from '../../types/ipc';
+import './EventChip.css';
 
-// Component 10 of docs/04 section 4. Google renders three shapes by chip height
-// (docs/design/measurements/event_chip-{fifteen,thirty,forty_five}-light.json): a single
-// line "Title, HH:MM" at 11px (tiny) or 12px (short), and title + time lines from 45 min.
-// Classes mirror the dump nodes (chip-* for 60 min, chip-tiny-*, chip-short-*, chip-mid-* for 15, 30, 45).
+// A timed event in a day column (docs/11 section 7): tonal chip with the calendar's colour on
+// the left border, title (label-medium) and time (body-small); with 30 minutes or less only the
+// title. Declined events are struck through on a half-opacity container; tentative ones get a
+// dashed border. Chips stacked over another (column > 0) rise with a level-1 shadow.
 
-export type ChipShape = 'tiny' | 'short' | 'mid' | 'long';
-
-/** Rendered height in px → shape. Measured heights: 13 (15 min), 28 (30 min), 43 (45 min), 58 (60 min);
- *  the switch points between them are not observable and sit halfway. */
-export function chipShape(heightPx: number): ChipShape {
-  if (heightPx < 15) return 'tiny';
-  if (heightPx < 34) return 'short';
-  if (heightPx < 51) return 'mid';
-  return 'long';
-}
-
-/** "10:00 to 11:00, Title, Calendar: X, No location, September 19, 2026" (Google's hidden description). */
+/** "10:00 to 11:00, Title, Calendar: X, No location, September 19, 2026" (the chip's accessible description). */
 export function chipDescription(o: ViewOccurrence, tz: string, calendarName: string, dateLabel: string): string {
   const title = o.title ?? '(No title)';
   const loc = o.location ? `Location: ${o.location}` : 'No location';
@@ -30,12 +20,18 @@ export function chipDescription(o: ViewOccurrence, tz: string, calendarName: str
   return `${hhmm(o.start, tz)} to ${hhmm(o.end, tz)}, ${title}, Calendar: ${calendarName}, ${loc}${color}, ${dateLabel}`;
 }
 
+/** Inline style with the chip's colour roles as --data-chip-* (docs/11 section 6). */
+export function chipStyle(hex: string, theme: 'light' | 'dark'): CSSProperties {
+  const c = chipColors(hex, theme);
+  return { '--data-chip-color': c.color, '--data-chip-container': c.container, '--data-chip-on-container': c.onContainer } as CSSProperties;
+}
+
 export interface EventChipProps {
   occurrence: ViewOccurrence;
   /** Column geometry inside the chips layer, fractions of its width. */
   left: number;
   width: number;
-  /** Column index in the overlap cluster: stacked chips (1+) get the outline and a higher z-index. */
+  /** Column index in the overlap cluster: stacked chips (1+) rise over the ones to their left. */
   column: number;
   /** Minutes from the top of the day column and rendered minutes. */
   topMinutes: number;
@@ -47,83 +43,26 @@ export interface EventChipProps {
 export function EventChip({ occurrence: o, left, width, column, topMinutes, minutes, calendarName, dateLabel }: EventChipProps) {
   const tz = useUi((s) => s.tz);
   const theme = useTheme();
-  const heightPx = minutes - 2; // measured: minutes − chip_height_gap at 60px per hour
-  const shape = chipShape(heightPx);
-  const state = o.my_response === 'declined' ? 'declined' : o.my_response === 'tentative' ? 'tentative' : null;
   const title = o.title ?? '(No title)';
-  const style = {
-    '--data-chip-bg': chipBackground(o.color_bg, theme),
-    '--data-column': column,
-    left: `${left * 100}%`,
-    width: `${width * 100}%`,
-    top: `calc(var(--layout-hour-row-height) * ${topMinutes / 60} - var(--chip-root-margin-top))`,
-    height: `calc(var(--layout-hour-row-height) * ${minutes / 60} - var(--layout-chip-height-gap))`,
-  } as CSSProperties;
-  const open = (e: React.MouseEvent<HTMLDivElement>) => {
+  const state = o.my_response === 'declined' ? ' event-chip-declined' : o.my_response === 'tentative' ? ' event-chip-tentative' : '';
+  const style: CSSProperties = {
+    ...chipStyle(o.color_bg, theme),
+    left: `calc(${left * 100}% + var(--ugc-layout-chip-gap))`,
+    width: `calc(${width * 100}% - var(--ugc-layout-chip-gap) * 2)`,
+    top: `calc(var(--ugc-layout-hour-row-height) * ${topMinutes / 60})`,
+    height: `calc(var(--ugc-layout-hour-row-height) * ${minutes / 60} - var(--ugc-layout-chip-gap))`,
+  };
+  const open = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     useUi.getState().openDialog({ kind: 'event', occurrenceId: o.id, anchor: e.currentTarget.getBoundingClientRect() });
   };
-  const stacked = column > 0 ? ' chip-stacked' : '';
-  const cls = (base: string) => `${base}${state ? ` chip-${state}-${base.slice(5)}` : ''}${base === 'chip-root' ? stacked : ''}`;
-  const sr = <div className="chip-sr">{chipDescription(o, tz, calendarName, dateLabel)}</div>;
-  const resize = <div className={shape === 'long' ? 'chip-resize' : `chip-${shape}-resize`}></div>;
-
-  if (shape === 'tiny' || shape === 'short') {
-    const p = `chip-${shape}`;
-    return (
-      <div className={cls('chip-root') + ` ${p}-root`} role="button" tabIndex={0} data-title={title} style={style} onClick={open}>
-        {sr}
-        <div className={`${p}-body`}>
-          <div className={`${p}-inner`}>
-            <div className={`${p}-line`}>
-              <span className={`${p}-span`}>
-                <span className={`${p}-title`}>{title}</span>
-                <span className={`${p}-comma`}>{',\u00a0'}</span>
-                <span className={`${p}-time`}>{hhmm(o.start, tz)}</span>
-              </span>
-            </div>
-          </div>
-        </div>
-        {resize}
-      </div>
-    );
-  }
-  if (shape === 'mid') {
-    return (
-      <div className={cls('chip-root') + ' chip-mid-root'} role="button" tabIndex={0} data-title={title} style={style} onClick={open}>
-        {sr}
-        <div className={cls('chip-body') + ' chip-mid-body'}>
-          <div className="chip-mid-inner">
-            <div className={cls('chip-title-box') + ' chip-mid-title-box'}>
-              <span className="chip-mid-title-span">
-                <span className={cls('chip-title') + ' chip-mid-title'}>{title}</span>
-              </span>
-            </div>
-            <div className={cls('chip-time') + ' chip-mid-time'}>{`${hhmm(o.start, tz)} – ${hhmm(o.end, tz)}`}</div>
-          </div>
-        </div>
-        {resize}
-      </div>
-    );
-  }
-  // With a location Google keeps the title on one line and adds it as a third line
-  // (docs/design/measurements/event_chip-with_location-light.json: chip-loc-* nodes).
-  const loc = o.location ? ' chip-loc' : '';
+  const cls = `event-chip${minutes <= 30 ? ' event-chip-short' : ''}${column > 0 ? ' event-chip-stacked' : ''}${state}`;
   return (
-    <div className={cls('chip-root')} role="button" tabIndex={0} data-title={title} style={style} onClick={open}>
-      {sr}
-      <div className={cls('chip-body') + (loc && `${loc}-body`)}>
-        <div className={`chip-inner${loc && `${loc}-inner`}`}>
-          <div className={cls('chip-title-box') + (loc && `${loc}-title-box`)}>
-            <span className={`chip-title-span${loc && `${loc}-title-span`}`}>
-              <span className={cls('chip-title') + (loc && `${loc}-title`)}>{title}</span>
-            </span>
-          </div>
-          <div className={cls('chip-time')}>{`${hhmm(o.start, tz)} – ${hhmm(o.end, tz)}`}</div>
-          <div className={`chip-extra${loc && `${loc}-extra`}`}>{o.location ?? ''}</div>
-        </div>
-      </div>
-      {resize}
+    <div className={cls} role="button" tabIndex={0} aria-label={chipDescription(o, tz, calendarName, dateLabel)} style={style} onClick={open}>
+      <md-ripple></md-ripple>
+      <md-focus-ring></md-focus-ring>
+      <div className="event-chip-title md-typescale-label-medium">{title}</div>
+      <div className="event-chip-time md-typescale-body-small">{`${hhmm(o.start, tz)} – ${hhmm(o.end, tz)}`}</div>
     </div>
   );
 }

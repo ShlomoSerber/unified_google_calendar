@@ -15,7 +15,8 @@ describe('App', () => {
     // <md-*> elements are inert in jsdom (vitest.setup.ts): the Today button is found by its label.
     expect(container.querySelector('md-outlined-button[aria-label^="Today, "]')).toBeTruthy();
     expect(container.querySelectorAll('md-menu-item')).toHaveLength(5); // view menu
-    expect(screen.getByRole('grid', { name: /\d{4}$/ })).toBeTruthy(); // mini calendar
+    expect(screen.getByRole('grid', { name: /^[A-Z][a-z]+ \d{4}$/ })).toBeTruthy(); // mini calendar
+    expect(within(screen.getByRole('main')).getByRole('grid', { name: /^Week of / })).toBeTruthy();
     expect(screen.getByRole('main')).toBeTruthy(); // the view's own main box
     expect(within(screen.getByRole('main')).getAllByRole('columnheader')).toHaveLength(7); // week header
   });

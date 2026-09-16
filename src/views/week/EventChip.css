@@ -1,0 +1,49 @@
+/* Timed chip (docs/11 section 7): container and text from the calendar's custom colour
+   (--data-chip-*, set inline), 3 px left border in the colour, small corner. */
+.event-chip {
+  position: absolute;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-height: var(--ugc-layout-chip-min-height);
+  padding: var(--ugc-layout-chip-padding-y) var(--ugc-layout-chip-padding-x);
+  border-left: var(--ugc-layout-chip-border) solid var(--data-chip-color);
+  border-radius: var(--ugc-layout-chip-radius);
+  background: var(--data-chip-container);
+  color: var(--data-chip-on-container);
+  overflow: hidden;
+  cursor: pointer;
+  --md-focus-ring-shape: var(--ugc-layout-chip-radius);
+}
+
+.event-chip-title,
+.event-chip-time {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-chip-short {
+  justify-content: center;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.event-chip-short .event-chip-time {
+  display: none;
+}
+
+.event-chip-stacked {
+  z-index: 1;
+  box-shadow: var(--md-sys-elevation-level1);
+}
+
+.event-chip-declined {
+  background: color-mix(in srgb, var(--data-chip-container) 50%, transparent);
+  text-decoration: line-through;
+}
+
+.event-chip-tentative {
+  border-left-style: dashed;
+}

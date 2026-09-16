@@ -1,0 +1,42 @@
+/* Day headers (docs/11 section 7): 72 px tall, name over a 40 px circle. */
+.week-header {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  height: var(--ugc-layout-day-header-height);
+}
+
+.week-header-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ugc-space-1);
+  padding-top: var(--ugc-space-2);
+  border-left: var(--ugc-layout-divider-width) solid var(--md-sys-color-outline-variant);
+}
+
+.week-header-name {
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.week-header-number {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--ugc-layout-day-number-size);
+  height: var(--ugc-layout-day-number-size);
+  border-radius: var(--md-sys-shape-corner-full);
+  color: var(--md-sys-color-on-surface);
+  --md-focus-ring-shape: var(--md-sys-shape-corner-full);
+}
+
+.week-header-today .week-header-name {
+  color: var(--md-sys-color-primary);
+}
+
+.week-header-today .week-header-number {
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  --md-ripple-hover-color: var(--md-sys-color-on-primary);
+  --md-ripple-pressed-color: var(--md-sys-color-on-primary);
+}
