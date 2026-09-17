@@ -2,7 +2,8 @@ import { dayStart } from '../lib/dates';
 import { useUi } from '../state/ui';
 import './CreateButton.css';
 
-// Extended FAB of the drawer (docs/11 section 7). Only events exist in version 1, so it reads
+// Primary button of the drawer (docs/11 section 7; docs/99, 2026-09-17: the app has one primary
+// button, one text button and one icon button). Only events exist in version 1, so it reads
 // "Create event" and opens the full form directly (docs/99, 2026-09-15).
 export function CreateButton() {
   const createEvent = () => {
@@ -13,8 +14,9 @@ export function CreateButton() {
     useUi.getState().openDialog({ kind: 'full-form', occurrenceId: null, startTs: start, endTs: start + 3600, allDay: false });
   };
   return (
-    <md-fab className="create-fab" variant="primary" label="Create event" lowered onclick={createEvent}>
+    <md-filled-button className="create-button" onclick={createEvent}>
       <md-icon slot="icon">add</md-icon>
-    </md-fab>
+      Create event
+    </md-filled-button>
   );
 }

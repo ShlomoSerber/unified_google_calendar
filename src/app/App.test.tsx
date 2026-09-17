@@ -13,7 +13,7 @@ describe('App', () => {
     expect(screen.getByRole('banner')).toBeTruthy();
     expect(container.querySelector('.topbar-range')?.textContent).toMatch(/\d{4}$/); // range title
     // <md-*> elements are inert in jsdom (vitest.setup.ts): the Today button is found by its label.
-    expect(container.querySelector('md-outlined-button[aria-label^="Today, "]')).toBeTruthy();
+    expect(container.querySelector('md-text-button[aria-label^="Today, "]')).toBeTruthy();
     expect(container.querySelectorAll('md-menu-item')).toHaveLength(5); // view menu
     expect(screen.getByRole('grid', { name: /^[A-Z][a-z]+ \d{4}$/ })).toBeTruthy(); // mini calendar
     expect(within(screen.getByRole('main')).getByRole('grid', { name: /^Week of / })).toBeTruthy();

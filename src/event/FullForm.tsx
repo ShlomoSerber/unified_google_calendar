@@ -291,9 +291,10 @@ export function FullForm({ occurrenceId, startTs: initialStart, endTs: initialEn
           </div>
         ) : (
           <div>
-            <md-assist-chip label="Add Google Meet" onclick={() => setAddMeet(true)}>
+            <md-text-button onclick={() => setAddMeet(true)}>
               <md-icon slot="icon">videocam</md-icon>
-            </md-assist-chip>
+              Add Google Meet
+            </md-text-button>
           </div>
         )}
         <md-outlined-text-field label="Location" value={location} oninput={(e) => setLocation(fieldValue(e))}>

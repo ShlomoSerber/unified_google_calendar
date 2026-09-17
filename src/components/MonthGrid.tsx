@@ -1,11 +1,12 @@
 import { format } from 'date-fns';
 import { inZone, isSameDay, monthGrid } from '../lib/dates';
+import { DayNumber } from './DayNumber';
 import './MonthGrid.css';
 
 // A month as seven columns of day buttons (docs/11 section 7): the mini calendar of the drawer,
 // the date picker popover and, in `compact` size, the twelve cards of the year view. Today is
 // primary on on-primary; the selected range is primary-container; days of another month are
-// on-surface-variant. Each day carries md-ripple and md-focus-ring.
+// on-surface-variant. Each day is a `DayNumber`.
 
 const DOW = [
   ['M', 'Monday'],
@@ -56,14 +57,11 @@ export function MonthGrid({ monthTs, tz, todayTs, selected, size, onPick }: Mont
             const today = isSameDay(ts, todayTs, tz);
             const inRange = !today && selected !== undefined && ts >= selected.from && ts < selected.to;
             const other = d.getMonth() !== month;
-            const cls = `month-grid-day md-typescale-label-medium${today ? ' month-grid-today' : inRange ? ' month-grid-selected' : other ? ' month-grid-other' : ''}`;
             return (
               <div className="month-grid-cell" role="gridcell" key={ts}>
-                <button className={cls} aria-label={dayAria(ts, monthTs, todayTs, tz)} type="button" onClick={() => onPick(ts)}>
-                  <md-ripple></md-ripple>
-                  <md-focus-ring></md-focus-ring>
+                <DayNumber size={size === 'compact' ? 'year' : 'mini'} typescale="md-typescale-label-medium" label={dayAria(ts, monthTs, todayTs, tz)} today={today} selected={inRange} muted={other} onClick={() => onPick(ts)}>
                   {d.getDate()}
-                </button>
+                </DayNumber>
               </div>
             );
           })}

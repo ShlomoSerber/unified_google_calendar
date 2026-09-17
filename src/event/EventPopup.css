@@ -99,13 +99,15 @@
   gap: var(--ugc-space-3);
 }
 
-.event-popup-location {
-  position: relative;
-  padding: var(--ugc-space-1) var(--ugc-space-2);
-  margin-left: calc(-1 * var(--ugc-space-2));
-  border-radius: var(--md-sys-shape-corner-small);
-  cursor: pointer;
-  --md-focus-ring-shape: var(--md-sys-shape-corner-small);
+.event-popup-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ugc-space-2);
+}
+
+/* Text buttons under a text row line up with the text, not with their own padding. */
+.event-popup-block md-text-button:first-child {
+  margin-left: calc(-1 * var(--ugc-space-3));
 }
 
 .event-popup-description {

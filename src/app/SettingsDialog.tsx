@@ -127,13 +127,14 @@ export function SettingsDialog() {
                 })}
               </md-list>
               <div className="settings-actions">
-                <md-filled-tonal-button disabled={busy || !form.oauth_configured} title={form.oauth_configured ? undefined : OAUTH_HINT} onclick={addGoogle}>
+                <md-text-button disabled={busy || !form.oauth_configured} title={form.oauth_configured ? undefined : OAUTH_HINT} onclick={addGoogle}>
+                  <md-icon slot="icon">add</md-icon>
                   Add Google account
-                </md-filled-tonal-button>
-                <md-outlined-button disabled={busy} onclick={() => void run('Syncing…', async () => ipc.syncNow().then(() => 'Sync requested.'))}>
+                </md-text-button>
+                <md-text-button disabled={busy} onclick={() => void run('Syncing…', async () => ipc.syncNow().then(() => 'Sync requested.'))}>
                   <md-icon slot="icon">sync</md-icon>
                   Sync now
-                </md-outlined-button>
+                </md-text-button>
               </div>
             </section>
             <section className="settings-section">
@@ -142,9 +143,9 @@ export function SettingsDialog() {
               <md-outlined-text-field label="Secret iCal address" placeholder="https://…/basic.ics" value={icalUrl} oninput={(e) => setIcalUrl(fieldValue(e))}></md-outlined-text-field>
               <md-outlined-text-field label="Your e-mail in that calendar (optional)" value={icalEmail} oninput={(e) => setIcalEmail(fieldValue(e))}></md-outlined-text-field>
               <div className="settings-actions">
-                <md-filled-tonal-button disabled={busy || !icalName || !icalUrl} onclick={addIcal}>
+                <md-text-button disabled={busy || !icalName || !icalUrl} onclick={addIcal}>
                   Add
-                </md-filled-tonal-button>
+                </md-text-button>
               </div>
             </section>
             <section className="settings-section">
@@ -186,9 +187,9 @@ export function SettingsDialog() {
               <h3 className="settings-heading md-typescale-title-medium">Push notifications (Tailscale Funnel)</h3>
               <div className="settings-actions">
                 <md-outlined-text-field className="settings-grow" label="Public URL of this machine" placeholder="https://…ts.net" supporting-text="Leave empty to poll every 60 seconds" value={form.public_base_url ?? ''} oninput={(e) => setDraft({ ...form, public_base_url: fieldValue(e) || null })}></md-outlined-text-field>
-                <md-outlined-button disabled={busy || !form.public_base_url} onclick={testPush}>
+                <md-text-button disabled={busy || !form.public_base_url} onclick={testPush}>
                   Test
-                </md-outlined-button>
+                </md-text-button>
               </div>
               <p className="settings-note md-typescale-body-small">
                 {form.push_enabled ? 'Push is on.' : 'Push is off: the app polls every 60 seconds.'}
@@ -201,9 +202,9 @@ export function SettingsDialog() {
                 <>
                   <p className="settings-note md-typescale-body-small">{`GNOME's calendar panel also shows ${goa.accounts.length} Google account${goa.accounts.length === 1 ? '' : 's'}: ${goa.accounts.map((a) => `${a.identity}${a.calendar_disabled ? ' (Calendar off)' : ''}`).join(', ')}.`}</p>
                   <div className="settings-actions">
-                    <md-outlined-button disabled={busy || goa.accounts.every((a) => a.calendar_disabled)} onclick={() => goaToggle(true)}>
+                    <md-text-button disabled={busy || goa.accounts.every((a) => a.calendar_disabled)} onclick={() => goaToggle(true)}>
                       Turn off their Calendar
-                    </md-outlined-button>
+                    </md-text-button>
                   </div>
                 </>
               ) : (

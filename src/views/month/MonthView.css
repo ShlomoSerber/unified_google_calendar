@@ -46,28 +46,7 @@
 }
 
 .month-view-number {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: var(--ugc-layout-month-number-size);
-  height: var(--ugc-layout-month-number-size);
   margin: calc((var(--ugc-layout-month-cell-header-height) - var(--ugc-layout-month-number-size)) / 2) auto 0;
-  padding: 0 var(--ugc-space-1);
-  border-radius: var(--md-sys-shape-corner-full);
-  color: var(--md-sys-color-on-surface);
-  --md-focus-ring-shape: var(--md-sys-shape-corner-full);
-}
-
-.month-view-other {
-  color: var(--md-sys-color-on-surface-variant);
-}
-
-.month-view-today {
-  background: var(--md-sys-color-primary);
-  color: var(--md-sys-color-on-primary);
-  --md-ripple-hover-color: var(--md-sys-color-on-primary);
-  --md-ripple-pressed-color: var(--md-sys-color-on-primary);
 }
 
 .month-view-chip,
@@ -81,7 +60,7 @@
   gap: var(--ugc-space-1);
   height: var(--ugc-layout-month-chip-height);
   padding: 0 var(--ugc-space-1) 0 var(--ugc-space-2);
-  border-radius: var(--ugc-layout-chip-radius);
+  border-radius: var(--md-sys-shape-corner-full);
   overflow: hidden;
   cursor: pointer;
   z-index: 1;

@@ -209,9 +209,10 @@ export function EventPopup({ occurrenceId, anchor, exiting = false }: EventPopup
             <md-icon>videocam</md-icon>
             <div className="event-popup-block">
               <div className="event-popup-inline">
-                <md-assist-chip label={`Join with ${d.conference_label ?? 'Google Meet'}`} onclick={openUrl(d.meet_link)}>
+                <md-text-button onclick={openUrl(d.meet_link)}>
                   <md-icon slot="icon">videocam</md-icon>
-                </md-assist-chip>
+                  {`Join with ${d.conference_label ?? 'Google Meet'}`}
+                </md-text-button>
                 <Tooltip text="Copy conference info">
                   <md-icon-button aria-label="Copy conference info" onclick={() => navigator.clipboard?.writeText(d.meet_link ?? '').catch(() => undefined)}>
                     <md-icon>content_copy</md-icon>
@@ -221,17 +222,19 @@ export function EventPopup({ occurrenceId, anchor, exiting = false }: EventPopup
               <div className="event-popup-muted md-typescale-body-small">{meetCode}</div>
               {d.conference_phone ? (
                 <div className="event-popup-phone">
-                  <md-text-button onclick={openUrl(d.conference_phone.uri)}>
-                    <md-icon slot="icon">call</md-icon>
-                    Join by phone
-                  </md-text-button>
-                  <span className="event-popup-muted md-typescale-body-small">{`‪${d.conference_phone.label}‬${d.conference_phone.pin ? ` PIN: ‪${d.conference_phone.pin}‬#` : ''}`}</span>
-                  {d.conference_phone.more_url ? (
-                    <md-text-button onclick={openUrl(d.conference_phone.more_url)}>
-                      <md-icon slot="icon">open_in_new</md-icon>
-                      More phone numbers
+                  <div className="event-popup-chips">
+                    <md-text-button onclick={openUrl(d.conference_phone.uri)}>
+                      <md-icon slot="icon">call</md-icon>
+                      Join by phone
                     </md-text-button>
-                  ) : null}
+                    {d.conference_phone.more_url ? (
+                      <md-text-button onclick={openUrl(d.conference_phone.more_url)}>
+                        <md-icon slot="icon">open_in_new</md-icon>
+                        More phone numbers
+                      </md-text-button>
+                    ) : null}
+                  </div>
+                  <span className="event-popup-muted md-typescale-body-small">{`‪${d.conference_phone.label}‬${d.conference_phone.pin ? ` PIN: ‪${d.conference_phone.pin}‬#` : ''}`}</span>
                 </div>
               ) : null}
             </div>
@@ -273,10 +276,14 @@ export function EventPopup({ occurrenceId, anchor, exiting = false }: EventPopup
         {d.location ? (
           <>
             <md-icon>place</md-icon>
-            <div className="event-popup-location md-typescale-body-medium" role="button" tabIndex={0} aria-label={`Open ${d.location} in Maps`} onClick={openMaps}>
-              <md-ripple></md-ripple>
-              <md-focus-ring></md-focus-ring>
-              {d.location}
+            <div className="event-popup-block">
+              <div className="md-typescale-body-medium">{d.location}</div>
+              <div>
+                <md-text-button aria-label={`Open ${d.location} in Maps`} onclick={openMaps}>
+                  <md-icon slot="icon">open_in_new</md-icon>
+                  Open in Maps
+                </md-text-button>
+              </div>
             </div>
           </>
         ) : null}

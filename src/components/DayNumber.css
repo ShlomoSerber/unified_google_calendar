@@ -1,0 +1,47 @@
+/* Circular day button shared by every view (docs/11 section 7). */
+.day-number {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--ugc-space-1);
+  border-radius: var(--md-sys-shape-corner-full);
+  color: var(--md-sys-color-on-surface);
+  --md-focus-ring-shape: var(--md-sys-shape-corner-full);
+}
+
+.day-number[data-size='day'] {
+  min-width: var(--ugc-layout-day-number-size);
+  height: var(--ugc-layout-day-number-size);
+}
+
+.day-number[data-size='mini'] {
+  min-width: var(--ugc-layout-mini-cal-cell);
+  height: var(--ugc-layout-mini-cal-cell);
+}
+
+.day-number[data-size='year'] {
+  min-width: var(--ugc-layout-year-cell-size);
+  height: var(--ugc-layout-year-cell-size);
+}
+
+.day-number[data-size='month'] {
+  min-width: var(--ugc-layout-month-number-size);
+  height: var(--ugc-layout-month-number-size);
+}
+
+.day-number-muted {
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.day-number-selected {
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+}
+
+.day-number-today {
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  --md-ripple-hover-color: var(--md-sys-color-on-primary);
+  --md-ripple-pressed-color: var(--md-sys-color-on-primary);
+}

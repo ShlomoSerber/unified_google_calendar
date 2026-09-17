@@ -19,24 +19,6 @@
   color: var(--md-sys-color-on-surface-variant);
 }
 
-.week-header-number {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: var(--ugc-layout-day-number-size);
-  height: var(--ugc-layout-day-number-size);
-  border-radius: var(--md-sys-shape-corner-full);
-  color: var(--md-sys-color-on-surface);
-  --md-focus-ring-shape: var(--md-sys-shape-corner-full);
-}
-
 .week-header-today .week-header-name {
   color: var(--md-sys-color-primary);
-}
-
-.week-header-today .week-header-number {
-  background: var(--md-sys-color-primary);
-  color: var(--md-sys-color-on-primary);
-  --md-ripple-hover-color: var(--md-sys-color-on-primary);
-  --md-ripple-pressed-color: var(--md-sys-color-on-primary);
 }

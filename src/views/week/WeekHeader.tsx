@@ -1,6 +1,7 @@
 import { format } from 'date-fns';
 import { inZone, isSameDay } from '../../lib/dates';
 import { useUi } from '../../state/ui';
+import { DayNumber } from '../../components/DayNumber';
 import './WeekHeader.css';
 
 // Day headers of the week and day views (docs/11 section 7): weekday name (label-medium,
@@ -33,11 +34,9 @@ export function WeekHeader({ days, now }: WeekHeaderProps) {
         return (
           <div className={today ? 'week-header-day week-header-today' : 'week-header-day'} role="columnheader" aria-label={aria} key={ts}>
             <span className="week-header-name md-typescale-label-medium">{format(d, 'EEE')}</span>
-            <button className="week-header-number md-typescale-title-large" aria-label={aria} type="button" onClick={() => openDay(ts)}>
-              <md-ripple></md-ripple>
-              <md-focus-ring></md-focus-ring>
+            <DayNumber size="day" typescale="md-typescale-title-large" label={aria} today={today} onClick={() => openDay(ts)}>
               {d.getDate()}
-            </button>
+            </DayNumber>
           </div>
         );
       })}

@@ -18,3 +18,7 @@
   margin: 0;
   color: var(--md-sys-color-primary);
 }
+
+.add-calendar-content > div > md-text-button {
+  margin-left: calc(-1 * var(--ugc-space-3));
+}

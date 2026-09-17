@@ -67,6 +67,12 @@ export function AddCalendarDialog() {
         <md-outlined-text-field label="Secret iCal address" placeholder="https://…/basic.ics" value={url} oninput={(e) => setUrl(fieldValue(e))}></md-outlined-text-field>
         <md-outlined-text-field label="Your e-mail in that calendar (optional)" value={email} oninput={(e) => setEmail(fieldValue(e))}></md-outlined-text-field>
         <p className="add-calendar-text md-typescale-body-medium">Or add another Google account with all its calendars.</p>
+        <div>
+          <md-text-button disabled={busy || !oauth} title={oauth ? undefined : OAUTH_HINT} onclick={() => void addGoogle()}>
+            <md-icon slot="icon">add</md-icon>
+            Add Google account
+          </md-text-button>
+        </div>
         {message ? (
           <p className="add-calendar-message md-typescale-body-small" role="status">
             {message}
@@ -75,9 +81,6 @@ export function AddCalendarDialog() {
       </div>
       <div slot="actions">
         <md-text-button onclick={close}>Cancel</md-text-button>
-        <md-text-button disabled={busy || !oauth} title={oauth ? undefined : OAUTH_HINT} onclick={() => void addGoogle()}>
-          Add Google account
-        </md-text-button>
         <md-filled-button disabled={busy || !name.trim() || !url.trim()} onclick={() => void addIcal()}>
           Add
         </md-filled-button>

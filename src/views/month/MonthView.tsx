@@ -8,6 +8,7 @@ import { LAYOUT, layoutNumber } from '../../styles/layout';
 import type { ViewOccurrence } from '../../types/ipc';
 import { chipDescription, chipStyle } from '../week/EventChip';
 import { layoutAllDay } from '../week/layout';
+import { DayNumber } from '../../components/DayNumber';
 import './MonthView.css';
 
 // Month view (docs/11 section 7): cells with outline-variant borders, the day number in a
@@ -117,14 +118,11 @@ export function MonthView() {
                 const overflow = used > slots;
                 const shown = overflow ? items.filter((it) => it.slot < slots - 1) : items;
                 const hiddenCount = total - shown.length;
-                const numberCls = `month-view-number md-typescale-label-large${today ? ' month-view-today' : other ? ' month-view-other' : ''}`;
                 return (
                   <div className="month-view-cell" role="gridcell" key={ts} aria-label={total === 0 ? `No events, ${label}` : `${total} event${total === 1 ? '' : 's'}, ${label}`}>
-                    <button className={numberCls} type="button" aria-label={`${label}${today ? ', today' : ''}`} onClick={() => openDay(ts)}>
-                      <md-ripple></md-ripple>
-                      <md-focus-ring></md-focus-ring>
+                    <DayNumber size="month" typescale="md-typescale-label-large" className="month-view-number" label={`${label}${today ? ', today' : ''}`} today={today} muted={other} onClick={() => openDay(ts)}>
                       {first ? format(d, 'MMM d') : d.getDate()}
-                    </button>
+                    </DayNumber>
                     {shown.map((it) => {
                       const o = it.occurrence;
                       const title = o.title ?? '(No title)';

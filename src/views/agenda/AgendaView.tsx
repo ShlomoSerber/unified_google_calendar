@@ -6,6 +6,7 @@ import { useUi } from '../../state/ui';
 import { useViewData } from '../../state/useViewData';
 import type { ViewOccurrence } from '../../types/ipc';
 import { chipDescription, chipStyle } from '../week/EventChip';
+import { DayNumber } from '../../components/DayNumber';
 import './AgendaView.css';
 
 // Schedule view (docs/11 section 7): one group per day with events, starting at the anchor
@@ -56,11 +57,9 @@ export function AgendaView() {
         return (
           <section className={today ? 'agenda-view-group agenda-view-today' : 'agenda-view-group'} key={day} aria-label={dayLabel}>
             <div className="agenda-view-date">
-              <button className="agenda-view-number md-typescale-title-medium" type="button" aria-label={dayLabel} onClick={() => openDay(day)}>
-                <md-ripple></md-ripple>
-                <md-focus-ring></md-focus-ring>
+              <DayNumber size="day" typescale="md-typescale-title-medium" label={dayLabel} today={today} onClick={() => openDay(day)}>
                 {d.getDate()}
-              </button>
+              </DayNumber>
               <span className="agenda-view-month md-typescale-label-medium">{format(d, 'MMM, EEE')}</span>
             </div>
             <div className="agenda-view-rows" role="list">

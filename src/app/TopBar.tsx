@@ -84,15 +84,15 @@ export function TopBar({ weekDays }: TopBarProps) {
         </md-icon-button>
       </Tooltip>
       <Tooltip text={todayLabel}>
-        <md-outlined-button aria-label={`Today, ${todayLabel}`} onclick={today}>
+        <md-text-button aria-label={`Today, ${todayLabel}`} onclick={today}>
           Today
-        </md-outlined-button>
+        </md-text-button>
       </Tooltip>
       <span className="topbar-view">
-        <md-outlined-button id="topbar-view-button" aria-haspopup="menu" trailing-icon onclick={toggleViewMenu}>
+        <md-text-button id="topbar-view-button" aria-haspopup="menu" trailing-icon onclick={toggleViewMenu}>
           <md-icon slot="icon">arrow_drop_down</md-icon>
           {VIEW_LABEL[view]}
-        </md-outlined-button>
+        </md-text-button>
         <md-menu ref={menu} anchor="topbar-view-button" positioning="fixed" aria-label="View">
           {VIEWS.map((v) => (
             <md-menu-item key={v.view} onclick={() => useUi.getState().setView(v.view)}>

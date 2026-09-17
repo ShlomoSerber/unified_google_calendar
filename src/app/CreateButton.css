@@ -1,4 +1,4 @@
-/* The FAB sits at the left of the drawer column, not stretched. */
-.create-fab {
+/* The button sits at the left of the drawer column, not stretched. */
+.create-button {
   align-self: flex-start;
 }

@@ -61,3 +61,8 @@
 .full-form-error {
   color: var(--md-sys-color-error);
 }
+
+/* "Add Google Meet" and "Add notification" line up with the fields, not with their own padding. */
+.full-form-content > div > md-text-button {
+  margin-left: calc(-1 * var(--ugc-space-3));
+}

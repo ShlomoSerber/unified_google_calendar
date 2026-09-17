@@ -4,16 +4,12 @@
 // the element's events as lowercase `on<event>` listeners. Hyphenated attributes
 // (`touch-target`, `supporting-text`, `trailing-icon`, ...) need no declaration in JSX.
 import type { MdFilledButton } from '@material/web/button/filled-button.js';
-import type { MdFilledTonalButton } from '@material/web/button/filled-tonal-button.js';
-import type { MdOutlinedButton } from '@material/web/button/outlined-button.js';
 import type { MdTextButton } from '@material/web/button/text-button.js';
 import type { MdCheckbox } from '@material/web/checkbox/checkbox.js';
-import type { MdAssistChip } from '@material/web/chips/assist-chip.js';
 import type { MdChipSet } from '@material/web/chips/chip-set.js';
 import type { MdFilterChip } from '@material/web/chips/filter-chip.js';
 import type { MdDialog } from '@material/web/dialog/dialog.js';
 import type { MdDivider } from '@material/web/divider/divider.js';
-import type { MdFab } from '@material/web/fab/fab.js';
 import type { MdFocusRing } from '@material/web/focus/md-focus-ring.js';
 import type { MdIcon } from '@material/web/icon/icon.js';
 import type { MdIconButton } from '@material/web/iconbutton/icon-button.js';
@@ -39,16 +35,12 @@ declare module 'react' {
   namespace JSX {
     interface IntrinsicElements {
       'md-filled-button': M3<MdFilledButton, Clickable>;
-      'md-filled-tonal-button': M3<MdFilledTonalButton, Clickable>;
-      'md-outlined-button': M3<MdOutlinedButton, Clickable>;
       'md-text-button': M3<MdTextButton, Clickable>;
       'md-checkbox': M3<MdCheckbox, Field>;
-      'md-assist-chip': M3<MdAssistChip, Clickable>;
       'md-chip-set': M3<MdChipSet>;
       'md-filter-chip': M3<MdFilterChip, Clickable | 'change'>;
       'md-dialog': M3<MdDialog, 'open' | 'opened' | 'close' | 'closed' | 'cancel'>;
       'md-divider': M3<MdDivider>;
-      'md-fab': M3<MdFab, Clickable>;
       'md-focus-ring': M3<MdFocusRing>;
       'md-icon': M3<MdIcon>;
       'md-icon-button': M3<MdIconButton, Clickable>;

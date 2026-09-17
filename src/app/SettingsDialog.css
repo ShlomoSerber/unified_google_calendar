@@ -51,3 +51,8 @@
   margin: 0;
   color: var(--md-sys-color-primary);
 }
+
+/* A text button that opens a row lines up with the fields above it, not with its own padding. */
+.settings-actions > md-text-button:first-child {
+  margin-left: calc(-1 * var(--ugc-space-3));
+}
