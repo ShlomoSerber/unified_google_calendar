@@ -1,6 +1,6 @@
 [package]
 name = "unified-google-calendar"
-version = "0.2.1"
+version = "0.2.3"
 description = "All your Google accounts in one calendar"
 authors = ["Shlomo Serber"]
 edition = "2021"

@@ -6,6 +6,7 @@
 set -uo pipefail
 cd "$(dirname "$0")/.."
 export CARGO_BUILD_JOBS="${CARGO_BUILD_JOBS:-2}"
+export PATH="$HOME/.cargo/bin:$PATH"
 fail=0
 step() { printf '\n== %s\n' "$1"; }
 run() { if "$@"; then echo "ok: $*"; else echo "FAIL: $*"; fail=1; fi; }
@@ -64,8 +65,11 @@ run npm test --silent -- --run
 
 step "release"
 v="$(node -p "require('./package.json').version")"
-if [ "$v" = "0.2.0" ]; then echo "ok: version 0.2.0"; else echo "FAIL: version is $v, expected 0.2.0 (scripts/bump-version.sh 0.2.0)"; fail=1; fi
-ls src-tauri/target/release/bundle/deb/*_0.2.0_*.deb >/dev/null 2>&1 && echo "ok: .deb 0.2.0 present" || { echo "FAIL: no 0.2.0 .deb in src-tauri/target/release/bundle/deb"; fail=1; }
+# The transition closed at 0.2.0; every later delivery bumps the version (docs/10 section 7).
+for f in src-tauri/tauri.conf.json src-tauri/Cargo.toml; do
+  grep -q "\"\?version\"\? *[:=] *\"$v\"" "$f" && echo "ok: $f at $v" || { echo "FAIL: $f is not at $v (scripts/bump-version.sh $v)"; fail=1; }
+done
+ls src-tauri/target/release/bundle/deb/*_"$v"_*.deb >/dev/null 2>&1 && echo "ok: .deb $v present" || { echo "FAIL: no $v .deb in src-tauri/target/release/bundle/deb"; fail=1; }
 grep -q "| M6 |" docs/99-decisiones.md && echo "ok: RAM row for M6" || { echo "FAIL: add the M6 RAM row to docs/99-decisiones.md"; fail=1; }
 
 step "result"
