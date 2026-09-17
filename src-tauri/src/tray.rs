@@ -4,7 +4,10 @@
 //! title next to the icon shows today's next timed event as `"09:30 Daily standup"`, truncated
 //! to 32 characters, refreshed after every `calendar:updated` and every minute. An event stays
 //! until `GRACE_SECS` after its start; when nothing is left today the title is empty until
-//! tomorrow (docs/06 section 2, user decision of 2026-09-15).
+//! tomorrow (docs/06 section 2, user decision of 2026-09-15). Every refresh alternates an
+//! invisible zero-width space at the end of the title: GNOME's AppIndicator extension only
+//! redraws a label whose value differs from its cache, and a value it missed (2026-09-17: the
+//! label was on the bus, the panel showed nothing) stayed missing until the next event.
 //! The icon is today's day of month in the primary time zone (icons/day/NN.rgba and NN.png,
 //! rendered by scripts/gen-day-icons.mjs); the tray, the main window and the user's hicolor
 //! theme (for GNOME's dock) get it at start and at midnight.
@@ -28,6 +31,8 @@ pub const TITLE_MAX_CHARS: usize = 32;
 pub const GRACE_SECS: i64 = 120;
 
 static NEXT_ITEM: OnceLock<MenuItem<Wry>> = OnceLock::new();
+static TICK: AtomicU32 = AtomicU32::new(0);
+const ZERO_WIDTH_SPACE: char = '\u{200B}';
 /// Day of month currently drawn on the icons; 0 until the first refresh.
 static ICON_DAY: AtomicU32 = AtomicU32::new(0);
 
@@ -348,6 +353,16 @@ pub fn build(app: &AppHandle) -> Result<(), AppError> {
     Ok(())
 }
 
+/// The title of refresh number `tick`: the same text, with a zero-width space on odd ticks so
+/// that consecutive values never compare equal (see the module comment).
+pub fn tick_title(title: &str, tick: u32) -> String {
+    if tick % 2 == 1 {
+        format!("{title}{ZERO_WIDTH_SPACE}")
+    } else {
+        title.to_string()
+    }
+}
+
 /// `tray::set_next_event` per docs/08 section 12: title next to the icon and the menu line.
 pub fn set_next_event(app: &AppHandle, label: Option<String>) {
     if let Some(tray) = app.tray_by_id(TRAY_ID) {
@@ -368,10 +383,11 @@ async fn refresh(app: &AppHandle) {
         Ok(day) => apply_day_icon(app, day),
         Err(e) => tracing::debug!(error = %e, "day icon refresh failed"),
     }
+    let tick = TICK.fetch_add(1, Ordering::SeqCst);
     match crate::db::call(move |c| next_event(c, now)).await {
         Ok(Some(n)) => {
             if let Some(tray) = app.tray_by_id(TRAY_ID) {
-                let _ = tray.set_title(Some(n.title.clone()));
+                let _ = tray.set_title(Some(tick_title(&n.title, tick)));
             }
             if let Some(item) = NEXT_ITEM.get() {
                 let _ = item.set_text(&n.menu);
@@ -425,6 +441,16 @@ mod tests {
             mtime > past,
             "the theme root must change so GNOME Shell rescans it"
         );
+    }
+
+    #[test]
+    fn tick_title_alternates_an_invisible_suffix() {
+        let a = tick_title("10:30 Daily Team", 0);
+        let b = tick_title("10:30 Daily Team", 1);
+        assert_eq!(a, "10:30 Daily Team");
+        assert_ne!(a, b);
+        assert_eq!(b.trim_end_matches(ZERO_WIDTH_SPACE), a);
+        assert_eq!(tick_title("10:30 Daily Team", 2), a);
     }
 
     #[test]
