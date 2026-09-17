@@ -406,6 +406,10 @@ pub fn start(app: AppHandle) {
         tauri::async_runtime::spawn(async move { refresh(&h).await });
     });
     tauri::async_runtime::spawn(async move {
+        refresh(&app).await;
+        // GNOME's AppIndicator extension misses the first label at start and paints the next
+        // distinct value (docs/06 section 2): send it after 5 s instead of after a minute.
+        tokio::time::sleep(std::time::Duration::from_secs(5)).await;
         let mut interval = tokio::time::interval(std::time::Duration::from_secs(60));
         loop {
             interval.tick().await;
