@@ -51,7 +51,7 @@ Sync now
 Quit
 ```
 
-`set_title` se actualiza con el próximo evento no de día completo de hoy (zona primaria), formato `"09:30 Daily standup"`, truncado a 32 caracteres. Un evento empezado sigue en el título hasta dos minutos después de su inicio; después pasa al siguiente. Sin más eventos hoy, título vacío hasta mañana (cambio del 2026-09-15, `docs/99`; antes: cualquier evento dentro de las próximas 12 horas, y desaparecía al empezar). Se recalcula tras cada `calendar:updated` y cada minuto.
+`set_title` se actualiza con el próximo evento no de día completo de hoy (zona primaria), formato `"09:30 Daily standup"`, truncado a 32 caracteres. Un evento empezado sigue en el título hasta dos minutos después de su inicio; después pasa al siguiente. Sin más eventos hoy, título vacío hasta mañana (cambio del 2026-09-15, `docs/99`; antes: cualquier evento dentro de las próximas 12 horas, y desaparecía al empezar). Se recalcula tras cada `calendar:updated` y cada minuto. Cada recálculo alterna un espacio de ancho cero (U+200B) al final del título (`tray::tick_title`): la extensión AppIndicator de GNOME solo repinta la etiqueta cuando el valor recibido difiere del que tiene en caché, y el 2026-09-17 se vio la etiqueta en el bus (`XAyatanaLabel` del `StatusNotifierItem`) y ausente en el panel hasta que cambió la reunión; con un valor distinto por minuto el panel repinta siempre a más tardar un minuto después.
 
 ## 3. Cerrar deja la app corriendo
 
